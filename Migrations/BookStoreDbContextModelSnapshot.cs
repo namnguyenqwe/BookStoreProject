@@ -74,6 +74,9 @@ namespace BookStoreProject.Migrations
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
 
+                    b.Property<float?>("Weight")
+                        .HasColumnType("real");
+
                     b.HasKey("BookID");
 
                     b.HasIndex("CategoryID");

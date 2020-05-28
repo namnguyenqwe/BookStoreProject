@@ -15,9 +15,9 @@ namespace BookStoreProject.Models
         [Required]
         [StringLength(200)]
         public string NameBook { get; set; }
-       
+        [ForeignKey("CategoryID")]
         public int CategoryID { get; set; }
-        
+        [ForeignKey("PublisherID")]
         public int PublisherID { get; set; }
         public string Author { get; set; }
         public string? Dimensions { get; set; }
@@ -34,15 +34,17 @@ namespace BookStoreProject.Models
         public int? QuantityIn { get; set; }
         public int? QuantityOut { get; set; }
         public bool? Status { get; set; }
+
+        public float? Weight { get; set; }
        
 
-        public ICollection<WishList> WishLists { get; set; }
-        public ICollection<CartItems> CartItems { get; set; }
+        public virtual ICollection<WishList> WishLists { get; set; }
+        public virtual ICollection<CartItems> CartItems { get; set; }
         
-        public ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
         public virtual Categories Category { get; set; }
         public virtual Publisher Publisher { get; set; }
-        public ICollection<OrderItems> OrderItems { get; set; }
+        public virtual ICollection<OrderItems> OrderItems { get; set; }
 
     }
 

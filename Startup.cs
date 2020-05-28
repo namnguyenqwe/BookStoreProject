@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BookStoreProject.Models;
+using BookStoreProject.Services;
+using AutoMapper;
+using BookStoreProject.AutoMapper;
 
 namespace BookStoreProject
 {
@@ -46,12 +49,10 @@ namespace BookStoreProject
                 options.Password.RequireUppercase = false;
 
             });
-            
 
-           
-          
-
-
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +68,8 @@ namespace BookStoreProject
             app.UseRouting();
 
             app.UseAuthorization();
+
+            
 
             app.UseEndpoints(endpoints =>
             {
