@@ -36,7 +36,11 @@ namespace BookStoreProject
 
             services.AddDbContext<BookStoreDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookStore")));
 
-            services.BuildServiceProvider().GetService<BookStoreDbContext>().Database.Migrate();
+
+            /*services.BuildServiceProvider()
+                .GetService<BookStoreDbContext>().Database
+                .Migrate();*/
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<BookStoreDbContext>()
@@ -65,6 +69,8 @@ namespace BookStoreProject
                 app.UseDeveloperExceptionPage();
             }
 
+            UpdateDatabase(app);
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -77,6 +83,19 @@ namespace BookStoreProject
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<BookStoreDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

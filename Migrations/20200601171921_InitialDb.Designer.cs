@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStoreProject.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    [Migration("20200601161323_InitialAzureDatabase")]
-    partial class InitialAzureDatabase
+    [Migration("20200601171921_InitialDb")]
+    partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
