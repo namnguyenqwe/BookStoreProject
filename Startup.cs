@@ -36,6 +36,8 @@ namespace BookStoreProject
 
             services.AddDbContext<BookStoreDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookStore")));
 
+            services.BuildServiceProvider().GetService<BookStoreDbContext>().Database.Migrate();
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<BookStoreDbContext>()
                 .AddDefaultTokenProviders();

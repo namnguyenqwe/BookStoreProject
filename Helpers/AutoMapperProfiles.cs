@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BookStoreProject.Dtos.Book;
 using BookStoreProject.Dtos.Category;
+using BookStoreProject.Dtos.Review;
 using BookStoreProject.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace BookStoreProject.AutoMapper
                                             .ForMember(x => x.publisher, y => { y.MapFrom(z => z.Publisher.publisher); });
             CreateMap<CategoryDto,Categories>().ForMember(x => x.CategoryID, opt => opt.Ignore());
             CreateMap<Categories, CategoryForListDto>();
+            CreateMap<Review, ReviewForListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
+                                           .ForMember(x => x.FullName, y => { y.MapFrom(z => z.ApplicationUser.FullName); });
         }
     }
 }
