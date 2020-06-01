@@ -69,7 +69,7 @@ namespace BookStoreProject
                 app.UseDeveloperExceptionPage();
             }
 
-            UpdateDatabase(app);
+            //UpdateDatabase(app);
 
             app.UseHttpsRedirection();
 
