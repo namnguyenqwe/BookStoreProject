@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStoreProject.Migrations
 {
-    public partial class InitialDb : Migration
+    public partial class InitialAzureDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
