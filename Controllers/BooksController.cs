@@ -82,10 +82,10 @@ namespace BookStoreProject.Controllers
             {
                 
                 var list = _bookService.GetBooks(keyword);
-                return Ok("bookstore");
+                
                 var listforDto = _mapper.Map<IEnumerable<Book>, IEnumerable<BookForListDto>>(list);
                 int totalCount = list.Count();
-
+                return Ok(totalCount);
                 var response = _bookService.GetBooksPerPage(listforDto, page, pageSize, sort, criteria);
 
                 var paginationSet = new PaginationSet<BookForListDto>()
