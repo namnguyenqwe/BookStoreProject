@@ -8,6 +8,6 @@ namespace BookStoreProject.Dtos.Category
     public class CategoryForListDto
     {
         public int CategoryID { get; set; }
-        public string? Category { get; set; }
+        public string Category { get; set; }
     }
 }

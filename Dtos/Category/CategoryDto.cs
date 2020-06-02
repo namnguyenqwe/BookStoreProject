@@ -7,6 +7,6 @@ namespace BookStoreProject.Dtos.Category
 {
     public class CategoryDto
     {
-        public string? Category { get; set; }
+        public string Category { get; set; }
     }
 }

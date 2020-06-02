@@ -12,7 +12,7 @@ namespace BookStoreProject.Dtos.Review
         public string FullName { get; set; }
         public string NameBook { get; set; }
         public int? Rating { get; set; }
-        public string? Comment { get; set; }
+        public string Comment { get; set; }
         public DateTime Date { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace BookStoreProject.Models
     public class Publisher
     {
         public int PublisherID { get; set; }
-        public string? publisher { get; set; }
+        public string publisher { get; set; }
         public virtual ICollection<Book> Books { get; set; }
     }
 }
