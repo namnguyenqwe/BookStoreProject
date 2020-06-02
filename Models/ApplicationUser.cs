@@ -14,11 +14,11 @@ namespace BookStoreProject.Models
         public string FullName { get; set; }
 
         [StringLength(300)]
-        public string? AvatarLink { get; set; }
+        public string AvatarLink { get; set; }
         public bool? Status { get; set; }
         public bool? IsDeleted { get; set; }
         [StringLength(50)]
-        public string? Salt { get; set; }
+        public string Salt { get; set; }
         //public int UserID { get; set; }
         //[ForeignKey("UserID")]
         //public User User { get; set; }
