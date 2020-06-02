@@ -82,7 +82,7 @@ namespace BookStoreProject.Controllers
             {
                 
                 var list = _bookService.GetBooks(keyword);
-                return Ok(list);
+                return Ok("bookstore");
                 var listforDto = _mapper.Map<IEnumerable<Book>, IEnumerable<BookForListDto>>(list);
                 int totalCount = list.Count();
 
