@@ -77,8 +77,10 @@ namespace BookStoreProject.Controllers
         [HttpGet]
         public IActionResult GetAllBooks(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "BookId")
         {
+            
             try
             {
+                return Ok("bookstore");
                 var list = _bookService.GetBooks(keyword);
                 var listforDto = _mapper.Map<IEnumerable<Book>, IEnumerable<BookForListDto>>(list);
                 int totalCount = list.Count();
