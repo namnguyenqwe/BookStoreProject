@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using BookStoreProject.Commons;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BookStoreProject.Controllers
@@ -23,12 +24,14 @@ namespace BookStoreProject.Controllers
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationSetting _appSettings;
+        private IBaseUrlHelper _baseUrlHelper;
         public ApplicationUserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
-            IOptions<ApplicationSetting> appSettings)
+            IOptions<ApplicationSetting> appSettings,IBaseUrlHelper baseUrlHelper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _appSettings = appSettings.Value;
+            _baseUrlHelper = baseUrlHelper;
 
         }
 
@@ -44,9 +47,9 @@ namespace BookStoreProject.Controllers
             role2.Name = "Admin";
             await _roleManager.CreateAsync(role2);
 
-            /*var role3 = new IdentityRole();
+            var role3 = new IdentityRole();
             role3.Name = "Manager";
-            await _roleManager.CreateAsync(role3);*/
+            await _roleManager.CreateAsync(role3);
 
 
 
@@ -55,7 +58,7 @@ namespace BookStoreProject.Controllers
                 UserName = model.UserName,
                 Email = model.Email,
                 FullName = model.FullName,
-
+                AvatarLink = _baseUrlHelper.GetBaseUrl() + "/Images/defaultAvatar.png",
             };
             applicationUser.AccountCreateDate = DateTime.Now;
 

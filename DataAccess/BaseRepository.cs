@@ -26,6 +26,24 @@ namespace BookStoreProject.DataAccess
             get { return _bookStoreDbContext ?? (_bookStoreDbContext = dBFactory.Init()); }
         }
 
+        public void Add(T entity)
+        {
+            _dbSet.Add(entity);
+        }
+        public void Update(T entity)
+        {
+            _dbSet.Attach(entity);
+            BookStoreDbContext.Entry(entity).State = EntityState.Modified;
+        }
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
+        public T GetSingleById(int id)
+        {
+            return _dbSet.Find(id);
+        }
         public BaseRepository(IDBFactory dbFactory)
         {
             dBFactory = dbFactory;
@@ -45,6 +63,43 @@ namespace BookStoreProject.DataAccess
             return BookStoreDbContext.Set<T>().FirstOrDefault(expression);
         }
 
+        public virtual IEnumerable<T> GetAll(string[] includes)
+        {
+            if(includes != null && includes.Count()>0)
+            {
+                var query = BookStoreDbContext.Set<T>().Include(includes.First());
+                foreach(string i in includes.Skip(1))
+                {
+                    query = query.Include(i);
+                }
+                return query.AsQueryable();
+            }
+            return BookStoreDbContext.Set<T>().AsQueryable();
+        }
+        public virtual IEnumerable<T> GetMultiPaging(Expression<Func<T, bool>> expression, int index = 0, int size = 10, string[] includes = null)
+        {
+            var skipCount = index * size;
+            IQueryable<T> _resetSet = null;
+            if(includes != null && includes.Count() > 0)
+            {
+                var query = BookStoreDbContext.Set<T>().Include(includes.First());
+                foreach(string i in includes.Skip(1))
+                {
+                    query = query.Include(i);
+                }
+                _resetSet = expression != null ? query.Where<T>(expression).AsQueryable() : query.AsQueryable();
+            }
+            else
+            {
+                _resetSet = expression != null ? BookStoreDbContext.Set<T>().Where<T>(expression).AsQueryable() : BookStoreDbContext.Set<T>().AsQueryable();
+            }
+            _resetSet = index == 0 ? _resetSet.Take(size) : _resetSet.Skip(skipCount).Take(size);
+            return _resetSet.AsQueryable();
+        }
+        public int GetCount(Expression<Func<T, bool>> expression)
+        {
+            return expression == null ? BookStoreDbContext.Set<T>().Count() : BookStoreDbContext.Set<T>().Where(expression).Count();
+        }
 
     }
 }

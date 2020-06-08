@@ -23,6 +23,7 @@ using BookStoreProject.Models;
 using BookStoreProject.Infrastructure;
 using BookStoreProject.DataAccess;
 using BookStoreProject.Services;
+using BookStoreProject.Commons;
 using AutoMapper;
 using BookStoreProject.AutoMapper;
 using BookStoreProject.Repositorys;
@@ -106,13 +107,14 @@ namespace BookStoreProject
             services.AddCors();
             services.AddSignalR();
             services.AddHttpContextAccessor();
+            services.AddSingleton<IBaseUrlHelper, BaseUrlHelper>();
             services.AddScoped<IDBFactory, DBFactory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
-            //services.AddScoped<IBookService, BookService>();
-            //services.AddScoped<ICategoryService, CategoryService>();
-            //services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -127,15 +129,16 @@ namespace BookStoreProject
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseStaticFiles();
          
-            app.UseAuthentication();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
