@@ -19,9 +19,8 @@ namespace BookStoreProject.Models
         public bool? IsDeleted { get; set; }
         [StringLength(50)]
         public string? Salt { get; set; }
-        //public int UserID { get; set; }
-        //[ForeignKey("UserID")]
-        //public User User { get; set; }
+         
+        public DateTime? AccountCreateDate { get; set; }
         public ICollection<WishList> WishLists { get; set; }
         public ICollection<CartItems> CartItems { get; set; }
 
