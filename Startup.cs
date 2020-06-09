@@ -57,7 +57,9 @@ namespace BookStoreProject
 
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IPublisherService, PublisherService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,7 +78,7 @@ namespace BookStoreProject
 
             app.UseAuthorization();
 
-            
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {

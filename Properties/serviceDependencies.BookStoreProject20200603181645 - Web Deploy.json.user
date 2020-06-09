@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2020-06-03T11:25:41.8231849Z"
+    }
+  },
+  "parameters": {
+    "resourceGroup": {
+      "Type": "resourceGroup",
+      "Value": "bookstoreapp-resource-group"
+    },
+    "subscriptionId": {
+      "Type": "subscription",
+      "Value": "d46ab579-b8df-4ef8-909d-9d530026e2c1"
+    }
+  }
+}

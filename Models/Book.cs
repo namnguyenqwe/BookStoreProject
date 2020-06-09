@@ -26,7 +26,7 @@ namespace BookStoreProject.Models
         public DateTime Date { get; set; }
         public int? NumberOfPage { get; set; }
 
-        public string Infomation { get; set; }
+        public string Information { get; set; }
         public decimal? OriginalPrice { get; set; }
         public decimal? Price { get; set; }
         [StringLength(300)]

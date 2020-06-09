@@ -45,7 +45,7 @@ namespace BookStoreProject.Migrations
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
-                    b.Property<string>("Infomation")
+                    b.Property<string>("Information")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameBook")

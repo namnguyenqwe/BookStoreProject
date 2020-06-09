@@ -12,6 +12,7 @@ namespace BookStoreProject.Services
     {
         Task<bool> DeleteReview(int bookId, string applicationUserId);
         IEnumerable<Review> GetReviews(string keyword);
+        Task<IEnumerable<Review>> GetReviewsByBookId(int bookId);
     }
     public class ReviewService : IReviewService
     {
@@ -51,6 +52,11 @@ namespace BookStoreProject.Services
                         x.Comment.Contains(keyword)).AsEnumerable();
             }
             return _dbContext.Reviews.Include(x => x.Book).Include(x => x.ApplicationUser).AsEnumerable();
+        }
+
+        public async Task<IEnumerable<Review>> GetReviewsByBookId(int bookId)
+        {
+            return await _dbContext.Reviews.Where(x => x.BookID == bookId).ToListAsync();
         }
     }
 }

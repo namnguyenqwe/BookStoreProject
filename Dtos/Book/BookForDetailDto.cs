@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace BookStoreProject.Dtos.Book
 {
     public class BookForDetailDto
     {
+        public int BookID { get; set; }
         public string NameBook { get; set; }
 
         public int CategoryID { get; set; }
@@ -23,7 +25,7 @@ namespace BookStoreProject.Dtos.Book
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int? NumberOfPage { get; set; }
 
-        public string Infomation { get; set; }
+        public string Information { get; set; }
 
         [Range(0,Int32.MaxValue,ErrorMessage = "Value must be a positive number")]
         public decimal? OriginalPrice { get; set; }

@@ -153,3 +153,5 @@ F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\AutoMapper
 F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 F:\assignments\CNPM\Back-end\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.csproj.CoreCompileInputs.cache
 F:\assignments\CNPM\Back-end\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.MvcApplicationPartsAssemblyInfo.cache
+F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
+F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BookStoreProjectDUT - Web Deploy.json

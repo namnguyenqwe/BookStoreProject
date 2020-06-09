@@ -13,10 +13,14 @@ namespace BookStoreProject.Services
     {
         Task<bool> DeleteBookAsync(int bookId);
         Task<Book> GetBookByIdAsync(int bookId);
+        Task<Book> GetBookByIdForUserAsync(int bookId);
         Task<bool> CreateBookAsync(Book bookCreate);
         Task<bool> UpdateBookAsync(Book book);
         IEnumerable<Book> GetBooks(string keyword);
         IEnumerable<BookForListDto> GetBooksPerPage(IEnumerable<BookForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "BookId");
+        Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int number);
+        Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int number);
+        Task<ICollection<Book>> GetRelatedBooks(int bookId, int number);
     }
     public class BookService : IBookService
     {
@@ -166,6 +170,56 @@ namespace BookStoreProject.Services
                     return list.OrderBy(x => x.Price).Skip((page - 1) * pageSize).Take(pageSize);
             }
             return null;
+        }
+
+        public async Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int num)
+        {
+            var latestBookList = await _dbContext.Books.Include(x => x.Reviews).Where(x => x.Status == true)
+                                    .OrderByDescending(x => x.Date.Year)
+                                    .ThenByDescending(x => x.Date.Month)
+                                    .ThenByDescending(x => x.Date.Day).Take(num).ToListAsync();
+            var listForReturn = latestBookList.Select(x => new BookForUserListDto
+            {
+                BookID = x.BookID,
+                NameBook = x.NameBook,
+                Price = x.Price,
+                ReviewCount = x.Reviews.Any() ? x.Reviews.Count : 0,
+                ImageLink = x.ImageLink,
+                Rating = x.Reviews.Any() ? (int)(x.Reviews.Aggregate((a,b) => new Review { Rating = a.Rating + b.Rating}).Rating / x.Reviews.Count) : 0
+            }) ;
+            return listForReturn; 
+        }
+
+        public async Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int number)
+        {
+           /* var latestBookList = await _dbContext.Books.Include(x => x.OrderItems)
+                                    .ThenInclude(x => x.Order).ToListAsync();
+                                    */
+            var latestBookList = await _dbContext.Books.Include(x => x.Reviews).Where(x => x.Status == true).OrderByDescending(x => x.QuantityOut).Take(number).ToListAsync();
+            var listForReturn = latestBookList.Select(x => new BookForUserListDto
+            {
+                BookID = x.BookID,
+                NameBook = x.NameBook,
+                Price = x.Price,
+                ReviewCount = x.Reviews.Count,
+                ImageLink = x.ImageLink,
+                Rating = (int)(x.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / x.Reviews.Count)
+            });
+            return listForReturn;
+        }
+
+        public async Task<ICollection<Book>> GetRelatedBooks(int bookId, int number)
+        {
+            var book = await GetBookByIdAsync(bookId);
+            return await _dbContext.Books.Where(x => x.CategoryID == book.CategoryID 
+                                                    && x.Status == true
+                                                    && x.BookID != book.BookID).Take(number).ToListAsync();
+        }
+
+        public async Task<Book> GetBookByIdForUserAsync(int bookId)
+        {
+            return await _dbContext.Books.Include(x => x.Reviews).Include(x => x.Publisher)
+                          .Include(x => x.Category).FirstOrDefaultAsync(x => x.BookID == bookId);
         }
     }
 }

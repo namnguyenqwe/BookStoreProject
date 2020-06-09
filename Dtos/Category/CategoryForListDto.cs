@@ -9,5 +9,6 @@ namespace BookStoreProject.Dtos.Category
     {
         public int CategoryID { get; set; }
         public string Category { get; set; }
+        public int BookTitleCount { get; set; }
     }
 }
