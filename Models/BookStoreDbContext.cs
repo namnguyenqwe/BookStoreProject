@@ -19,7 +19,10 @@ namespace BookStoreProject.Models
         {
 
         }
+        public BookStoreDbContext()
+        {
 
+        }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<Book> Books { get; set; }

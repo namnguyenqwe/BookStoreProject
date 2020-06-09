@@ -4,14 +4,16 @@ using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStoreProject.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class BookStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200607141515_AccountCreateDate")]
+    partial class AccountCreateDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace BookStoreProject.Migrations
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Dimensions")
@@ -45,7 +47,7 @@ namespace BookStoreProject.Migrations
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
-                    b.Property<string>("Information")
+                    b.Property<string>("Infomation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameBook")

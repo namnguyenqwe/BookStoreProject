@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace BookStoreProject.Models
 {
-    public class LoginModel
+    public class ApplicationSetting
     {
-        public string UserName { get; set; }
-        public string PassWord { get; set; }
-        
+        public string JWT_Secret { get; set; }
+        public string Client_URL { get; set; }
     }
 }
