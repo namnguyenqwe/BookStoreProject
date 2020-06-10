@@ -248,3 +248,5 @@ C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreap
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.csproj.CoreCompileInputs.cache
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.MvcApplicationPartsAssemblyInfo.cache
 >>>>>>> 7e84da383b79ec94f1452a4e8752e26d6ca5c44f
+C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BookStoreProjectDUT - Web Deploy.json
+C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
