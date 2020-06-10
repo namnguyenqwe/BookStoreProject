@@ -153,6 +153,10 @@ F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\AutoMapper
 F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 F:\assignments\CNPM\Back-end\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.csproj.CoreCompileInputs.cache
 F:\assignments\CNPM\Back-end\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.MvcApplicationPartsAssemblyInfo.cache
+<<<<<<< HEAD
+F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
+F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BookStoreProjectDUT - Web Deploy.json
+=======
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
@@ -243,3 +247,4 @@ C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreap
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.csproj.CoreCompileInputs.cache
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\obj\Debug\netcoreapp3.1\BookStoreProject.MvcApplicationPartsAssemblyInfo.cache
+>>>>>>> 7e84da383b79ec94f1452a4e8752e26d6ca5c44f

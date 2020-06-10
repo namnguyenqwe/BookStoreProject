@@ -14,7 +14,7 @@ namespace BookStoreProject.Models
         public int? Discount { get; set; }
         public int? Quantity { get; set; }
         public int? QuantityUsed { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; }
         public ICollection<Orders> Orders { get; set; }
     }
 }

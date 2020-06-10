@@ -16,8 +16,8 @@ namespace BookStoreProject.Models
         public DateTime? Date { get; set; }
         public string CouponID { get; set; }
         public decimal? ShippingFee { get; set; }
-        public string? Status { get; set; }
-        public string? Note { get; set; }
+        public string Status { get; set; }
+        public string Note { get; set; }
 
         public ICollection<OrderItems> OrderItems { get; set; }
         public ApplicationUser ApplicationUser { get; set; }

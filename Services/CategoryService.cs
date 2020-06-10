@@ -14,6 +14,8 @@ namespace BookStoreProject.Services
         Task<bool> CreateCategoryAsync(Categories categoryCreate);
         Task<Categories> FindCategoryByIdAsync(int CategoryId);
         IEnumerable<Categories> GetCategories(string keyword);
+        Task<IEnumerable<Categories>> GetCategoriesAsync();
+        int CountBookTitleInCategory(int CategoryId);
     }
     public class CategoryService : ICategoryService
     {
@@ -81,6 +83,18 @@ namespace BookStoreProject.Services
                     .AsEnumerable();
             }
             return _dbContext.Categories.AsEnumerable();
+        }
+
+        public async Task<IEnumerable<Categories>> GetCategoriesAsync()
+        {
+            return await _dbContext.Categories.ToListAsync();
+        }
+
+        public int CountBookTitleInCategory(int CategoryId)
+        {
+            var category = _dbContext.Categories.Include(x => x.Books)
+                           .FirstOrDefault(x => x.CategoryID == CategoryId);
+            return category.Books.Count;
         }
     }
 }

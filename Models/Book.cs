@@ -20,17 +20,17 @@ namespace BookStoreProject.Models
         [ForeignKey("PublisherID")]
         public int PublisherID { get; set; }
         public string Author { get; set; }
-        public string? Dimensions { get; set; }
+        public string Dimensions { get; set; }
 
-        public string? Format { get; set; }
-        public DateTime? Date { get; set; }
+        public string Format { get; set; }
+        public DateTime Date { get; set; }
         public int? NumberOfPage { get; set; }
 
-        public string? Infomation { get; set; }
+        public string Information { get; set; }
         public decimal? OriginalPrice { get; set; }
         public decimal? Price { get; set; }
         [StringLength(300)]
-        public string? ImageLink { get; set; }
+        public string ImageLink { get; set; }
         public int? QuantityIn { get; set; }
         public int? QuantityOut { get; set; }
         public bool? Status { get; set; }

@@ -22,7 +22,7 @@ namespace BookStoreProject.Dtos.Book
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int? NumberOfPage { get; set; }
 
-        public string Infomation { get; set; }
+        public string Information { get; set; }
 
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public decimal? OriginalPrice { get; set; }

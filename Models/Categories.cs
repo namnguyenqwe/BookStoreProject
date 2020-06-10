@@ -11,7 +11,7 @@ namespace BookStoreProject.Models
     public class Categories
     {
         public int CategoryID { get; set; }
-        public string? Category { get; set; }
+        public string Category { get; set; }
         public virtual ICollection<Book> Books { get; set; }
     }
 }

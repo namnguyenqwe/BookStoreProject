@@ -13,7 +13,7 @@ namespace BookStoreProject.Models
         public string CityID { get; set; }
         public string city { get; set; }
         [StringLength(30)]
-        public string? type { get; set; }
+        public string type { get; set; }
 
         public ICollection<Recipient> Recipients { get; set; }
         public ICollection<District> Districts { get; set; }

@@ -15,10 +15,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Hosting;
+
 using BookStoreProject.Models;
 using BookStoreProject.Infrastructure;
 using BookStoreProject.DataAccess;
@@ -28,6 +33,8 @@ using AutoMapper;
 using BookStoreProject.AutoMapper;
 using BookStoreProject.Repositorys;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting;
 
 namespace BookStoreProject
 {
@@ -48,6 +55,12 @@ namespace BookStoreProject
 
             services.Configure<ApplicationSetting>(Configuration.GetSection("ApplicationSettings"));
             services.AddDbContext<BookStoreDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookStore")));
+
+
+            /*services.BuildServiceProvider()
+                .GetService<BookStoreDbContext>().Database
+                .Migrate();*/
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
@@ -114,7 +127,9 @@ namespace BookStoreProject
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IPublisherService, PublisherService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,11 +139,13 @@ namespace BookStoreProject
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseCors(builder =>
             builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
+
             app.UseHttpsRedirection();
             
             app.UseRouting();
@@ -136,13 +153,28 @@ namespace BookStoreProject
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.UseStaticFiles();
          
             
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<BookStoreDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }

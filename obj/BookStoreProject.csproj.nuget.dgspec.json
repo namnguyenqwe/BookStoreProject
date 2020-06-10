@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\A\\Desktop\\DACNPM_2020\\BookStoreAPI\\BookStoreProject\\BookStoreProject.csproj": {}
+    "F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\BookStoreProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\A\\Desktop\\DACNPM_2020\\BookStoreAPI\\BookStoreProject\\BookStoreProject.csproj": {
+    "F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\BookStoreProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\A\\Desktop\\DACNPM_2020\\BookStoreAPI\\BookStoreProject\\BookStoreProject.csproj",
+        "projectUniqueName": "F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\BookStoreProject.csproj",
         "projectName": "BookStoreProject",
-        "projectPath": "C:\\Users\\A\\Desktop\\DACNPM_2020\\BookStoreAPI\\BookStoreProject\\BookStoreProject.csproj",
-        "packagesPath": "C:\\Users\\A\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\A\\Desktop\\DACNPM_2020\\BookStoreAPI\\BookStoreProject\\obj\\",
+        "projectPath": "F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\BookStoreProject.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\A\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -90,6 +90,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.2, 3.1.2]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -98,7 +104,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

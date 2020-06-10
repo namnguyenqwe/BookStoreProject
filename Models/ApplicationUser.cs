@@ -14,13 +14,15 @@ namespace BookStoreProject.Models
         public string FullName { get; set; }
 
         [StringLength(300)]
-        public string? AvatarLink { get; set; }
+        public string AvatarLink { get; set; }
         public bool? Status { get; set; }
         public bool? IsDeleted { get; set; }
         [StringLength(50)]
+
         public string? Salt { get; set; }
          
         public DateTime? AccountCreateDate { get; set; }
+
         public ICollection<WishList> WishLists { get; set; }
         public ICollection<CartItems> CartItems { get; set; }
 

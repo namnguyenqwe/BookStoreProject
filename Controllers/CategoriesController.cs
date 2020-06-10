@@ -86,6 +86,13 @@ namespace BookStoreProject.Controllers
                     else query = list.OrderBy(x => x.Category).Skip((page - 1) * pageSize).Take(pageSize);
                 }
                 var response = _mapper.Map<IEnumerable<Categories>, IEnumerable<CategoryForListDto>>(query);
+                if (response != null)
+                {
+                    foreach(var item in response)
+                    {
+                        item.BookTitleCount = _categoryService.CountBookTitleInCategory(item.CategoryID);
+                    }    
+                }    
                 var paginationSet = new PaginationSet<CategoryForListDto>()
                 {
                     Items = response,
@@ -93,6 +100,34 @@ namespace BookStoreProject.Controllers
                 };
 
                 return Ok(paginationSet);
+            }
+            catch(System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            try
+            {
+                var categoriesInDB = await _categoryService.GetCategoriesAsync();
+                var listForReturn = _mapper.Map<IEnumerable<Categories>,IEnumerable<CategoryForSelectDto>>(categoriesInDB);
+                return Ok(listForReturn);
+            }
+            catch(System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("user")]
+        public async Task<IActionResult> GetAllCategoriesForUser()
+        {
+            try
+            {
+                var categoriesInDB = await _categoryService.GetCategoriesAsync();
+                var listForReturn = _mapper.Map<IEnumerable<Categories>, IEnumerable<CategoryForUserListDto>>(categoriesInDB);
+                return Ok(listForReturn);    
             }
             catch(System.Exception)
             {
