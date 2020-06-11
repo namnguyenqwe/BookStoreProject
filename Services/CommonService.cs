@@ -23,6 +23,7 @@ namespace BookStoreProject.Services
         T GetSingleByCondition(Expression<Func<T, bool>> expression, string[] includes);
 
         IEnumerable<T> GetAll(string[] includes);
+        IEnumerable<T> GetMultiByCondition(Expression<Func<T, bool>> expression, string[] includes);
         IEnumerable<T> GetMultiPaging(Expression<Func<T, bool>> expression, int index = 0, int size = 10, string[] includes = null);
         int GetCount(Expression<Func<T, bool>> expression);
         
@@ -67,6 +68,10 @@ namespace BookStoreProject.Services
         public IEnumerable<T> GetAll(string[] includes)
         {
             return _repository.GetAll(includes);
+        }
+        public IEnumerable<T> GetMultiByCondition(Expression<Func<T, bool>> expression, string[] includes)
+        {
+            return _repository.GetMultiByCondition(expression, includes);
         }
         public IEnumerable<T> GetMultiPaging(Expression<Func<T, bool>> expression, int index = 0, int size = 10, string[] includes = null)
         {
