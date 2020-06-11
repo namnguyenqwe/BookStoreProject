@@ -102,7 +102,7 @@ namespace BookStoreProject.Controllers
             if(!"failed".Equals(imageName))
             {
                 var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
-                user.AvatarLink = _baseUrlHelper.GetBaseUrl() + "/Image/" + imageName;
+                user.AvatarLink = _baseUrlHelper.GetBaseUrl() + "/Images/" + imageName;
                 _userService.Update(user);
                 _userService.SaveChanges();
                 return Ok(user);
