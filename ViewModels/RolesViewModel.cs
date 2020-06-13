@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace BookStoreProject.ViewModels
 {
-    public class ProfileViewModel
+    public class RolesViewModel
     {
+        public string RoleName { get; set; }
         public string UserName { get; set; }
-        public string FullName { get; set; }
-        public DateTime? AccountCreateDate { get; set; }
-        public string Role { get; set; }
     }
 }
