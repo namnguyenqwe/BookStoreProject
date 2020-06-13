@@ -16,7 +16,7 @@ namespace BookStoreProject.Services
         void Add(T entity);
         void Update(T entity);
 
-        //void Delete();
+        void Delete(T entity);
         void SaveChanges();
 
         T GetSingleById(int id);
@@ -50,7 +50,10 @@ namespace BookStoreProject.Services
             _repository.Update(entity);
         }
 
-        //public void Delete();
+        public void Delete(T entity)
+        {
+            _repository.Remove(entity);
+        }
         public void SaveChanges()
         {
             _unitOfWork.Commit();

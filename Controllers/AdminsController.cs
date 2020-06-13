@@ -39,6 +39,14 @@ namespace BookStoreProject.Controllers
             _imageFileService = imageFileService;
             this._context = context;
         }
+        [HttpGet]
+        [Route("test")]
+        public IActionResult test()
+        {
+            BookStoreDbContext db = new BookStoreDbContext();
+            var listUser = _context.UserRoles.ToList();
+            return Ok(listUser);
+        }
 
         [HttpGet]
         public IActionResult GetUserProfile()
@@ -49,7 +57,7 @@ namespace BookStoreProject.Controllers
                 return Unauthorized();
             }
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
-
+           
             if (user == null)
             {
                 return NotFound();
@@ -108,13 +116,12 @@ namespace BookStoreProject.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = _userService.GetSingleByCondition(s => s.Id == id, null);
+            var user = _userService.GetSingleByCondition(s => s.Id == id,null);
             if (user == null)
             {
                 return NotFound();
             }
-            user.IsDeleted = true;
-            _userService.Update(user);
+            _userService.Delete(user);
             _userService.SaveChanges();
             return Ok();
 
