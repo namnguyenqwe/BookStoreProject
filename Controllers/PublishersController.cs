@@ -79,6 +79,16 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet("{publisherId}")]
+        public async Task<IActionResult> GetPublisherById(int publisherId)
+        {
+            var publisherInDB = await _publisherService.GetPublisherByIdAsync(publisherId);
+            if (publisherInDB == null)
+                return NotFound(publisherId);
+            var publisherForReturn = _mapper.Map<Publisher, PublisherForListDto>(publisherInDB);
+            publisherForReturn.BookTitleCount = _publisherService.CountBookTitleInPublisher(publisherId);
+            return Ok(publisherForReturn);
+        }
         [HttpPost]
         public async Task<IActionResult> CreatePublishers([FromBody] PublisherDto input)
         {

@@ -13,7 +13,7 @@ namespace BookStoreProject.Models
         public int OrderID { get; set; }
         public string ApplicationUserID { get; set; }
         public int RecipientID { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
         public string CouponID { get; set; }
         public decimal? ShippingFee { get; set; }
         public string Status { get; set; }

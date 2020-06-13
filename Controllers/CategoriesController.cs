@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using AutoMapper;
 using BookStoreProject.Dtos.Category;
@@ -105,6 +106,16 @@ namespace BookStoreProject.Controllers
             {
                 return BadRequest();
             }
+        }
+        [HttpGet("{categoryId}")]
+        public async Task<IActionResult> GetCategoryById(int categoryId)
+        {
+            var categoryInDB = await _categoryService.FindCategoryByIdAsync(categoryId);
+            if (categoryInDB == null)
+                return NotFound(categoryId);
+            var categoryForReturn = _mapper.Map<Categories, CategoryForListDto>(categoryInDB);
+            categoryForReturn.BookTitleCount = _categoryService.CountBookTitleInCategory(categoryId);
+            return Ok(categoryForReturn);
         }
         [HttpGet("all")]
         public async Task<IActionResult> GetAllCategories()

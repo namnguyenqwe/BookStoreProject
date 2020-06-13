@@ -32,37 +32,7 @@ namespace BookStoreProject.Controllers
                 return NotFound();
             else return Ok(_mapper.Map<BookForDetailDto>(book));
         }
-        [HttpGet("user/{bookId}")]
-        public async Task<IActionResult> GetBookByIdForUser(int bookId,int num)
-        {
-            var bookInDB = await _bookService.GetBookByIdForUserAsync(bookId);
-            if (bookInDB == null)
-                return NotFound(bookId);
-            var book = _mapper.Map<Book, BookForUserDetailDto>(bookInDB);
-            if (book.Reviews != null)
-            {
-               // book.ReviewCount = book.Reviews.Count;
-                //book.Rating = (int)(book.Reviews.Aggregate((a, b) => new ReviewForUserListDto { Rating = a.Rating + b.Rating }).Rating / book.ReviewCount);
-                book.Reviews = book.Reviews.Take(3).ToList();
-            } 
-            var relatedBooksInDB = await _bookService.GetRelatedBooks(book.BookID, num);
-            book.RelatedBooks = _mapper.Map<ICollection<Book>, ICollection<BookForUserRelatedListDto>>(relatedBooksInDB);
-            return Ok(book);
-
-        }
-        [HttpGet("user/latest")]
-        public async Task<IActionResult> GetLatestBooks(int num = 5)
-        {
-            try
-            {
-                var latestBooks = await _bookService.GetLatestBooks(num);
-                return Ok(latestBooks);
-            }
-            catch(System.Exception)
-            {
-                return BadRequest();
-            }
-        }
+       
         [HttpDelete("{bookId}")]
         public async Task<IActionResult> DeleteBook(int bookId)
         {
@@ -133,6 +103,63 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
-        
+        [HttpGet("user")]
+        public IActionResult GetAllBooks(string keyword)
+        {
+            try
+            {
+                var booksInDB = _bookService.GetBooksForUser(keyword);
+                var booksForReturn = _mapper.Map<IEnumerable<Book>, IEnumerable<BookForUserSearchListDto>>(booksInDB);
+                return Ok(booksForReturn);
+            }
+            catch(System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("user/{bookId}")]
+        public async Task<IActionResult> GetBookByIdForUser(int bookId, int num = 5)
+        {
+            var bookInDB = await _bookService.GetBookByIdForUserAsync(bookId);
+            if (bookInDB == null)
+                return NotFound(bookId);
+            var book = _mapper.Map<Book, BookForUserDetailDto>(bookInDB);
+            /*if (book.Reviews != null)
+            {
+               // book.ReviewCount = book.Reviews.Count;
+                //book.Rating = (int)(book.Reviews.Aggregate((a, b) => new ReviewForUserListDto { Rating = a.Rating + b.Rating }).Rating / book.ReviewCount);
+                book.Reviews = book.Reviews.Take(3).ToList();
+            } */
+            var relatedBooksInDB = await _bookService.GetRelatedBooks(book.BookID, num);
+            book.RelatedBooks = _mapper.Map<ICollection<Book>, ICollection<BookForUserRelatedListDto>>(relatedBooksInDB);
+            return Ok(book);
+
+        }
+        [HttpGet("user/latest")]
+        public async Task<IActionResult> GetLatestBooks(int num = 5)
+        {
+            try
+            {
+                var latestBooks = await _bookService.GetLatestBooks(num);
+                return Ok(latestBooks);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("user/popular")]
+        public async Task<IActionResult> GetPopularBooks(int num = 5)
+        {
+            try 
+            {
+                var popularBooks = await _bookService.GetPopularBooks(num);
+                return Ok(popularBooks);
+            }
+            catch(System.Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

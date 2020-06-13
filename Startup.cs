@@ -117,7 +117,7 @@ namespace BookStoreProject
                 };
             });
 
-            services.AddCors();
+            //services.AddCors();
             services.AddSignalR();
             services.AddHttpContextAccessor();
             services.AddSingleton<IBaseUrlHelper, BaseUrlHelper>();
@@ -140,11 +140,16 @@ namespace BookStoreProject
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder =>
+            /*app.UseCors(builder =>
             builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString())
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials());
+            .AllowCredentials());*/
+            app.UseCors(builder =>
+            builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            );
 
             app.UseHttpsRedirection();
             

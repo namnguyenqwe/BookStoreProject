@@ -21,6 +21,7 @@ namespace BookStoreProject.Services
         Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int number);
         Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int number);
         Task<ICollection<Book>> GetRelatedBooks(int bookId, int number);
+        IEnumerable<Book> GetBooksForUser(string keyword);
     }
     public class BookService : IBookService
     {
@@ -190,22 +191,39 @@ namespace BookStoreProject.Services
             return listForReturn; 
         }
 
-        public async Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int number)
+        public async Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int num)
         {
-           /* var latestBookList = await _dbContext.Books.Include(x => x.OrderItems)
-                                    .ThenInclude(x => x.Order).ToListAsync();
-                                    */
-            var latestBookList = await _dbContext.Books.Include(x => x.Reviews).Where(x => x.Status == true).OrderByDescending(x => x.QuantityOut).Take(number).ToListAsync();
-            var listForReturn = latestBookList.Select(x => new BookForUserListDto
-            {
-                BookID = x.BookID,
-                NameBook = x.NameBook,
-                Price = x.Price,
-                ReviewCount = x.Reviews.Count,
-                ImageLink = x.ImageLink,
-                Rating = (int)(x.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / x.Reviews.Count)
-            });
-            return listForReturn;
+            /* var latestBookList = await _dbContext.Books.Include(x => x.OrderItems)
+                                     .ThenInclude(x => x.Order).ToListAsync();
+                                     */
+            /* var latestBookList = await _dbContext.Books.Include(x => x.Reviews).Where(x => x.Status == true).OrderByDescending(x => x.QuantityOut).Take(number).ToListAsync();
+             var listForReturn = latestBookList.Select(x => new BookForUserListDto
+             {
+                 BookID = x.BookID,
+                 NameBook = x.NameBook,
+                 Price = x.Price,
+                 ReviewCount = x.Reviews.Count,
+                 ImageLink = x.ImageLink,
+                 Rating = (int)(x.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / x.Reviews.Count)
+             });*/
+
+            return await _dbContext.OrderItems.Include(x => x.Order)
+                                       .Include(x => x.Book).ThenInclude(y => y.Reviews)
+                                       // .Where(x => x.Order.Date.Month == DateTime.Now.Month)
+                                        .GroupBy(x => x.Book)
+                                        .OrderByDescending(x => x.Count())
+                                        //.OrderByDescending(x => x.Aggregate((a,b) => new OrderItems {Quantity = a.Quantity + b.Quantity }).Quantity)
+                                        .Select(x => new BookForUserListDto
+                                        {
+                                            BookID = x.Key.BookID,
+                                            NameBook = x.Key.NameBook,
+                                            Price = x.Key.Price,
+                                            ReviewCount = x.Key.Reviews.Any() ? x.Key.Reviews.Count : 0,
+                                            ImageLink = x.Key.ImageLink,
+                                            Rating = x.Key.Reviews.Any() ? (int)(x.Key.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / x.Key.Reviews.Count) : 0
+                                        }).Take(num).ToListAsync();
+                                        
+            //return listForReturn;
         }
 
         public async Task<ICollection<Book>> GetRelatedBooks(int bookId, int number)
@@ -218,8 +236,24 @@ namespace BookStoreProject.Services
 
         public async Task<Book> GetBookByIdForUserAsync(int bookId)
         {
-            return await _dbContext.Books.Include(x => x.Reviews).Include(x => x.Publisher)
-                          .Include(x => x.Category).FirstOrDefaultAsync(x => x.BookID == bookId);
+            return await _dbContext.Books.Include(x => x.Publisher)
+                          .Include(x => x.Category)
+                          .Include(x => x.Reviews).ThenInclude(y => y.ApplicationUser)
+                          .FirstOrDefaultAsync(x => x.BookID == bookId);
+        }
+
+        public IEnumerable<Book> GetBooksForUser(string keyword)
+        {
+            if (!string.IsNullOrEmpty(keyword))
+            {
+
+                return _dbContext.Books.Include(x => x.Reviews)
+                    .Where(x =>
+                        x.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
+                        x.Author.ToUpper().Contains(keyword.ToUpper()))
+                    .AsEnumerable();
+            }
+            return _dbContext.Books.Include(x => x.Reviews).AsEnumerable();
         }
     }
 }

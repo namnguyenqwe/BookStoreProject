@@ -450,6 +450,21 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607141515_AccountCreateDate')
+BEGIN
+    ALTER TABLE [AspNetUsers] ADD [AccountCreateDate] datetime2 NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607141515_AccountCreateDate')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200607141515_AccountCreateDate', N'3.1.4');
+END;
+
+GO
+
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607160827_ChangeInformationInBookTable')
 BEGIN
     DECLARE @var0 sysname;
