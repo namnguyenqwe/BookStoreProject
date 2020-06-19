@@ -16,13 +16,14 @@ namespace BookStoreProject.Services
         void Add(T entity);
         void Update(T entity);
 
-        //void Delete();
+        void Delete(T entity);
         void SaveChanges();
 
         T GetSingleById(int id);
         T GetSingleByCondition(Expression<Func<T, bool>> expression, string[] includes);
 
         IEnumerable<T> GetAll(string[] includes);
+        IEnumerable<T> GetMultiByCondition(Expression<Func<T, bool>> expression, string[] includes);
         IEnumerable<T> GetMultiPaging(Expression<Func<T, bool>> expression, int index = 0, int size = 10, string[] includes = null);
         int GetCount(Expression<Func<T, bool>> expression);
         
@@ -49,7 +50,10 @@ namespace BookStoreProject.Services
             _repository.Update(entity);
         }
 
-        //public void Delete();
+        public void Delete(T entity)
+        {
+            _repository.Remove(entity);
+        }
         public void SaveChanges()
         {
             _unitOfWork.Commit();
@@ -67,6 +71,10 @@ namespace BookStoreProject.Services
         public IEnumerable<T> GetAll(string[] includes)
         {
             return _repository.GetAll(includes);
+        }
+        public IEnumerable<T> GetMultiByCondition(Expression<Func<T, bool>> expression, string[] includes)
+        {
+            return _repository.GetMultiByCondition(expression, includes);
         }
         public IEnumerable<T> GetMultiPaging(Expression<Func<T, bool>> expression, int index = 0, int size = 10, string[] includes = null)
         {

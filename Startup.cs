@@ -125,6 +125,9 @@ namespace BookStoreProject
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IImageWriter, ImageWriter>();
+            services.AddTransient<IImageFileService, ImageFileService>();
+
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPublisherService, PublisherService>();

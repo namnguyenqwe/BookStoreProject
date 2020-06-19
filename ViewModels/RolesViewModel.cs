@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookStoreProject.Models
+namespace BookStoreProject.ViewModels
 {
-    public class LoginModel
+    public class RolesViewModel
     {
-        public string Email { get; set; }
+        public string RoleName { get; set; }
         public string UserName { get; set; }
-        public string PassWord { get; set; }
-        
     }
 }

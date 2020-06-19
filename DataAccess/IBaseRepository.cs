@@ -17,6 +17,7 @@ namespace BookStoreProject.DataAccess
         T GetSingleByCondition(Expression<Func<T, bool>> expression, string[] includes);
 
         IEnumerable<T> GetAll(string[] includes);
+        IEnumerable<T> GetMultiByCondition(Expression<Func<T, bool>> expression, string[] includes); 
         IEnumerable<T> GetMultiPaging(Expression<Func<T, bool>> expression, int index = 0, int size = 10, string[] includes = null);
         int GetCount(Expression<Func<T, bool>> expression);
         
