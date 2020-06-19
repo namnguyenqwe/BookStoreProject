@@ -83,7 +83,7 @@ namespace BookStoreProject.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.UserName);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.PassWord))
             {
                 var role = await _userManager.GetRolesAsync(user);
@@ -92,9 +92,9 @@ namespace BookStoreProject.Controllers
                 {
                     Subject = new ClaimsIdentity(new Claim[] {
                         new Claim("Name",user.UserName.ToString()),
+                        new Claim("Email",user.Email.ToString()),
                         new Claim("UserID",user.Id.ToString()),
-                        new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault()),
-                        //new Claim("IsDeleted",(user.IsDeleted==null?false:user.IsDeleted).ToString())
+                        new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault())          
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(10000),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
@@ -108,7 +108,7 @@ namespace BookStoreProject.Controllers
           
             else
             {
-                return BadRequest(new { message = "Username or password is incorrect!" });
+                return BadRequest(new { message = "Email or password is incorrect!" });
             }
         }
 
