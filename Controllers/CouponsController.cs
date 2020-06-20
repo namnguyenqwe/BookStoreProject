@@ -35,6 +35,7 @@ namespace BookStoreProject.Controllers
                 criteria = criteria.ToLower();
                 var response = _mapper.Map<IEnumerable<Coupon>, IEnumerable<CouponForListDto>>(list);
 
+                #region Sort by criteria
                 if (criteria.Equals("couponid"))
                 {
                     if (sort == 0) response = response.OrderByDescending(x => x.CouponID).Skip((page - 1) * pageSize).Take(pageSize);
@@ -69,6 +70,8 @@ namespace BookStoreProject.Controllers
 
                     else response = response.OrderBy(x => x.Status).Skip((page - 1) * pageSize).Take(pageSize);
                 }
+                #endregion
+
                 var paginationSet = new PaginationSet<CouponForListDto>()
                 {
                     Items = response,

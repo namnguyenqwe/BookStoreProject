@@ -41,6 +41,8 @@ namespace BookStoreProject.Controllers
                         item.BookTitleCount = _publisherService.CountBookTitleInPublisher(item.PublisherID);
                     }
                 }
+
+                #region sort by criteria
                 if (criteria.Equals("publisherid"))
                 {
                     if (sort == 0) response = response.OrderByDescending(x => x.PublisherID).Skip((page - 1) * pageSize).Take(pageSize);
@@ -55,7 +57,9 @@ namespace BookStoreProject.Controllers
                 {
                     if (sort == 0) response = response.OrderByDescending(x => x.BookTitleCount).Skip((page - 1) * pageSize).Take(pageSize);
                     else response = response.OrderBy(x => x.BookTitleCount).Skip((page - 1) * pageSize).Take(pageSize);
-                }    
+                }
+                #endregion
+
                 var paginationSet = new PaginationSet<PublisherForListDto>()
                 {
                     Items = response,

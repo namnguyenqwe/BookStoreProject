@@ -76,6 +76,21 @@ namespace BookStoreProject.DataAccess
             }
             return BookStoreDbContext.Set<T>().AsQueryable();
         }
+
+        public virtual IEnumerable<T> GetMultiByCondition(Expression<Func<T, bool>> expression, string[] includes)
+        {
+            if(includes != null && includes.Count()>0)
+            {
+                var query = BookStoreDbContext.Set<T>().Include(includes.First());
+                foreach(string i in includes.Skip(1))
+                {
+                    query = query.Include(i);
+                }
+                return query.Where<T>(expression).AsQueryable();
+            }
+            return BookStoreDbContext.Set<T>().Where<T>(expression).AsQueryable();
+        }
+
         public virtual IEnumerable<T> GetMultiPaging(Expression<Func<T, bool>> expression, int index = 0, int size = 10, string[] includes = null)
         {
             var skipCount = index * size;

@@ -33,6 +33,8 @@ namespace BookStoreProject.Controllers
                 var totalCount = reviewsInDB.Count();
                 criteria = criteria.ToLower();
                 var response = _mapper.Map<IEnumerable<Review>, IEnumerable<ReviewForListDto>>(reviewsInDB);
+
+                #region sort by criteria
                 if (criteria.Equals("reviewid"))
                 {
                     if (sort == 0) response = response.OrderByDescending(x => x.ReviewId).Skip((page - 1) * pageSize).Take(pageSize);
@@ -67,6 +69,8 @@ namespace BookStoreProject.Controllers
                                         .ThenBy(x => x.Date.Month)
                                         .ThenBy(x => x.Date.Day).Skip((page - 1) * pageSize).Take(pageSize);
                 }
+                #endregion
+
                 var paginationSet = new PaginationSet<ReviewForListDto>()
                 {
                     Items = response,
