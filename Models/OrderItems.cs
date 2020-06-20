@@ -12,7 +12,7 @@ namespace BookStoreProject.Models
         public int? Quantity { get; set; }
         public decimal? Price { get; set; }
 
-        public Book Book { get; set; }
-        public Orders Order { get; set; }
+        public virtual Book Book { get; set; }
+        public virtual Orders Order { get; set; }
     }
 }

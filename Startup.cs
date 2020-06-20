@@ -128,6 +128,10 @@ namespace BookStoreProject
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPublisherService, PublisherService>();
+            services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<ICouponService, CouponService>();
+            services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<IShippingService, ShippingService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
             services.AddCors();
         }
@@ -169,17 +173,6 @@ namespace BookStoreProject
             });
         }
 
-        private static void UpdateDatabase(IApplicationBuilder app)
-        {
-            using (var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<BookStoreDbContext>())
-                {
-                    context.Database.Migrate();
-                }
-            }
-        }
+       
     }
 }

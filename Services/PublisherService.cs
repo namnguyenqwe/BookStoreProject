@@ -49,12 +49,40 @@ namespace BookStoreProject.Services
         {
             try
             {
-                var publisherInDb = await _dbContext.Publishers.Include(x => x.Books)
+                var publisherInDb = await _dbContext.Publishers.Include(x => x.Books).ThenInclude(y => y.CartItems)
+                                .Include(x => x.Books).ThenInclude(y => y.Reviews)
+                                .Include(x => x.Books).ThenInclude(y => y.WishLists)
+                                .Include(x => x.Books).ThenInclude(y => y.OrderItems)
                                 .FirstOrDefaultAsync(x => x.PublisherID == publisherId);
                 if (publisherInDb == null)
                     return false;
                 if (publisherInDb.Books.Any())
+                {
+                    foreach (var book in publisherInDb.Books)
+                    {
+
+                        if (book.CartItems.Any())
+                        {
+                            _dbContext.CartItems.RemoveRange(book.CartItems);
+                        }
+
+                        if (book.OrderItems.Any())
+                        {
+                            _dbContext.OrderItems.RemoveRange(book.OrderItems);
+                        }
+
+                        if (book.WishLists.Any())
+                        {
+                            _dbContext.WishLists.RemoveRange(book.WishLists);
+                        }
+
+                        if (book.Reviews.Any())
+                        {
+                            _dbContext.Reviews.RemoveRange(book.Reviews);
+                        }
+                    }
                     _dbContext.Books.RemoveRange(publisherInDb.Books);
+                }    
                 _dbContext.Publishers.Remove(publisherInDb);
                 await _dbContext.SaveChangesAsync();
                 return true;

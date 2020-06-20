@@ -220,7 +220,7 @@ namespace BookStoreProject.Migrations
                     b.Property<string>("CouponID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("Date")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
@@ -297,6 +297,11 @@ namespace BookStoreProject.Migrations
 
             modelBuilder.Entity("BookStoreProject.Models.Review", b =>
                 {
+                    b.Property<int>("ReviewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -312,7 +317,9 @@ namespace BookStoreProject.Migrations
                     b.Property<int?>("Rating")
                         .HasColumnType("int");
 
-                    b.HasKey("ApplicationUserId", "BookID");
+                    b.HasKey("ReviewId");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("BookID");
 
@@ -647,9 +654,7 @@ namespace BookStoreProject.Migrations
                 {
                     b.HasOne("BookStoreProject.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Reviews")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("BookStoreProject.Models.Book", "Book")
                         .WithMany("Reviews")

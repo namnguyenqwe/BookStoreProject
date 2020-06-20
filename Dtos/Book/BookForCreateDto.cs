@@ -8,6 +8,8 @@ namespace BookStoreProject.Dtos.Book
 {
     public class BookForCreateDto
     {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NameBook can not be null or empty")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string NameBook { get; set; }
 
         public int CategoryID { get; set; }

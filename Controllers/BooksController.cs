@@ -110,7 +110,7 @@ namespace BookStoreProject.Controllers
             {
                 var booksInDB = _bookService.GetBooksForUser(keyword);
                 var booksForReturn = _mapper.Map<IEnumerable<Book>, IEnumerable<BookForUserSearchListDto>>(booksInDB);
-                return Ok(booksForReturn);
+                return Ok(new { data = booksForReturn });
             }
             catch(System.Exception)
             {
@@ -136,12 +136,12 @@ namespace BookStoreProject.Controllers
 
         }
         [HttpGet("user/latest")]
-        public async Task<IActionResult> GetLatestBooks(int num = 5)
+        public async Task<IActionResult> GetLatestBooks(int? num)
         {
             try
             {
                 var latestBooks = await _bookService.GetLatestBooks(num);
-                return Ok(latestBooks);
+                return Ok(new { data = latestBooks });
             }
             catch (System.Exception)
             {
@@ -149,12 +149,12 @@ namespace BookStoreProject.Controllers
             }
         }
         [HttpGet("user/popular")]
-        public async Task<IActionResult> GetPopularBooks(int num = 5)
+        public async Task<IActionResult> GetPopularBooks(int? num)
         {
             try 
             {
                 var popularBooks = await _bookService.GetPopularBooks(num);
-                return Ok(popularBooks);
+                return Ok(new { data = popularBooks });
             }
             catch(System.Exception)
             {

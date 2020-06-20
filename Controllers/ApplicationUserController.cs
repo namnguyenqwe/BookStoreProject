@@ -101,12 +101,13 @@ namespace BookStoreProject.Controllers
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-                return Ok(new {  token,user, role });
+
+                return Ok(new { token, user, role });
 
             }
             else
             {
-                return BadRequest(new { message = "Username or password is incorrect!" });
+                return BadRequest( new { message = "Username or password is incorrect!" });
             }
         }
 

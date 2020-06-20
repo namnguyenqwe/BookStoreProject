@@ -33,24 +33,28 @@ namespace BookStoreProject.Controllers
                 var list = _publisherService.GetPublishers(keyword);
                 int totalCount = list.Count();
                 criteria = criteria.ToLower();
-                IEnumerable<Publisher> query = null;
+                var response = _mapper.Map<IEnumerable<Publisher>, IEnumerable<PublisherForListDto>>(list);
+                if (response != null)
+                {
+                    foreach (var item in response)
+                    {
+                        item.BookTitleCount = _publisherService.CountBookTitleInPublisher(item.PublisherID);
+                    }
+                }
                 if (criteria.Equals("publisherid"))
                 {
-                    if (sort == 0) query = list.OrderByDescending(x => x.PublisherID).Skip((page - 1) * pageSize).Take(pageSize);
-                    else query = list.OrderBy(x => x.PublisherID).Skip((page - 1) * pageSize).Take(pageSize);
+                    if (sort == 0) response = response.OrderByDescending(x => x.PublisherID).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.PublisherID).Skip((page - 1) * pageSize).Take(pageSize);
                 }
                 if (criteria.Equals("publisher"))
                 {
-                    if (sort == 0) query = list.OrderByDescending(x => x.publisher).Skip((page - 1) * pageSize).Take(pageSize);
-                    else query = list.OrderBy(x => x.publisher).Skip((page - 1) * pageSize).Take(pageSize);
+                    if (sort == 0) response = response.OrderByDescending(x => x.publisher).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.publisher).Skip((page - 1) * pageSize).Take(pageSize);
                 }
-                var response = _mapper.Map<IEnumerable<Publisher>, IEnumerable<PublisherForListDto>>(query);
-                if (response != null)
+                if (criteria.Equals("booktitlecount"))
                 {
-                    foreach(var item in response)
-                    {
-                        item.BookTitleCount = _publisherService.CountBookTitleInPublisher(item.PublisherID);
-                    }    
+                    if (sort == 0) response = response.OrderByDescending(x => x.BookTitleCount).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.BookTitleCount).Skip((page - 1) * pageSize).Take(pageSize);
                 }    
                 var paginationSet = new PaginationSet<PublisherForListDto>()
                 {

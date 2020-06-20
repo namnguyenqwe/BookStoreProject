@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using BookStoreProject.Dtos.Book;
+using BookStoreProject.Dtos.CartItem;
 using BookStoreProject.Dtos.Category;
+using BookStoreProject.Dtos.Coupon;
+using BookStoreProject.Dtos.District;
 using BookStoreProject.Dtos.Publisher;
 using BookStoreProject.Dtos.Review;
 using BookStoreProject.Models;
@@ -15,6 +18,7 @@ namespace BookStoreProject.AutoMapper
     {
         public AutoMapperProfiles()
         {
+            #region Book
             CreateMap<BookForCreateDto, Book>().ForMember(x => x.BookID, opt => opt.Ignore())
                                                 .ForMember(x => x.QuantityOut, opt => opt.Ignore());                                      
             CreateMap<Book, BookForDetailDto>();
@@ -34,7 +38,9 @@ namespace BookStoreProject.AutoMapper
                                                         .ForMember(x => x.Rating, y => { 
                                                             y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a,b) => new Review { BookID = 0,Rating = a.Rating + b.Rating}).Rating / z.Reviews.Count : 0); 
                                                         });
+            #endregion
 
+            #region Category
             CreateMap<CategoryDto,Categories>().ForMember(x => x.CategoryID, opt => opt.Ignore());
             CreateMap<Categories, CategoryForSelectDto>();
             CreateMap<Categories, CategoryForListDto>().ForMember(x => x.BookTitleCount, y => { y.MapFrom(z => z.Books.Count); });
@@ -46,15 +52,42 @@ namespace BookStoreProject.AutoMapper
                                                                                     .ThenByDescending(x => x.Date.Day)
                                                                                     .FirstOrDefault().ImageLink);
                                                         });
+            #endregion
 
+            #region Review
             CreateMap<Review, ReviewForListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
-                                           .ForMember(x => x.FullName, y => { y.MapFrom(z => z.ApplicationUser.FullName); });
+                                           .ForMember(x => x.UserName, y => { y.MapFrom(z => z.ApplicationUser.UserName); });
             CreateMap<Review, ReviewForUserListDto>().ForMember(x => x.AvatarLink, y => { y.MapFrom(z => z.ApplicationUser.AvatarLink); })
                                                     .ForMember(x => x.userName, y => { y.MapFrom(z => z.ApplicationUser.UserName); });
+            CreateMap<ReviewForUserCreateDto, Review>();
+            #endregion
 
+            #region Publisher
             CreateMap<Publisher, PublisherForSelectDto>();
             CreateMap<Publisher, PublisherForListDto>();
             CreateMap<PublisherDto, Publisher>();
+            #endregion
+
+            #region Coupon
+            CreateMap<Coupon, CouponForListDto>();
+            CreateMap<CouponForModalDto, Coupon>();
+            #endregion
+
+            #region CartItem
+            CreateMap<CartItems, CartItemForUserListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
+                                                          .ForMember(x => x.Author, y => { y.MapFrom(z => z.Book.Author); })
+                                                          .ForMember(x => x.Price, y => { y.MapFrom(z => z.Book.Price); })
+                                                          .ForMember(x => x.OriginalPrice, y => { y.MapFrom(z => z.Book.OriginalPrice); });
+            #endregion
+
+            #region District
+            CreateMap<District, DistrictForListDto>();
+            CreateMap<District, DistrictForDetailDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); });
+            CreateMap<DistrictForUpdateDto, District>().ForMember(x => x.DistrictID, opt => opt.Ignore())
+                                                       .ForMember(x => x.CityID, opt => opt.Ignore())
+                                                       .ForMember(x => x.type, opt => opt.Ignore())
+                                                       .ForMember(x => x.district, opt => opt.Ignore());
+            #endregion
         }
     }
 }

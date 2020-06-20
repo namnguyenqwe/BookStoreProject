@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookStoreProject.Migrations
 {
-    public partial class InitialAzureDb : Migration
+    public partial class ConnectToDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,7 +45,8 @@ namespace BookStoreProject.Migrations
                     AvatarLink = table.Column<string>(maxLength: 300, nullable: true),
                     Status = table.Column<bool>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: true),
-                    Salt = table.Column<string>(maxLength: 50, nullable: true)
+                    Salt = table.Column<string>(maxLength: 50, nullable: true),
+                    AccountCreateDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -247,7 +248,7 @@ namespace BookStoreProject.Migrations
                     Format = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     NumberOfPage = table.Column<int>(nullable: true),
-                    Infomation = table.Column<string>(nullable: true),
+                    Information = table.Column<string>(nullable: true),
                     OriginalPrice = table.Column<decimal>(nullable: true),
                     Price = table.Column<decimal>(nullable: true),
                     ImageLink = table.Column<string>(maxLength: 300, nullable: true),
@@ -333,21 +334,23 @@ namespace BookStoreProject.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
+                    ReviewId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     BookID = table.Column<int>(nullable: false),
-                    ApplicationUserId = table.Column<string>(nullable: false),
+                    ApplicationUserId = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reviews", x => new { x.ApplicationUserId, x.BookID });
+                    table.PrimaryKey("PK_Reviews", x => x.ReviewId);
                     table.ForeignKey(
                         name: "FK_Reviews_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reviews_Book_BookID",
                         column: x => x.BookID,
@@ -388,7 +391,7 @@ namespace BookStoreProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ApplicationUserID = table.Column<string>(nullable: true),
                     RecipientID = table.Column<int>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false),
                     CouponID = table.Column<string>(nullable: true),
                     ShippingFee = table.Column<decimal>(nullable: true),
                     Status = table.Column<string>(nullable: true),
@@ -531,6 +534,11 @@ namespace BookStoreProject.Migrations
                 name: "IX_Recipient_DistrictID",
                 table: "Recipient",
                 column: "DistrictID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_ApplicationUserId",
+                table: "Reviews",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_BookID",

@@ -18,9 +18,9 @@ namespace BookStoreProject.Services
         Task<bool> UpdateBookAsync(Book book);
         IEnumerable<Book> GetBooks(string keyword);
         IEnumerable<BookForListDto> GetBooksPerPage(IEnumerable<BookForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "BookId");
-        Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int number);
-        Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int number);
-        Task<ICollection<Book>> GetRelatedBooks(int bookId, int number);
+        Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int? num);
+        Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int? num);
+        Task<ICollection<Book>> GetRelatedBooks(int bookId, int num);
         IEnumerable<Book> GetBooksForUser(string keyword);
     }
     public class BookService : IBookService
@@ -40,9 +40,33 @@ namespace BookStoreProject.Services
         {
             try
             {
-                var book = await _dbContext.Books.FirstOrDefaultAsync(x => x.BookID == bookID);
+                var book = await _dbContext.Books.Include(x => x.WishLists)
+                            .Include(x => x.OrderItems)
+                            .Include(x => x.Reviews)
+                            .Include(x => x.CartItems)
+                            .FirstOrDefaultAsync(x => x.BookID == bookID);
                 if (book == null)
                     return false;
+
+                if (book.CartItems.Any())
+                {
+                    _dbContext.CartItems.RemoveRange(book.CartItems);
+                }
+
+                if (book.OrderItems.Any())
+                {
+                    _dbContext.OrderItems.RemoveRange(book.OrderItems);
+                }
+
+                if (book.WishLists.Any())
+                {
+                    _dbContext.WishLists.RemoveRange(book.WishLists);
+                }
+
+                if (book.Reviews.Any())
+                {
+                    _dbContext.Reviews.RemoveRange(book.Reviews);
+                }
                 _dbContext.Books.Remove(book);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -173,25 +197,27 @@ namespace BookStoreProject.Services
             return null;
         }
 
-        public async Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int num)
+        public async Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int? num)
         {
             var latestBookList = await _dbContext.Books.Include(x => x.Reviews).Where(x => x.Status == true)
                                     .OrderByDescending(x => x.Date.Year)
                                     .ThenByDescending(x => x.Date.Month)
-                                    .ThenByDescending(x => x.Date.Day).Take(num).ToListAsync();
+                                    .ThenByDescending(x => x.Date.Day).ToListAsync();
             var listForReturn = latestBookList.Select(x => new BookForUserListDto
             {
                 BookID = x.BookID,
                 NameBook = x.NameBook,
+                OriginalPrice = x.OriginalPrice,
                 Price = x.Price,
+                Information = x.Information,
                 ReviewCount = x.Reviews.Any() ? x.Reviews.Count : 0,
                 ImageLink = x.ImageLink,
                 Rating = x.Reviews.Any() ? (int)(x.Reviews.Aggregate((a,b) => new Review { Rating = a.Rating + b.Rating}).Rating / x.Reviews.Count) : 0
             }) ;
-            return listForReturn; 
+            return num != null ? listForReturn.Take((int)num) : listForReturn; 
         }
 
-        public async Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int num)
+        public async Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int? num)
         {
             /* var latestBookList = await _dbContext.Books.Include(x => x.OrderItems)
                                      .ThenInclude(x => x.Order).ToListAsync();
@@ -207,22 +233,25 @@ namespace BookStoreProject.Services
                  Rating = (int)(x.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / x.Reviews.Count)
              });*/
 
-            return await _dbContext.OrderItems.Include(x => x.Order)
+         var list = (await _dbContext.OrderItems.Include(x => x.Order)
                                        .Include(x => x.Book).ThenInclude(y => y.Reviews)
-                                       // .Where(x => x.Order.Date.Month == DateTime.Now.Month)
+                                       .Where(x => x.Order.Date.Year == DateTime.Now.Year && x.Order.Date.Month == DateTime.Now.Month)
+                                       .ToListAsync())
                                         .GroupBy(x => x.Book)
-                                        .OrderByDescending(x => x.Count())
-                                        //.OrderByDescending(x => x.Aggregate((a,b) => new OrderItems {Quantity = a.Quantity + b.Quantity }).Quantity)
+                                        .Where(x => x.Key.Status == true)
+                                      .OrderByDescending(x => x.Aggregate((a,b) => new OrderItems {Quantity = a.Quantity + b.Quantity }).Quantity)
                                         .Select(x => new BookForUserListDto
                                         {
                                             BookID = x.Key.BookID,
                                             NameBook = x.Key.NameBook,
+                                            OriginalPrice = x.Key.OriginalPrice,
                                             Price = x.Key.Price,
+                                            Information = x.Key.Information,
                                             ReviewCount = x.Key.Reviews.Any() ? x.Key.Reviews.Count : 0,
                                             ImageLink = x.Key.ImageLink,
                                             Rating = x.Key.Reviews.Any() ? (int)(x.Key.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / x.Key.Reviews.Count) : 0
-                                        }).Take(num).ToListAsync();
-                                        
+                                        }).ToList();
+            return num != null ? list.Take((int)num) : list;
             //return listForReturn;
         }
 

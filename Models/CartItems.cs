@@ -11,12 +11,9 @@ namespace BookStoreProject.Models
     public class CartItems
     {
         public string ApplicationUserId { get; set; }
-
         public int BookID { get; set; }
         public int? Quantity { get; set; }
-
         public DateTime? CreatedDate { get; set; }
-
         public Book Book { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }

@@ -9,7 +9,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [AspNetRoles] (
         [Id] nvarchar(450) NOT NULL,
@@ -22,7 +22,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [AspNetUsers] (
         [Id] nvarchar(450) NOT NULL,
@@ -46,13 +46,14 @@ BEGIN
         [Status] bit NULL,
         [IsDeleted] bit NULL,
         [Salt] nvarchar(50) NULL,
+        [AccountCreateDate] datetime2 NULL,
         CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
     );
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [Category] (
         [CategoryID] int NOT NULL IDENTITY,
@@ -63,7 +64,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [City] (
         [CityID] nvarchar(450) NOT NULL,
@@ -75,7 +76,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [Coupon] (
         [CouponID] nvarchar(450) NOT NULL,
@@ -89,7 +90,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [Publisher] (
         [PublisherID] int NOT NULL IDENTITY,
@@ -100,7 +101,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [AspNetRoleClaims] (
         [Id] int NOT NULL IDENTITY,
@@ -114,7 +115,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [AspNetUserClaims] (
         [Id] int NOT NULL IDENTITY,
@@ -128,7 +129,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [AspNetUserLogins] (
         [LoginProvider] nvarchar(450) NOT NULL,
@@ -142,7 +143,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [AspNetUserRoles] (
         [UserId] nvarchar(450) NOT NULL,
@@ -155,7 +156,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [AspNetUserTokens] (
         [UserId] nvarchar(450) NOT NULL,
@@ -169,7 +170,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [District] (
         [DistrictID] nvarchar(450) NOT NULL,
@@ -184,7 +185,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [Book] (
         [BookID] int NOT NULL IDENTITY,
@@ -196,7 +197,7 @@ BEGIN
         [Format] nvarchar(max) NULL,
         [Date] datetime2 NOT NULL,
         [NumberOfPage] int NULL,
-        [Infomation] nvarchar(max) NULL,
+        [Information] nvarchar(max) NULL,
         [OriginalPrice] decimal(18,2) NULL,
         [Price] decimal(18,2) NULL,
         [ImageLink] nvarchar(300) NULL,
@@ -212,7 +213,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [Recipient] (
         [RecipientID] int NOT NULL IDENTITY,
@@ -230,7 +231,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [CartItems] (
         [ApplicationUserId] nvarchar(450) NOT NULL,
@@ -245,23 +246,24 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [Reviews] (
+        [ReviewId] int NOT NULL IDENTITY,
         [BookID] int NOT NULL,
-        [ApplicationUserId] nvarchar(450) NOT NULL,
+        [ApplicationUserId] nvarchar(450) NULL,
         [Rating] int NULL,
         [Comment] nvarchar(max) NULL,
         [Date] datetime2 NOT NULL,
-        CONSTRAINT [PK_Reviews] PRIMARY KEY ([ApplicationUserId], [BookID]),
-        CONSTRAINT [FK_Reviews_AspNetUsers_ApplicationUserId] FOREIGN KEY ([ApplicationUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [PK_Reviews] PRIMARY KEY ([ReviewId]),
+        CONSTRAINT [FK_Reviews_AspNetUsers_ApplicationUserId] FOREIGN KEY ([ApplicationUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION,
         CONSTRAINT [FK_Reviews_Book_BookID] FOREIGN KEY ([BookID]) REFERENCES [Book] ([BookID]) ON DELETE CASCADE
     );
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [WishList] (
         [ApplicationUserId] nvarchar(450) NOT NULL,
@@ -274,13 +276,13 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [Orders] (
         [OrderID] int NOT NULL IDENTITY,
         [ApplicationUserID] nvarchar(450) NULL,
         [RecipientID] int NOT NULL,
-        [Date] datetime2 NULL,
+        [Date] datetime2 NOT NULL,
         [CouponID] nvarchar(450) NULL,
         [ShippingFee] decimal(18,2) NULL,
         [Status] nvarchar(max) NULL,
@@ -294,7 +296,7 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE TABLE [OrderItems] (
         [OrderID] int NOT NULL,
@@ -309,186 +311,150 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Book_CategoryID] ON [Book] ([CategoryID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Book_PublisherID] ON [Book] ([PublisherID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_CartItems_BookID] ON [CartItems] ([BookID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_District_CityID] ON [District] ([CityID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_OrderItems_BookID] ON [OrderItems] ([BookID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Orders_ApplicationUserID] ON [Orders] ([ApplicationUserID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Orders_CouponID] ON [Orders] ([CouponID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Orders_RecipientID] ON [Orders] ([RecipientID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Recipient_CityID] ON [Recipient] ([CityID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Recipient_DistrictID] ON [Recipient] ([DistrictID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
+BEGIN
+    CREATE INDEX [IX_Reviews_ApplicationUserId] ON [Reviews] ([ApplicationUserId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_Reviews_BookID] ON [Reviews] ([BookID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     CREATE INDEX [IX_WishList_BookID] ON [WishList] ([BookID]);
 END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200603141027_InitialAzureDb')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200616164456_ConnectToDb')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20200603141027_InitialAzureDb', N'3.1.4');
-END;
-
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607141515_AccountCreateDate')
-BEGIN
-    ALTER TABLE [AspNetUsers] ADD [AccountCreateDate] datetime2 NULL;
-END;
-
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607141515_AccountCreateDate')
-BEGIN
-    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20200607141515_AccountCreateDate', N'3.1.4');
-END;
-
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607160827_ChangeInformationInBookTable')
-BEGIN
-    DECLARE @var0 sysname;
-    SELECT @var0 = [d].[name]
-    FROM [sys].[default_constraints] [d]
-    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
-    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Book]') AND [c].[name] = N'Infomation');
-    IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [Book] DROP CONSTRAINT [' + @var0 + '];');
-    ALTER TABLE [Book] DROP COLUMN [Infomation];
-END;
-
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607160827_ChangeInformationInBookTable')
-BEGIN
-    ALTER TABLE [Book] ADD [Information] nvarchar(max) NULL;
-END;
-
-GO
-
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200607160827_ChangeInformationInBookTable')
-BEGIN
-    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20200607160827_ChangeInformationInBookTable', N'3.1.4');
+    VALUES (N'20200616164456_ConnectToDb', N'3.1.4');
 END;
 
 GO

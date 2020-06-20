@@ -75,25 +75,33 @@ namespace BookStoreProject.Controllers
                 var list = _categoryService.GetCategories(keyword);
                 int totalCount = list.Count();
                 criteria = criteria.ToLower();
-                IEnumerable<Categories> query = null;
+                var response = _mapper.Map<IEnumerable<Categories>, IEnumerable<CategoryForListDto>>(list);
+                if (response != null)
+                {
+                    foreach (var item in response)
+                    {
+                        item.BookTitleCount = _categoryService.CountBookTitleInCategory(item.CategoryID);
+                    }
+                }
+
+                #region Sort by criteria
                 if (criteria.Equals("categoryid"))
                 {
-                    if (sort == 0) query = list.OrderByDescending(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize);
-                    else query = list.OrderBy(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize);
+                    if (sort == 0) response = response.OrderByDescending(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize);
                 }
                 if (criteria.Equals("category"))
                 {
-                    if (sort == 0) query = list.OrderByDescending(x => x.Category).Skip((page - 1) * pageSize).Take(pageSize);
-                    else query = list.OrderBy(x => x.Category).Skip((page - 1) * pageSize).Take(pageSize);
+                    if (sort == 0) response = response.OrderByDescending(x => x.Category).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.Category).Skip((page - 1) * pageSize).Take(pageSize);
                 }
-                var response = _mapper.Map<IEnumerable<Categories>, IEnumerable<CategoryForListDto>>(query);
-                if (response != null)
+                if (criteria.Equals("booktitlecount"))
                 {
-                    foreach(var item in response)
-                    {
-                        item.BookTitleCount = _categoryService.CountBookTitleInCategory(item.CategoryID);
-                    }    
-                }    
+                    if (sort == 0) response = response.OrderByDescending(x => x.BookTitleCount).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.BookTitleCount).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                #endregion
+
                 var paginationSet = new PaginationSet<CategoryForListDto>()
                 {
                     Items = response,
@@ -138,7 +146,7 @@ namespace BookStoreProject.Controllers
             {
                 var categoriesInDB = await _categoryService.GetCategoriesAsync();
                 var listForReturn = _mapper.Map<IEnumerable<Categories>, IEnumerable<CategoryForUserListDto>>(categoriesInDB);
-                return Ok(listForReturn);    
+                return Ok(new { data = listForReturn });    
             }
             catch(System.Exception)
             {

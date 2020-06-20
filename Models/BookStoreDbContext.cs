@@ -46,7 +46,6 @@ namespace BookStoreProject.Models
            
             modelBuilder.Entity<WishList>().HasKey(x => new { x.ApplicationUserId, x.BookID });
             modelBuilder.Entity<CartItems>().HasKey(x => new { x.ApplicationUserId, x.BookID });
-            modelBuilder.Entity<Review>().HasKey(x => new { x.ApplicationUserId, x.BookID });
             modelBuilder.Entity<Categories>().HasKey(x => new { x.CategoryID });
             modelBuilder.Entity<OrderItems>().HasKey(x => new { x.OrderID, x.BookID });
             

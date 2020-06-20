@@ -10,9 +10,11 @@ namespace BookStoreProject.Services
 {
     public interface IReviewService
     {
-        Task<bool> DeleteReview(int bookId, string applicationUserId);
+        Task<bool> DeleteReview(int reviewId);
+        Task<bool> CreateReview(Review reviewCreate);
         IEnumerable<Review> GetReviews(string keyword);
         Task<IEnumerable<Review>> GetReviewsByBookId(int bookId);
+        Task<Review> GetReviewById(int reviewId);
     }
     public class ReviewService : IReviewService
     {
@@ -21,14 +23,28 @@ namespace BookStoreProject.Services
         {
             _dbContext = dbContext;
         }
-        public async Task<bool> DeleteReview(int bookId, string applicationUserId )
+
+        public async Task<bool> CreateReview(Review reviewCreate)
         {
             try
             {
-                var review = await _dbContext.Reviews.Where(x => 
-                x.BookID == bookId &&
-                x.ApplicationUserId == applicationUserId)
-                   .FirstOrDefaultAsync();
+                _dbContext.Reviews.Add(reviewCreate);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> DeleteReview(int reviewId)
+        {
+            try
+            {
+                var review = await _dbContext.Reviews
+                   .FirstOrDefaultAsync(x =>
+                x.ReviewId == reviewId);
                 if (review == null)
                     return false;
                 _dbContext.Reviews.Remove(review);
@@ -39,6 +55,13 @@ namespace BookStoreProject.Services
             {
                 throw ex;
             }
+        }
+
+        public async Task<Review> GetReviewById(int reviewId)
+        {
+            return await _dbContext.Reviews.Include(x => x.ApplicationUser)
+                            .Include(x => x.Book)
+                .FirstOrDefaultAsync(x => x.ReviewId == reviewId);
         }
 
         public IEnumerable<Review> GetReviews(string keyword)
@@ -56,7 +79,7 @@ namespace BookStoreProject.Services
 
         public async Task<IEnumerable<Review>> GetReviewsByBookId(int bookId)
         {
-            return await _dbContext.Reviews.Where(x => x.BookID == bookId).ToListAsync();
+            return await _dbContext.Reviews.Include(x => x.ApplicationUser).Where(x => x.BookID == bookId).ToListAsync();
         }
     }
 }
