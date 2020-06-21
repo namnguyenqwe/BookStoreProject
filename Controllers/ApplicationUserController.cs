@@ -57,7 +57,7 @@ namespace BookStoreProject.Controllers
             {
                 UserName = model.UserName,
                 Email = model.Email,
-                FullName = model.FullName,
+                Name = model.FullName,
                 AvatarLink = _baseUrlHelper.GetBaseUrl() + "/Images/defaultAvatar.png",
             };
             applicationUser.AccountCreateDate = DateTime.Now;
@@ -103,7 +103,7 @@ namespace BookStoreProject.Controllers
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
 
-                return Ok(new { token, user, role });
+                return Ok(new { token });
 
             }
           

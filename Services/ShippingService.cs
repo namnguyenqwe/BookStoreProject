@@ -35,11 +35,11 @@ namespace BookStoreProject.Services
         {
             if (!string.IsNullOrEmpty(keyword))
             {
-                return _dbContext.Districts.Where(x =>
+                return _dbContext.Districts.Include(x => x.City).Where(x =>
                         x.district.ToUpper().Contains(keyword.ToUpper()))
                     .AsEnumerable();
             }
-            return _dbContext.Districts.AsEnumerable();
+            return _dbContext.Districts.Include(x => x.City).AsEnumerable();
         }
 
         public async Task<bool> UpdateShippingLocation(District districtUpdate)

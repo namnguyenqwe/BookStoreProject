@@ -9,6 +9,7 @@ namespace BookStoreProject.Dtos.District
     {
         public string DistrictID { get; set; }
         public string district { get; set; }
+        public string city { get; set; }
         public int? Fee { get; set; }
     }
 }

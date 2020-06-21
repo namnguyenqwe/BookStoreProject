@@ -13,9 +13,6 @@ namespace BookStoreProject.Models
     {
         public string ApplicationUserId { get; set; }
         public int BookID { get; set; }
-       
-       
-        
         public Book Book { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }

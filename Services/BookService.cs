@@ -22,6 +22,7 @@ namespace BookStoreProject.Services
         Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int? num);
         Task<ICollection<Book>> GetRelatedBooks(int bookId, int num);
         IEnumerable<Book> GetBooksForUser(string keyword);
+        Task<IEnumerable<Book>> GetBooksByCategoryId(int categoryId);
     }
     public class BookService : IBookService
     {
@@ -283,6 +284,11 @@ namespace BookStoreProject.Services
                     .AsEnumerable();
             }
             return _dbContext.Books.Include(x => x.Reviews).AsEnumerable();
+        }
+
+        public async Task<IEnumerable<Book>> GetBooksByCategoryId(int categoryId)
+        {
+            return await _dbContext.Books.Where(x => x.CategoryID == categoryId).ToListAsync();
         }
     }
 }

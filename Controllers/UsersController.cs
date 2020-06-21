@@ -64,7 +64,7 @@ namespace BookStoreProject.Controllers
             }
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
-            user.FullName = profile.FullName;
+            user.Name = profile.FullName;
             _userService.Update(user);
             _userService.SaveChanges();
             return Ok(user);
@@ -75,7 +75,7 @@ namespace BookStoreProject.Controllers
         [Route("SearchUsersByName")]
         public IActionResult GetUserByName(string name,int index,int size =15)
         {
-            var users = _userService.GetMultiPaging(s => s.FullName.Contains(name), index, size, null);
+            var users = _userService.GetMultiPaging(s => s.Name.Contains(name), index, size, null);
             return Ok(users);
         }
 

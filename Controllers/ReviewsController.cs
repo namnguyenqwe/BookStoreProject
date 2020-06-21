@@ -134,6 +134,7 @@ namespace BookStoreProject.Controllers
                     return Unauthorized();
                 }
                 input.ApplicationUserId = userId;
+                input.Date = DateTime.Now;
                 var review = _mapper.Map<Review>(input);
                 var result = await _reviewService.CreateReview(review);
                 if (result)

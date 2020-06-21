@@ -14,6 +14,8 @@ using BookStoreProject.Commons;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
+using BookStoreProject.Dtos.ApplicationUser;
 
 namespace BookStoreProject.Controllers
 {
@@ -29,14 +31,16 @@ namespace BookStoreProject.Controllers
         private IImageFileService _imageFileService;
         private readonly BookStoreDbContext _context;
         private BookStoreDbContext db = new BookStoreDbContext();
+        private readonly IMapper _mapper;
         public AdminsController(UserManager<ApplicationUser> userManager, IUserService userService, RoleManager<IdentityRole> roleManager,
-             BookStoreDbContext context,IBaseUrlHelper baseUrlHelper, IImageFileService imageFileService)
+             BookStoreDbContext context,IBaseUrlHelper baseUrlHelper, IImageFileService imageFileService, IMapper mapper)
         {
             _userManager = userManager;
             _userService = userService;
             _roleManager = roleManager;
             _baseUrlHelper = baseUrlHelper;
             _imageFileService = imageFileService;
+            _mapper = mapper;
             this._context = context;
         }
         [HttpGet]
@@ -49,7 +53,7 @@ namespace BookStoreProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUserProfile()
+        public async Task<IActionResult> GetUserProfileAsync()
         {
             string userId = GetUserId();
             if (userId == null)
@@ -64,8 +68,10 @@ namespace BookStoreProject.Controllers
             }
             else
             {
-
-                return Ok(user);
+                var role =  await _userManager.GetRolesAsync(user);
+                var userForReturn = _mapper.Map<ApplicationUserForProfileDto>(user);
+                userForReturn.Role = role.FirstOrDefault();
+                return Ok(userForReturn);
             }
         }
 
@@ -81,7 +87,7 @@ namespace BookStoreProject.Controllers
         [Route("SearchUsersByName")]
         public IActionResult GetUserByName(string name, int index, int size = 15)
         {
-            var users = _userService.GetMultiPaging(s => s.FullName.Contains(name), index, size, null);
+            var users = _userService.GetMultiPaging(s => s.Name.Contains(name), index, size, null);
             return Ok(users);
         }
 
@@ -106,7 +112,7 @@ namespace BookStoreProject.Controllers
             }
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
-            user.FullName = profile.FullName;
+            user.Name = profile.FullName;
             _userService.Update(user);
             _userService.SaveChanges();
             return Ok(user);

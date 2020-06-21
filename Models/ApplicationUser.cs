@@ -11,7 +11,7 @@ namespace BookStoreProject.Models
 {
     public class ApplicationUser:IdentityUser
     {
-        public string FullName { get; set; }
+        public string Name { get; set; }
 
         [StringLength(300)]
         public string AvatarLink { get; set; }
@@ -19,7 +19,7 @@ namespace BookStoreProject.Models
         public bool? IsDeleted { get; set; }
         [StringLength(50)]
 
-        public string? Salt { get; set; }
+      //  public string? Salt { get; set; }
          
         public DateTime? AccountCreateDate { get; set; }
 

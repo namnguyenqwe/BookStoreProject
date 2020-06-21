@@ -8,6 +8,7 @@ using BookStoreProject.Dtos.Review;
 using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,7 @@ namespace BookStoreProject.Controllers
             _bookService = bookService;
             _mapper = mapper;
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet("{bookId}")]
         public async Task<IActionResult> GetBookByIdForAdmin(int bookId)
         {
@@ -32,7 +34,8 @@ namespace BookStoreProject.Controllers
                 return NotFound();
             else return Ok(_mapper.Map<BookForDetailDto>(book));
         }
-       
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{bookId}")]
         public async Task<IActionResult> DeleteBook(int bookId)
         {
@@ -42,10 +45,11 @@ namespace BookStoreProject.Controllers
             var result = await _bookService.DeleteBookAsync(book.BookID);
             if (!result)
             {
-                return BadRequest("Có lỗi trong quá trình xóa dữ liệu: ");
+                return BadRequest(new { message = "Có lỗi trong quá trình xóa dữ liệu" });
             }
             return Ok();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody] BookForCreateDto input)
         {
@@ -58,6 +62,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(ModelState);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("{bookId}")]
         public async Task<IActionResult> UpdateBook(int bookId, [FromBody] BookForUpdateDto input)
         {
@@ -68,23 +73,24 @@ namespace BookStoreProject.Controllers
                 {
                     return NotFound(bookId);
                 }
-                var result = await _bookService.UpdateBookAsync(_mapper.Map(input, bookInDB) );
+                var result = await _bookService.UpdateBookAsync(_mapper.Map(input, bookInDB));
                 if (result)
                 {
                     return Ok();
-                }    
+                }
             }
             return BadRequest(ModelState);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult GetAllBooks(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "BookId")
         {
-            
+
             try
             {
-                
+
                 var list = _bookService.GetBooks(keyword);
-                
+
                 var listforDto = _mapper.Map<IEnumerable<Book>, IEnumerable<BookForListDto>>(list);
                 int totalCount = list.Count();
                 //return Ok(totalCount);
@@ -112,7 +118,7 @@ namespace BookStoreProject.Controllers
                 var booksForReturn = _mapper.Map<IEnumerable<Book>, IEnumerable<BookForUserSearchListDto>>(booksInDB);
                 return Ok(new { data = booksForReturn });
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
                 return BadRequest();
             }
@@ -151,12 +157,25 @@ namespace BookStoreProject.Controllers
         [HttpGet("user/popular")]
         public async Task<IActionResult> GetPopularBooks(int? num)
         {
-            try 
+            try
             {
                 var popularBooks = await _bookService.GetPopularBooks(num);
                 return Ok(new { data = popularBooks });
             }
-            catch(System.Exception)
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [HttpGet("user/category/{categoryId}")]
+        public async Task<IActionResult> GetBooksByCategoryId(int categoryId)
+        {
+            try
+            {
+                var books = await _bookService.GetBooksByCategoryId(categoryId);
+                return Ok(new { data = _mapper.Map<IEnumerable<BookForUserSearchListDto>> (books) });
+            }
+            catch (System.Exception)
             {
                 return BadRequest();
             }

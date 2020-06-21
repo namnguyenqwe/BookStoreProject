@@ -14,6 +14,7 @@ namespace BookStoreProject.Services
         Task<bool> UpdateCoupon(Coupon couponUpdate);
         Task<bool> DeleteCoupon(string couponId);
         IEnumerable<Coupon> GetCoupons(string keyword);
+        Task<bool> IsCouponAvailable(string couponId);
     }
     public class CouponService : ICouponService
     {
@@ -68,6 +69,21 @@ namespace BookStoreProject.Services
                         x.Status.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
             }
             return _dbContext.Coupons.AsEnumerable();
+        }
+
+        public async Task<bool> IsCouponAvailable(string couponId)
+        {
+            try
+            {
+                var coupon = await _dbContext.Coupons.FirstOrDefaultAsync(x => x.CouponID == couponId && x.Status.Equals("Available"));
+                if (coupon == null)
+                    return false;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<bool> UpdateCoupon(Coupon couponUpdate)

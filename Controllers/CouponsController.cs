@@ -100,7 +100,7 @@ namespace BookStoreProject.Controllers
             {
                 var couponInDB = await _couponService.GetCouponById(input.CouponID);
                 if (couponInDB != null)
-                    return BadRequest("Coupon already exists");
+                    return BadRequest(new { message = "Coupon already exists" });
                 var coupon = _mapper.Map<Coupon>(input);
                 var result = await _couponService.CreateCoupon(coupon);
                 if (result)

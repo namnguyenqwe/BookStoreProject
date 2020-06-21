@@ -38,6 +38,7 @@ namespace BookStoreProject.Models
 
         public DbSet<City> Cities { get; set; }
         public DbSet<District> Districts { get; set; }
+        public DbSet<Subcriber> Subcribers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            

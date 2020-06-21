@@ -10,6 +10,7 @@ namespace BookStoreProject.Models
     [Table("City")]
     public class City
     {
+        [Key]
         public string CityID { get; set; }
         public string city { get; set; }
         [StringLength(30)]

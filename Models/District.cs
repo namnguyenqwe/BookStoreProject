@@ -10,10 +10,13 @@ namespace BookStoreProject.Models
     [Table("District")]
     public class District
     {
+        [Key]
         public string DistrictID { get; set; }
         public string district { get; set; }
         [StringLength(30)]
         public string type { get; set; }
+
+        [ForeignKey("CityID")]
         public string CityID { get; set; }
         public int? Fee { get; set; }
 

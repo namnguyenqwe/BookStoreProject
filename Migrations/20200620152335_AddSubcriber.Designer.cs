@@ -4,14 +4,16 @@ using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookStoreProject.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    partial class BookStoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200620152335_AddSubcriber")]
+    partial class AddSubcriber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,25 +328,6 @@ namespace BookStoreProject.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("BookStoreProject.Models.Subcriber", b =>
-                {
-                    b.Property<int>("SubcriberId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
-
-                    b.HasKey("SubcriberId");
-
-                    b.ToTable("Subcribers");
-                });
-
             modelBuilder.Entity("BookStoreProject.Models.WishList", b =>
                 {
                     b.Property<string>("ApplicationUserId")
@@ -574,11 +557,11 @@ namespace BookStoreProject.Migrations
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");

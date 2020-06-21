@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookStoreProject.Dtos.ApplicationUser;
 using BookStoreProject.Dtos.Book;
 using BookStoreProject.Dtos.CartItem;
 using BookStoreProject.Dtos.Category;
@@ -81,12 +82,16 @@ namespace BookStoreProject.AutoMapper
             #endregion
 
             #region District
-            CreateMap<District, DistrictForListDto>();
+            CreateMap<District, DistrictForListDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); }); 
             CreateMap<District, DistrictForDetailDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); });
             CreateMap<DistrictForUpdateDto, District>().ForMember(x => x.DistrictID, opt => opt.Ignore())
                                                        .ForMember(x => x.CityID, opt => opt.Ignore())
                                                        .ForMember(x => x.type, opt => opt.Ignore())
                                                        .ForMember(x => x.district, opt => opt.Ignore());
+            #endregion
+
+            #region ApplicationUser
+            CreateMap<ApplicationUser, ApplicationUserForProfileDto>().ForMember(x => x.ApplicationUserId, y => { y.MapFrom(z => z.Id); }); ;
             #endregion
         }
     }
