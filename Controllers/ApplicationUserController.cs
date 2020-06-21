@@ -54,9 +54,9 @@ namespace BookStoreProject.Controllers
 
 
             var applicationUser = new ApplicationUser()
-            {
-                UserName = model.UserName,
+            {              
                 Email = model.Email,
+                UserName = model.Email,
                 FullName = model.FullName,
                 AvatarLink = _baseUrlHelper.GetBaseUrl() + "/Images/defaultAvatar.png",
             };
@@ -69,8 +69,10 @@ namespace BookStoreProject.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(applicationUser, "User");
+                    return Ok(result);
                 }
-                return Ok(result);
+                else
+                    return BadRequest(result);
             }
             catch (Exception ex)
             {
