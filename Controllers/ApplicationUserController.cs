@@ -61,6 +61,7 @@ namespace BookStoreProject.Controllers
                 AvatarLink = _baseUrlHelper.GetBaseUrl() + "/Images/defaultAvatar.png",
             };
             applicationUser.AccountCreateDate = DateTime.Now;
+            applicationUser.Status = true;
 
             try
             {
@@ -96,7 +97,8 @@ namespace BookStoreProject.Controllers
                         new Claim("Name",user.UserName.ToString()),
                         new Claim("Email",user.Email.ToString()),
                         new Claim("UserID",user.Id.ToString()),
-                        new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault())          
+                        //new Claim("Status",(user.Status==null?true:user.Status).ToString()),
+                        new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault())  
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(10000),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
