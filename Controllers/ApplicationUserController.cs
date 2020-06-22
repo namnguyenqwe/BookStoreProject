@@ -136,7 +136,7 @@ namespace BookStoreProject.Controllers
             }
             if (!await _userManager.CheckPasswordAsync(user, model.OldPassword))
             {
-                return BadRequest();
+                return BadRequest(new {message = "Old password is incorrect" });
             }
             else
             {

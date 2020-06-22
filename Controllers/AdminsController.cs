@@ -141,6 +141,20 @@ namespace BookStoreProject.Controllers
             return Ok(user);
 
         }
+
+        /*[HttpPost]
+        [Route("AddUser")]
+        public async Task<IActionResult> AddUser(UserModel model,RolesViewModel rolemodel)
+        {
+
+            var applicationUser = new ApplicationUser()
+            {
+                Email = model.Email,
+                UserName = model.Email,
+                FullName = model.FullName
+            };
+            applicationUser.AccountCreateDate = DateTime.Now;
+        }*/
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
