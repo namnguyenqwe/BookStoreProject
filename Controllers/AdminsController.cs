@@ -15,7 +15,8 @@ using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
-using BookStoreProject.Dtos.ApplicationUser;
+using BookStoreProject.Dtos.Admin;
+using BookStoreProject.Helpers;
 
 namespace BookStoreProject.Controllers
 {
@@ -31,15 +32,18 @@ namespace BookStoreProject.Controllers
         private IImageFileService _imageFileService;
         private readonly BookStoreDbContext _context;
         private BookStoreDbContext db = new BookStoreDbContext();
+        private IAdminService _adminService;
         private readonly IMapper _mapper;
         public AdminsController(UserManager<ApplicationUser> userManager, IUserService userService, RoleManager<IdentityRole> roleManager,
-             BookStoreDbContext context,IBaseUrlHelper baseUrlHelper, IImageFileService imageFileService, IMapper mapper)
+             BookStoreDbContext context,IBaseUrlHelper baseUrlHelper, IImageFileService imageFileService,
+             IAdminService adminService,IMapper mapper)
         {
             _userManager = userManager;
             _userService = userService;
             _roleManager = roleManager;
             _baseUrlHelper = baseUrlHelper;
             _imageFileService = imageFileService;
+            _adminService = adminService;
             _mapper = mapper;
             this._context = context;
         }
@@ -53,7 +57,7 @@ namespace BookStoreProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserProfileAsync()
+        public async Task<IActionResult> GetUserProfile()
         {
             string userId = GetUserId();
             if (userId == null)
@@ -68,26 +72,45 @@ namespace BookStoreProject.Controllers
             }
             else
             {
-                var role =  await _userManager.GetRolesAsync(user);
-                var userForReturn = _mapper.Map<ApplicationUserForProfileDto>(user);
-                userForReturn.Role = role.FirstOrDefault();
-                return Ok(userForReturn);
+                return Ok(user);
             }
         }
 
+        
         [HttpGet]
         [Route("ListUser")]
-        public IActionResult GetListUser(int index, int size)
+        public IActionResult GetListUser(string keyword,int page = 1, int pageSize = 10, int sort = 0, string criteria = "Id")
         {
-            var users = _userService.GetMultiPaging(s => s.IsDeleted !=true, index, size = 10);
-            return Ok(users);
+            try
+            {
+                
+                var list = _adminService.GetUsers(keyword);
+                var listforDto = _mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<UserForListDto>>(list);
+                int totalCount = list.Count();
+
+                var response = _adminService.GetUsersPerPage(listforDto, page, pageSize, sort, criteria);
+
+                var paginationSet = new PaginationSet<UserForListDto>()
+                {
+                    Items = response,
+                    Total = totalCount,
+                };
+
+                return Ok(paginationSet);
+                
+            }
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
+                
         }
 
         [HttpGet]
         [Route("SearchUsersByName")]
         public IActionResult GetUserByName(string name, int index, int size = 15)
         {
-            var users = _userService.GetMultiPaging(s => s.Name.Contains(name), index, size, null);
+            var users = _userService.GetMultiPaging(s => s.FullName.Contains(name), index, size, null);
             return Ok(users);
         }
 
@@ -112,7 +135,7 @@ namespace BookStoreProject.Controllers
             }
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
-            user.Name = profile.FullName;
+            user.FullName = profile.FullName;
             _userService.Update(user);
             _userService.SaveChanges();
             return Ok(user);
