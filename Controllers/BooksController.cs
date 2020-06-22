@@ -87,8 +87,6 @@ namespace BookStoreProject.Controllers
 
                 var paginationSet = new PaginationSet<BookForListDto>()
                 {
-                    Items = response,
-                    Total = totalCount,
                 };
 
                 return Ok(paginationSet);
