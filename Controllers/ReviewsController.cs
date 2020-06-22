@@ -10,6 +10,7 @@ using BookStoreProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BookStoreProject.Controllers
 {
@@ -40,10 +41,10 @@ namespace BookStoreProject.Controllers
                     if (sort == 0) response = response.OrderByDescending(x => x.ReviewId).Skip((page - 1) * pageSize).Take(pageSize);
                     else response = response.OrderBy(x => x.ReviewId).Skip((page - 1) * pageSize).Take(pageSize);
                 }
-                if (criteria.Equals("username"))
+                if (criteria.Equals("email"))
                 {
-                    if (sort == 0) response = response.OrderByDescending(x => x.UserName).Skip((page - 1) * pageSize).Take(pageSize);
-                    else response = response.OrderBy(x => x.UserName).Skip((page - 1) * pageSize).Take(pageSize);
+                    if (sort == 0) response = response.OrderByDescending(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
                 }
                 if (criteria.Equals("namebook"))
                 {
@@ -115,6 +116,11 @@ namespace BookStoreProject.Controllers
                     Rating = (float)(reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / (float)reviews.Count()),
                     Reviews = _mapper.Map<IEnumerable<Review>, IEnumerable<ReviewForUserListDto>>(reviews)
                 };
+                
+                for (int i = 0; i < reviews.Count(); i++)
+                {
+                    response.Reviews.ToList()[i].isPurchased = await _reviewService.isPurchased(reviews.ToList()[i]);
+                }    
                 return Ok(response);
             }
             catch(System.Exception)

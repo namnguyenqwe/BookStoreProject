@@ -23,6 +23,8 @@ namespace BookStoreProject.Services
         Task<ICollection<Book>> GetRelatedBooks(int bookId, int num);
         IEnumerable<Book> GetBooksForUser(string keyword);
         Task<IEnumerable<Book>> GetBooksByCategoryId(int categoryId);
+
+        Task<bool> isPurchased(Review review);
     }
     public class BookService : IBookService
     {
@@ -111,13 +113,13 @@ namespace BookStoreProject.Services
             if (!string.IsNullOrEmpty(keyword))
             {
 
-                return _dbContext.Books.Include(x => x.Category).Include(x => x.Publisher)
+                return _dbContext.Books
                     .Where(x =>
                         x.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
                         x.Author.ToUpper().Contains(keyword.ToUpper()))
                     .AsEnumerable();
             }
-            return _dbContext.Books.Include(x => x.Category).Include(x => x.Publisher).AsEnumerable();
+            return _dbContext.Books.AsEnumerable();
         }
         public IEnumerable<BookForListDto> GetBooksPerPage(IEnumerable<BookForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "BookId")
         {
@@ -150,23 +152,15 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.Author).Skip((page - 1) * pageSize).Take(pageSize);
             }
-            if (criteria.Equals("category"))
+            
+            if (criteria.Equals("status"))
             {
                 if (sort == 0)
                 {
-                    return list.OrderByDescending(x => x.Category).Skip((page - 1) * pageSize).Take(pageSize);
+                    return list.OrderByDescending(x => x.Status).Skip((page - 1) * pageSize).Take(pageSize);
                 }
                 else
-                    return list.OrderBy(x => x.Category).Skip((page - 1) * pageSize).Take(pageSize);
-            }
-            if (criteria.Equals("publisher"))
-            {
-                if (sort == 0)
-                {
-                    return list.OrderByDescending(x => x.publisher).Skip((page - 1) * pageSize).Take(pageSize);
-                }
-                else
-                    return list.OrderBy(x => x.publisher).Skip((page - 1) * pageSize).Take(pageSize);
+                    return list.OrderBy(x => x.Status).Skip((page - 1) * pageSize).Take(pageSize);
             }
             if (criteria.Equals("quantityin"))
             {
@@ -258,10 +252,14 @@ namespace BookStoreProject.Services
 
         public async Task<ICollection<Book>> GetRelatedBooks(int bookId, int number)
         {
+            Random rnd = new Random();
             var book = await GetBookByIdAsync(bookId);
-            return await _dbContext.Books.Where(x => x.CategoryID == book.CategoryID 
+            var relatedBooks = await _dbContext.Books.Where(x => x.CategoryID == book.CategoryID 
                                                     && x.Status == true
-                                                    && x.BookID != book.BookID).Take(number).ToListAsync();
+                                                    && x.BookID != book.BookID)
+                .ToListAsync();
+            relatedBooks =  relatedBooks.Skip(rnd.Next(0,relatedBooks.Count() / 2)).Take(number).ToList();
+            return relatedBooks;
         }
 
         public async Task<Book> GetBookByIdForUserAsync(int bookId)
@@ -289,6 +287,14 @@ namespace BookStoreProject.Services
         public async Task<IEnumerable<Book>> GetBooksByCategoryId(int categoryId)
         {
             return await _dbContext.Books.Where(x => x.CategoryID == categoryId).ToListAsync();
+        }
+        public async Task<bool> isPurchased(Review review)
+        {
+            var purchasedBook = await _dbContext.OrderItems.Include(x => x.Order)
+                                 .FirstOrDefaultAsync(x => x.BookID == review.BookID && x.Order.ApplicationUserID == review.ApplicationUserId);
+            if (purchasedBook == null)
+                return false;
+            return true;
         }
     }
 }

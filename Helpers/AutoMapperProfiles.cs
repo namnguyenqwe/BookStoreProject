@@ -24,8 +24,7 @@ namespace BookStoreProject.AutoMapper
                                                 .ForMember(x => x.QuantityOut, opt => opt.Ignore());                                      
             CreateMap<Book, BookForDetailDto>();
             CreateMap<BookForUpdateDto, Book>().ForMember(x => x.QuantityOut, opt => opt.Ignore());
-            CreateMap<Book, BookForListDto>().ForMember(x => x.Category, y => { y.MapFrom(z => z.Category.Category); })
-                                            .ForMember(x => x.publisher, y => { y.MapFrom(z => z.Publisher.publisher); });
+            CreateMap<Book, BookForListDto>();
 
             CreateMap<Book, BookForUserDetailDto>().ForMember(x => x.Category, y => { y.MapFrom(z => z.Category.Category); })
                                             .ForMember(x => x.publisher, y => { y.MapFrom(z => z.Publisher.publisher); })
@@ -57,9 +56,9 @@ namespace BookStoreProject.AutoMapper
 
             #region Review
             CreateMap<Review, ReviewForListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
-                                           .ForMember(x => x.UserName, y => { y.MapFrom(z => z.ApplicationUser.UserName); });
+                                           .ForMember(x => x.Email, y => { y.MapFrom(z => z.ApplicationUser.Email); });
             CreateMap<Review, ReviewForUserListDto>().ForMember(x => x.AvatarLink, y => { y.MapFrom(z => z.ApplicationUser.AvatarLink); })
-                                                    .ForMember(x => x.userName, y => { y.MapFrom(z => z.ApplicationUser.UserName); });
+                                                    .ForMember(x => x.Name, y => { y.MapFrom(z => z.ApplicationUser.Name); });
             CreateMap<ReviewForUserCreateDto, Review>();
             #endregion
 

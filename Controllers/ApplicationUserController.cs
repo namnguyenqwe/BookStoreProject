@@ -56,7 +56,7 @@ namespace BookStoreProject.Controllers
             var applicationUser = new ApplicationUser()
             {              
                 Email = model.Email,
-                Name = model.FullName,
+                Name = model.Name,
                 UserName = model.Email,
                 AvatarLink = _baseUrlHelper.GetBaseUrl() + "/Images/defaultAvatar.png",
             };

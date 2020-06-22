@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +16,7 @@ namespace BookStoreProject.Dtos.Book
 
         public int PublisherID { get; set; }
         public string Author { get; set; }
-        [RegularExpression(@"^ *?\d*\.?\d+ *?x *?\d*\.?\d+ *?cm *?$")]
+        
         public string Dimensions { get; set; }
 
         public string Format { get; set; }

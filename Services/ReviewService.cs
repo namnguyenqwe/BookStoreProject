@@ -1,4 +1,5 @@
-﻿using BookStoreProject.Models;
+﻿using BookStoreProject.Dtos.Review;
+using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -15,6 +16,7 @@ namespace BookStoreProject.Services
         IEnumerable<Review> GetReviews(string keyword);
         Task<IEnumerable<Review>> GetReviewsByBookId(int bookId);
         Task<Review> GetReviewById(int reviewId);
+        Task<bool> isPurchased(Review review);
     }
     public class ReviewService : IReviewService
     {
@@ -71,7 +73,7 @@ namespace BookStoreProject.Services
                 return  _dbContext.Reviews.Include(x => x.Book).Include(x => x.ApplicationUser)
                         .Where(x =>
                         x.Book.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
-                        x.ApplicationUser.UserName.ToUpper().Contains(keyword.ToUpper()) ||
+                        x.ApplicationUser.Email.ToUpper().Contains(keyword.ToUpper()) ||
                         x.Comment.Contains(keyword)).AsEnumerable();
             }
             return _dbContext.Reviews.Include(x => x.Book).Include(x => x.ApplicationUser).AsEnumerable();
@@ -80,6 +82,15 @@ namespace BookStoreProject.Services
         public async Task<IEnumerable<Review>> GetReviewsByBookId(int bookId)
         {
             return await _dbContext.Reviews.Include(x => x.ApplicationUser).Where(x => x.BookID == bookId).ToListAsync();
+        }
+
+        public async Task<bool> isPurchased(Review review)
+        {
+            var purchasedBook = await _dbContext.OrderItems.Include(x => x.Order)
+                                 .FirstOrDefaultAsync(x => x.BookID == review.BookID && x.Order.ApplicationUserID == review.ApplicationUserId);
+            if (purchasedBook == null)
+                return false;
+            return true;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace BookStoreProject.Dtos.Review
         public int ReviewId { get; set; }
         public int BookID { get; set; }
         public string ApplicationUserId { get; set; }
-        public string UserName { get; set; }
+        public string Email { get; set; }
         public string NameBook { get; set; }
         public int? Rating { get; set; }
         public string Comment { get; set; }

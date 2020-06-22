@@ -138,6 +138,10 @@ namespace BookStoreProject.Controllers
             } */
             var relatedBooksInDB = await _bookService.GetRelatedBooks(book.BookID, num);
             book.RelatedBooks = _mapper.Map<ICollection<Book>, ICollection<BookForUserRelatedListDto>>(relatedBooksInDB);
+            for (int i = 0; i < book.Reviews.Count(); i++)
+            {
+                book.Reviews.ToList()[i].isPurchased = await _bookService.isPurchased(bookInDB.Reviews.ToList()[i]);
+            }
             return Ok(book);
 
         }

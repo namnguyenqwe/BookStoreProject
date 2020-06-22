@@ -13,6 +13,9 @@ namespace BookStoreProject.Dtos.Book
         public string NameBook { get; set; }
         public int CategoryID { get; set; }
         public int PublisherID { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NameBook can not be null or empty")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Author { get; set; }
 
         [RegularExpression(@"^ *?\d*\.?\d+ *?x *?\d*\.?\d+ *?cm *?$")]
@@ -22,6 +25,7 @@ namespace BookStoreProject.Dtos.Book
 
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int? NumberOfPage { get; set; }
+        [StringLength(1000,MinimumLength = 200)]
         public string Information { get; set; }
 
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]

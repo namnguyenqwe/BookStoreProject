@@ -36,7 +36,8 @@ namespace BookStoreProject.Services
             if (!string.IsNullOrEmpty(keyword))
             {
                 return _dbContext.Districts.Include(x => x.City).Where(x =>
-                        x.district.ToUpper().Contains(keyword.ToUpper()))
+                        x.district.ToUpper().Contains(keyword.ToUpper())
+                        || x.City.city.ToUpper().Contains(keyword.ToUpper()))
                     .AsEnumerable();
             }
             return _dbContext.Districts.Include(x => x.City).AsEnumerable();

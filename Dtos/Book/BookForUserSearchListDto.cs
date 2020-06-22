@@ -13,6 +13,7 @@ namespace BookStoreProject.Dtos.Book
         public string ImageLink { get; set; }
         public int Rating { get; set; }
         public int ReviewCount { get; set; }
+        public decimal? OriginalPrice { get; set; }
         public decimal? Price { get; set; }
     }
 }

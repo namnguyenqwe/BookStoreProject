@@ -33,6 +33,7 @@ namespace BookStoreProject.Controllers
 
                 var response = _mapper.Map<IEnumerable<District>, IEnumerable<DistrictForListDto>>(list);
                 int totalCount = list.Count();
+                criteria = criteria.ToLower();
 
                 #region Sort by criteria
                 if (criteria.Equals("districtid"))
@@ -45,6 +46,12 @@ namespace BookStoreProject.Controllers
                 {
                     if (sort == 0) response = response.OrderByDescending(x => x.district).Skip((page - 1) * pageSize).Take(pageSize);
                     else response = response.OrderBy(x => x.district).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+
+                else if (criteria.Equals("city"))
+                {
+                    if (sort == 0) response = response.OrderByDescending(x => x.city).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.city).Skip((page - 1) * pageSize).Take(pageSize);
                 }
 
                 else //if (criteria.Equals("fee"))
