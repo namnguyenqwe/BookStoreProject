@@ -12,7 +12,7 @@ namespace BookStoreProject.Dtos.Review
         public string AvatarLink { get; set; }
         public int? Rating { get; set; }
         public string Comment { get; set; }
-        public bool isPurchased { get; set; }
+        public bool? isPurchased { get; set; }
         public DateTime Date { get; set; }
     }
 }

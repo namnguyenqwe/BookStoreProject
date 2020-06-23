@@ -17,21 +17,21 @@ namespace BookStoreProject.Dtos.Book
         public string publisher { get; set; }
         public string Author { get; set; }
 
-        [RegularExpression(@"^ *?\d*\.?\d+ *?x *?\d*\.?\d+ *?cm *?$")]
+        //[RegularExpression(@"^ *?\d*\.?\d+ *?x *?\d*\.?\d+ *?cm *?$")]
         public string Dimensions { get; set; }
-
         public string Format { get; set; }
         public DateTime? Date { get; set; }
 
-        [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
+        //[Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int? NumberOfPage { get; set; }
         public string Information { get; set; }
 
-        [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
+        //[Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public decimal? OriginalPrice { get; set; }
 
-        [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
+        //[Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public decimal? Price { get; set; }
+        public int RemainQuantity { get; set; }
         public string ImageLink { get; set; }
         public ICollection<ReviewForUserListDto> Reviews { get; set; }
         public ICollection<BookForUserRelatedListDto> RelatedBooks { get; set; }

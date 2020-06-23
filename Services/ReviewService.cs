@@ -20,7 +20,7 @@ namespace BookStoreProject.Services
         Task<IEnumerable<Review>> GetReviewsByBookId(int bookId);
         Task<Review> GetReviewById(int reviewId);
         Task<bool> isPurchased(Review review);
-        IEnumerable<ReviewForUserListDto> GetReviewsByCriteria(IEnumerable<ReviewForUserListDto> list, int dateSort, bool isPurchased);
+        IEnumerable<ReviewForUserListDto> GetReviewsByCriteria(IEnumerable<ReviewForUserListDto> list, bool isLatest, bool? isPurchased);
     }
     public class ReviewService : IReviewService
     {
@@ -34,6 +34,9 @@ namespace BookStoreProject.Services
         {
             try
             {
+                var book = await _dbContext.Books.FirstOrDefaultAsync(x => x.BookID == reviewCreate.BookID);
+                if (book == null)
+                    return false;
                 _dbContext.Reviews.Add(reviewCreate);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -103,12 +106,14 @@ namespace BookStoreProject.Services
             return await _dbContext.Reviews.Include(x => x.ApplicationUser).Where(x => x.BookID == bookId).ToListAsync();
         }
 
-        public IEnumerable<ReviewForUserListDto> GetReviewsByCriteria(IEnumerable<ReviewForUserListDto> list, int dateSort, bool isPurchased)
+        public IEnumerable<ReviewForUserListDto> GetReviewsByCriteria(IEnumerable<ReviewForUserListDto> list, bool isLatest, bool? isPurchased)
         {
-            return dateSort == 0 ? list.Where(x => x.isPurchased == isPurchased).OrderByDescending(x => x.Date.Year)
+            return isLatest ? list.Where(x => isPurchased == null ? x.isPurchased != null : x.isPurchased == isPurchased)
+                                    .OrderByDescending(x => x.Date.Year)
                                    .ThenByDescending(x => x.Date.Month)
                                    .ThenByDescending(x => x.Date.Day)
-                                : list.Where(x => x.isPurchased == isPurchased).OrderBy(x => x.Date.Year)
+                                : list.Where(x => isPurchased == null ? x.isPurchased != null : x.isPurchased == isPurchased)
+                                    .OrderBy(x => x.Date.Year)
                                    .ThenBy(x => x.Date.Month)
                                    .ThenBy(x => x.Date.Day);
         }

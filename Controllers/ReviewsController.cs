@@ -105,7 +105,7 @@ namespace BookStoreProject.Controllers
             return Ok();
         }
         [HttpGet("user/{bookId}")]
-        public async Task<IActionResult> GetReviews(int bookId, int dateSort = 0, bool isPurchased = true)
+        public async Task<IActionResult> GetReviews(int bookId, bool? isPurchased, bool isLatest = true)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace BookStoreProject.Controllers
                     response.Reviews.ToList()[i].isPurchased = await _reviewService.isPurchased(reviews.ToList()[i]);
                 }
 
-                response.Reviews = _reviewService.GetReviewsByCriteria(response.Reviews, dateSort, isPurchased);
+                response.Reviews = _reviewService.GetReviewsByCriteria(response.Reviews, isLatest, isPurchased);
 
                 return Ok(response);
             }
@@ -140,7 +140,7 @@ namespace BookStoreProject.Controllers
                 var userId = GetUserId();
                 if (userId == "error")
                 {
-                    return Unauthorized();
+                    return StatusCode(201,new { message = "unauthorized"});
                 }
                 input.ApplicationUserId = userId;
                 input.Date = DateTime.Now;
@@ -149,7 +149,7 @@ namespace BookStoreProject.Controllers
                 if (result)
                     return Ok();
             }
-            return BadRequest(ModelState);
+            return StatusCode(201, new { message = "Invalid review" });
         }
         [NonAction]
         public string GetUserId()
