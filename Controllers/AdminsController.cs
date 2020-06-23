@@ -136,6 +136,7 @@ namespace BookStoreProject.Controllers
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
             user.FullName = profile.FullName;
+            user.AvatarLink = profile.AvatarLink;
             _userService.Update(user);
             _userService.SaveChanges();
             return Ok(user);
@@ -275,6 +276,8 @@ namespace BookStoreProject.Controllers
             return Ok();
 
         }
+
+      
         [HttpPost]
         [Route("Avatar")]
         public async Task<IActionResult> PostUserAvatar([FromForm]IFormFile file)
