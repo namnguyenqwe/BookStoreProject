@@ -301,6 +301,14 @@ namespace BookStoreProject.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetRole")]
+        public IActionResult GetListRole()
+        {
+            var roles = _context.Roles.ToList();
+            return Ok(roles);
+        }
+
         [NonAction]
         public string GetUserId()
         {
