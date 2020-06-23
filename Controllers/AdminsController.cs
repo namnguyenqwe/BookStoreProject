@@ -258,6 +258,7 @@ namespace BookStoreProject.Controllers
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
             user.Name = profile.Name;
+            user.AvatarLink = profile.AvatarLink;
             _userService.Update(user);
             _userService.SaveChanges();
             return Ok(user);
@@ -277,7 +278,7 @@ namespace BookStoreProject.Controllers
             return Ok();
 
         }
-        [HttpPost]
+        /*[HttpPost]
         [Route("Avatar")]
         public async Task<IActionResult> PostUserAvatar([FromForm]IFormFile file)
         {
@@ -299,7 +300,7 @@ namespace BookStoreProject.Controllers
             {
                 return BadRequest(new { message = "Invalid image type !" });
             }
-        }
+        }*/
 
         [HttpGet]
         [Route("GetRole")]
