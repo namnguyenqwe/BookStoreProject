@@ -142,19 +142,125 @@ namespace BookStoreProject.Controllers
 
         }
 
-        /*[HttpPost]
+        [HttpPost]
         [Route("AddUser")]
-        public async Task<IActionResult> AddUser(UserModel model,RolesViewModel rolemodel)
+        public async Task<IActionResult> AddUser(UserModel model)
         {
-
             var applicationUser = new ApplicationUser()
             {
                 Email = model.Email,
                 UserName = model.Email,
-                FullName = model.FullName
+                FullName = model.FullName,
+                AvatarLink = model.AvatarLink,
+                Status = model.Status,
             };
             applicationUser.AccountCreateDate = DateTime.Now;
-        }*/
+            
+            try
+            {
+                var result = await _userManager.CreateAsync(applicationUser, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(applicationUser, "User");
+                    return Ok(result);
+                }
+                else
+                    return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        [HttpPost]
+        [Route("AddAdmin")]
+        public async Task<IActionResult> AddAdmin(UserModel model)
+        {
+            var applicationUser = new ApplicationUser()
+            {
+                Email = model.Email,
+                UserName = model.Email,
+                FullName = model.FullName,
+                AvatarLink = model.AvatarLink,
+                Status = model.Status,
+            };
+            applicationUser.AccountCreateDate = DateTime.Now;
+
+            try
+            {
+                var result = await _userManager.CreateAsync(applicationUser, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(applicationUser, "Admin");
+                    return Ok(result);
+                }
+                else
+                    return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        [HttpPost]
+        [Route("AddManager")]
+        public async Task<IActionResult> AddManager(UserModel model)
+        {
+            var applicationUser = new ApplicationUser()
+            {
+                Email = model.Email,
+                UserName = model.Email,
+                FullName = model.FullName,
+                AvatarLink = model.AvatarLink,
+                Status = model.Status,
+            };
+            applicationUser.AccountCreateDate = DateTime.Now;
+
+            try
+            {
+                var result = await _userManager.CreateAsync(applicationUser, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(applicationUser, "Manager");
+                    return Ok(result);
+                }
+                else
+                    return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        [HttpPut]
+        [Route("EditUser/{id}")]
+        public async Task<IActionResult> EditUser(string id,ProfileViewModel profile)
+        {
+            var user =  _userService.GetSingleByCondition(s=> s.Id == id,null);
+
+            user.FullName = profile.FullName;
+            user.Email = profile.Email;
+            user.UserName = profile.Email;
+            user.Status = profile.Status;
+            user.AvatarLink = profile.AvatarLink;
+
+            _userService.Update(user);
+            _userService.SaveChanges();
+            return Ok(user);
+        }
+        
+       
+
+
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
