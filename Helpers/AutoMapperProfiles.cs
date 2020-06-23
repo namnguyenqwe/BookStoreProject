@@ -8,6 +8,7 @@ using BookStoreProject.Dtos.Coupon;
 using BookStoreProject.Dtos.District;
 using BookStoreProject.Dtos.Publisher;
 using BookStoreProject.Dtos.Review;
+using BookStoreProject.Dtos.Subcriber;
 using BookStoreProject.Models;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,11 @@ namespace BookStoreProject.AutoMapper
             CreateMap<ApplicationUser, ApplicationUserForProfileDto>().ForMember(x => x.ApplicationUserId, y => { y.MapFrom(z => z.Id); })
                                                                        .ForMember(x => x.Name, y => { y.MapFrom(z => z.Name); }); 
             CreateMap<ApplicationUser, UserForListDto>().ForMember(x => x.Id, y => { y.MapFrom(z => z.Id); });
+            #endregion
+
+            #region Subcriber
+            CreateMap<SubcriberForModalDto, Subcriber>().ForMember(x => x.CreatedDate, opt => opt.Ignore())
+                                                        .ForMember(x => x.SubcriberId, opt => opt.Ignore());
             #endregion
         }
     }

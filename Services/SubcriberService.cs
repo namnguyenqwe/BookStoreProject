@@ -80,9 +80,18 @@ namespace BookStoreProject.Services
             return _dbContext.Subcribers.AsEnumerable();
         }
 
-        public Task<bool> UpdateSubcriber(Subcriber subcriberUpdate)
+        public async Task<bool> UpdateSubcriber(Subcriber subcriberUpdate)
         {
-            throw new NotImplementedException();
+           try
+            {
+                _dbContext.Subcribers.Update(subcriberUpdate);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

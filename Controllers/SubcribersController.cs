@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using BookStoreProject.Dtos.Subcriber;
 using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
@@ -17,9 +19,11 @@ namespace BookStoreProject.Controllers
     public class SubcribersController : ControllerBase
     {
         private readonly ISubcriberService _subcriberService;
-        public SubcribersController(ISubcriberService subcriberService)
+        private readonly IMapper _mapper;
+        public SubcribersController(ISubcriberService subcriberService, IMapper mapper)
         {
             _subcriberService = subcriberService;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult GetAllSubcribers(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "subcriberid")
@@ -68,7 +72,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
-        [HttpGet]
+        [HttpGet("{subcriberId}")]
         public async Task<IActionResult> GetSubcriberById(int subcriberId)
         {
             var subcriber = await  _subcriberService.GetSubcriberById(subcriberId);
@@ -76,5 +80,41 @@ namespace BookStoreProject.Controllers
                 return NotFound(subcriberId);
             return Ok(subcriber);
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateSubcriber([FromBody] SubcriberForModalDto input)
+        {
+            if (ModelState.IsValid)
+            {
+                var subcriber = _mapper.Map<Subcriber>(input);
+                subcriber.CreatedDate = DateTime.Now;
+                var result = await _subcriberService.CreateSubcriber(subcriber);
+                if (result)
+                    return Ok();
+            }
+            return BadRequest(ModelState);
+        }
+        [HttpPut("{subcriberId}")]
+        public async Task<IActionResult> UpdateSubcriber(int subcriberId, [FromBody] SubcriberForModalDto input)
+        {
+            if (ModelState.IsValid)
+            {
+                var subcriberInDB = await _subcriberService.GetSubcriberById(subcriberId);
+                var result = await _subcriberService.UpdateSubcriber(_mapper.Map(input, subcriberInDB));
+                if (result)
+                    return Ok();
+            }
+            return BadRequest(ModelState);
+        }
+        [HttpDelete("{subcriberId}")]
+        public async Task<IActionResult> DeleteSubcriber(int subcriberId)
+        {
+            var subcriberInDB = await _subcriberService.GetSubcriberById(subcriberId);
+            if (subcriberInDB == null)
+                return NotFound(subcriberId);
+            var result = await _subcriberService.DeleteSubcriber(subcriberInDB.SubcriberId);
+            if (!result)
+                return BadRequest(new { message = "Có lỗi trong quá trình xóa dữ liệu"});
+            return Ok();
+        }    
     }
 }
