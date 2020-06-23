@@ -1,8 +1,11 @@
-﻿using BookStoreProject.Models;
+﻿using BookStoreProject.Helpers;
+using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BookStoreProject.Services
@@ -13,6 +16,7 @@ namespace BookStoreProject.Services
         Task<bool> DeleteSubcriber(int subcriberId);
         Task<Subcriber> GetSubcriberById(int subcriberId);
         IEnumerable<Subcriber> GetSubcribers(string keyword);
+        Task<bool> UpdateSubcriber(Subcriber subcriberUpdate);
     }
     public class SubcriberService : ISubcriberService
     {
@@ -62,10 +66,23 @@ namespace BookStoreProject.Services
             if (!string.IsNullOrEmpty(keyword))
             {
                 return _dbContext.Subcribers
-                        .Where(x =>
-                        x.Email.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
+                        .Where(delegate (Subcriber s)
+                        {
+                            if (MyConvert.ConvertToUnSign(s.Email.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+
+                            s.Email.ToUpper().Contains(keyword.ToUpper()))
+
+                                return true;
+                            else
+                                return false;
+                        }).AsEnumerable();
             }
             return _dbContext.Subcribers.AsEnumerable();
+        }
+
+        public Task<bool> UpdateSubcriber(Subcriber subcriberUpdate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

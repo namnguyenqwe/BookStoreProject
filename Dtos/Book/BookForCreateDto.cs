@@ -29,7 +29,7 @@ namespace BookStoreProject.Dtos.Book
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int? NumberOfPage { get; set; }
 
-        [StringLength(1000, MinimumLength = 200)]
+        [StringLength(Int32.MaxValue, MinimumLength = 200)]
         public string Information { get; set; }
 
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]

@@ -1,8 +1,11 @@
-﻿using BookStoreProject.Models;
+﻿using BookStoreProject.Helpers;
+using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BookStoreProject.Services
@@ -35,9 +38,20 @@ namespace BookStoreProject.Services
         {
             if (!string.IsNullOrEmpty(keyword))
             {
-                return _dbContext.Districts.Include(x => x.City).Where(x =>
-                        x.district.ToUpper().Contains(keyword.ToUpper())
-                        || x.City.city.ToUpper().Contains(keyword.ToUpper()))
+                return _dbContext.Districts.Include(x => x.City).Where(delegate (District d)
+                {
+                    if (MyConvert.ConvertToUnSign(d.City.city.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+
+                    MyConvert.ConvertToUnSign(d.district.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+
+                    d.district.ToUpper().Contains(keyword.ToUpper()) ||
+
+                    d.City.city.ToUpper().Contains(keyword.ToUpper()))
+
+                        return true;
+                    else
+                        return false;
+                })
                     .AsEnumerable();
             }
             return _dbContext.Districts.Include(x => x.City).AsEnumerable();
@@ -56,5 +70,6 @@ namespace BookStoreProject.Services
                 throw ex;
             }
         }
+       
     }
 }

@@ -105,7 +105,7 @@ namespace BookStoreProject.Controllers
             return Ok();
         }
         [HttpGet("user/{bookId}")]
-        public async Task<IActionResult> GetReviews(int bookId)
+        public async Task<IActionResult> GetReviews(int bookId, int dateSort = 0, bool isPurchased = true)
         {
             try
             {
@@ -120,7 +120,10 @@ namespace BookStoreProject.Controllers
                 for (int i = 0; i < reviews.Count(); i++)
                 {
                     response.Reviews.ToList()[i].isPurchased = await _reviewService.isPurchased(reviews.ToList()[i]);
-                }    
+                }
+
+                response.Reviews = _reviewService.GetReviewsByCriteria(response.Reviews, dateSort, isPurchased);
+
                 return Ok(response);
             }
             catch(System.Exception)

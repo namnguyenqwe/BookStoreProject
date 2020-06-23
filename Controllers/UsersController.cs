@@ -64,7 +64,7 @@ namespace BookStoreProject.Controllers
             }
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
-            user.Name = profile.FullName;
+            user.Name = profile.Name;
             _userService.Update(user);
             _userService.SaveChanges();
             return Ok(user);

@@ -1,8 +1,11 @@
-﻿using BookStoreProject.Models;
+﻿using BookStoreProject.Helpers;
+using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BookStoreProject.Services
@@ -106,8 +109,14 @@ namespace BookStoreProject.Services
         {
             if(!string.IsNullOrEmpty(keyword))
             {
-                return _dbContext.Categories.Where(x =>
-                        x.Category.ToUpper().Contains(keyword.ToUpper()))
+                return _dbContext.Categories.Where(delegate (Categories c)
+                {
+                    if (MyConvert.ConvertToUnSign(c.Category.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                    c.Category.ToUpper().Contains(keyword.ToUpper()))
+                        return true;
+                    else
+                        return false;
+                })
                     .AsEnumerable();
             }
             return _dbContext.Categories.AsEnumerable();
@@ -124,5 +133,6 @@ namespace BookStoreProject.Services
                            .FirstOrDefault(x => x.CategoryID == CategoryId);
             return category.Books.Count;
         }
+
     }
 }

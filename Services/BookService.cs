@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using BookStoreProject.Dtos.Book;
+using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BookStoreProject.Services
@@ -114,9 +117,16 @@ namespace BookStoreProject.Services
             {
 
                 return _dbContext.Books
-                    .Where(x =>
-                        x.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
-                        x.Author.ToUpper().Contains(keyword.ToUpper()))
+                    .Where(delegate (Book b)
+                    {
+                        if (MyConvert.ConvertToUnSign(b.NameBook.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                        MyConvert.ConvertToUnSign(b.Author.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                        b.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
+                        b.Author.ToUpper().Contains(keyword.ToUpper()))
+                            return true;
+                        else
+                            return false;
+                    })
                     .AsEnumerable();
             }
             return _dbContext.Books.AsEnumerable();
@@ -276,9 +286,16 @@ namespace BookStoreProject.Services
             {
 
                 return _dbContext.Books.Include(x => x.Reviews)
-                    .Where(x =>
-                        x.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
-                        x.Author.ToUpper().Contains(keyword.ToUpper()))
+                    .Where(delegate (Book b)
+                    {
+                        if (MyConvert.ConvertToUnSign(b.NameBook.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                        MyConvert.ConvertToUnSign(b.Author.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                        b.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
+                        b.Author.ToUpper().Contains(keyword.ToUpper()))
+                            return true;
+                        else
+                            return false;
+                    })
                     .AsEnumerable();
             }
             return _dbContext.Books.Include(x => x.Reviews).AsEnumerable();
@@ -296,5 +313,6 @@ namespace BookStoreProject.Services
                 return false;
             return true;
         }
+        
     }
 }

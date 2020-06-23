@@ -13,7 +13,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class SubcribersController : ControllerBase
     {
         private readonly ISubcriberService _subcriberService;
@@ -67,6 +67,14 @@ namespace BookStoreProject.Controllers
             {
                 return BadRequest();
             }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetSubcriberById(int subcriberId)
+        {
+            var subcriber = await  _subcriberService.GetSubcriberById(subcriberId);
+            if (subcriber == null)
+                return NotFound(subcriberId);
+            return Ok(subcriber);
         }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using BookStoreProject.Dtos.Review;
+using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BookStoreProject.Services
@@ -17,6 +20,7 @@ namespace BookStoreProject.Services
         Task<IEnumerable<Review>> GetReviewsByBookId(int bookId);
         Task<Review> GetReviewById(int reviewId);
         Task<bool> isPurchased(Review review);
+        IEnumerable<ReviewForUserListDto> GetReviewsByCriteria(IEnumerable<ReviewForUserListDto> list, int dateSort, bool isPurchased);
     }
     public class ReviewService : IReviewService
     {
@@ -71,10 +75,25 @@ namespace BookStoreProject.Services
             if (!string.IsNullOrEmpty(keyword))
             {
                 return  _dbContext.Reviews.Include(x => x.Book).Include(x => x.ApplicationUser)
-                        .Where(x =>
-                        x.Book.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
-                        x.ApplicationUser.Email.ToUpper().Contains(keyword.ToUpper()) ||
-                        x.Comment.Contains(keyword)).AsEnumerable();
+                        .Where(delegate (Review r)
+                        {
+                            if (MyConvert.ConvertToUnSign(r.Book.NameBook.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+
+                            MyConvert.ConvertToUnSign(r.ApplicationUser.Email.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+
+                            MyConvert.ConvertToUnSign(r.Comment.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+
+                            r.Book.NameBook.ToUpper().Contains(keyword.ToUpper()) ||
+
+                            r.ApplicationUser.Email.ToUpper().Contains(keyword.ToUpper()) ||
+
+                            r.Comment.Contains(keyword))
+
+                                return true;
+                            else
+                                return false;
+                        }
+                        ).AsEnumerable();
             }
             return _dbContext.Reviews.Include(x => x.Book).Include(x => x.ApplicationUser).AsEnumerable();
         }
@@ -82,6 +101,16 @@ namespace BookStoreProject.Services
         public async Task<IEnumerable<Review>> GetReviewsByBookId(int bookId)
         {
             return await _dbContext.Reviews.Include(x => x.ApplicationUser).Where(x => x.BookID == bookId).ToListAsync();
+        }
+
+        public IEnumerable<ReviewForUserListDto> GetReviewsByCriteria(IEnumerable<ReviewForUserListDto> list, int dateSort, bool isPurchased)
+        {
+            return dateSort == 0 ? list.Where(x => x.isPurchased == isPurchased).OrderByDescending(x => x.Date.Year)
+                                   .ThenByDescending(x => x.Date.Month)
+                                   .ThenByDescending(x => x.Date.Day)
+                                : list.Where(x => x.isPurchased == isPurchased).OrderBy(x => x.Date.Year)
+                                   .ThenBy(x => x.Date.Month)
+                                   .ThenBy(x => x.Date.Day);
         }
 
         public async Task<bool> isPurchased(Review review)
@@ -92,5 +121,7 @@ namespace BookStoreProject.Services
                 return false;
             return true;
         }
+
+        
     }
 }

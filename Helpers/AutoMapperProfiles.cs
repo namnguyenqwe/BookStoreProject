@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookStoreProject.Dtos.Admin;
 using BookStoreProject.Dtos.ApplicationUser;
 using BookStoreProject.Dtos.Book;
 using BookStoreProject.Dtos.CartItem;
@@ -21,7 +22,7 @@ namespace BookStoreProject.AutoMapper
         {
             #region Book
             CreateMap<BookForCreateDto, Book>().ForMember(x => x.BookID, opt => opt.Ignore())
-                                                .ForMember(x => x.QuantityOut, opt => opt.Ignore());                                      
+                                                .ForMember(x => x.QuantityOut, opt => opt.Ignore());
             CreateMap<Book, BookForDetailDto>();
             CreateMap<BookForUpdateDto, Book>().ForMember(x => x.QuantityOut, opt => opt.Ignore());
             CreateMap<Book, BookForListDto>();
@@ -30,21 +31,21 @@ namespace BookStoreProject.AutoMapper
                                             .ForMember(x => x.publisher, y => { y.MapFrom(z => z.Publisher.publisher); })
                                             .ForMember(x => x.ReviewCount, y => { y.MapFrom(z => z.Reviews.Count); })
                                             .ForMember(x => x.Rating, y => {
-                                                       y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Reviews.Count : 0);
+                                                y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Reviews.Count : 0);
                                             })
-                                            .ForMember(x => x.Reviews, y => { y.MapFrom(z => z.Reviews.Take(3)); }); 
+                                            .ForMember(x => x.Reviews, y => { y.MapFrom(z => z.Reviews.Take(3)); });
             CreateMap<Book, BookForUserRelatedListDto>();
             CreateMap<Book, BookForUserSearchListDto>().ForMember(x => x.ReviewCount, y => { y.MapFrom(z => z.Reviews.Count); })
-                                                        .ForMember(x => x.Rating, y => { 
-                                                            y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a,b) => new Review { BookID = 0,Rating = a.Rating + b.Rating}).Rating / z.Reviews.Count : 0); 
+                                                        .ForMember(x => x.Rating, y => {
+                                                            y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Reviews.Count : 0);
                                                         });
             #endregion
 
             #region Category
-            CreateMap<CategoryDto,Categories>().ForMember(x => x.CategoryID, opt => opt.Ignore());
+            CreateMap<CategoryDto, Categories>().ForMember(x => x.CategoryID, opt => opt.Ignore());
             CreateMap<Categories, CategoryForSelectDto>();
             CreateMap<Categories, CategoryForListDto>().ForMember(x => x.BookTitleCount, y => { y.MapFrom(z => z.Books.Count); });
-            CreateMap<Categories, CategoryForUserListDto>().ForMember(x => x.ImageLink, 
+            CreateMap<Categories, CategoryForUserListDto>().ForMember(x => x.ImageLink,
                                                         y =>
                                                         {
                                                             y.MapFrom(z => z.Books.OrderByDescending(x => x.Date.Year)
@@ -81,7 +82,7 @@ namespace BookStoreProject.AutoMapper
             #endregion
 
             #region District
-            CreateMap<District, DistrictForListDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); }); 
+            CreateMap<District, DistrictForListDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); });
             CreateMap<District, DistrictForDetailDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); });
             CreateMap<DistrictForUpdateDto, District>().ForMember(x => x.DistrictID, opt => opt.Ignore())
                                                        .ForMember(x => x.CityID, opt => opt.Ignore())
@@ -90,7 +91,9 @@ namespace BookStoreProject.AutoMapper
             #endregion
 
             #region ApplicationUser
-            CreateMap<ApplicationUser, ApplicationUserForProfileDto>().ForMember(x => x.ApplicationUserId, y => { y.MapFrom(z => z.Id); }); ;
+            CreateMap<ApplicationUser, ApplicationUserForProfileDto>().ForMember(x => x.ApplicationUserId, y => { y.MapFrom(z => z.Id); })
+                                                                       .ForMember(x => x.Name, y => { y.MapFrom(z => z.Name); }); 
+            CreateMap<ApplicationUser, UserForListDto>().ForMember(x => x.Id, y => { y.MapFrom(z => z.Id); });
             #endregion
         }
     }
