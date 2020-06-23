@@ -90,6 +90,7 @@ namespace BookStoreProject.Controllers
                 var result = await _subcriberService.CreateSubcriber(subcriber);
                 if (result)
                     return Ok();
+                else return BadRequest(new { message = "Email already exists !" });
             }
             return BadRequest(ModelState);
         }
@@ -102,6 +103,7 @@ namespace BookStoreProject.Controllers
                 var result = await _subcriberService.UpdateSubcriber(_mapper.Map(input, subcriberInDB));
                 if (result)
                     return Ok();
+                else return BadRequest(new { message = "Email already exists !" });
             }
             return BadRequest(ModelState);
         }

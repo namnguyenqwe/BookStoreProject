@@ -265,6 +265,7 @@ namespace BookStoreProject.Services
             Random rnd = new Random();
             var book = await GetBookByIdAsync(bookId);
             var relatedBooks = await _dbContext.Books.Where(x => x.CategoryID == book.CategoryID 
+                                                    || x.PublisherID == book.PublisherID
                                                     && x.Status == true
                                                     && x.BookID != book.BookID)
                 .ToListAsync();
@@ -277,7 +278,7 @@ namespace BookStoreProject.Services
             return await _dbContext.Books.Include(x => x.Publisher)
                           .Include(x => x.Category)
                           .Include(x => x.Reviews).ThenInclude(y => y.ApplicationUser)
-                          .FirstOrDefaultAsync(x => x.BookID == bookId);
+                          .FirstOrDefaultAsync(x => x.BookID == bookId && x.Status == true);
         }
 
         public IEnumerable<Book> GetBooksForUser(string keyword)

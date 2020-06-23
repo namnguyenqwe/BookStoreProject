@@ -29,6 +29,9 @@ namespace BookStoreProject.Services
         {
             try
             {
+                var subcriber = await _dbContext.Subcribers.FirstOrDefaultAsync(x => x.Email == subcriberCreate.Email);
+                if (subcriber != null)
+                    return false;
                 _dbContext.Subcribers.Add(subcriberCreate);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -84,6 +87,12 @@ namespace BookStoreProject.Services
         {
            try
             {
+                var subcriber = await _dbContext.Subcribers.FirstOrDefaultAsync(x => x.Email == subcriberUpdate.Email && x.SubcriberId != subcriberUpdate.SubcriberId);
+                if (subcriber != null)
+                    return false;
+                var subcriberInDB = await _dbContext.Subcribers.FirstOrDefaultAsync(x => x.SubcriberId == subcriberUpdate.SubcriberId);
+                if (subcriberInDB == null)
+                    return false;
                 _dbContext.Subcribers.Update(subcriberUpdate);
                 await _dbContext.SaveChangesAsync();
                 return true;

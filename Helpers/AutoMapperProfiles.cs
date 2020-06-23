@@ -9,6 +9,7 @@ using BookStoreProject.Dtos.District;
 using BookStoreProject.Dtos.Publisher;
 using BookStoreProject.Dtos.Review;
 using BookStoreProject.Dtos.Subcriber;
+using BookStoreProject.Dtos.WishList;
 using BookStoreProject.Models;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,8 @@ namespace BookStoreProject.AutoMapper
                                             .ForMember(x => x.Rating, y => {
                                                 y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Reviews.Count : 0);
                                             })
-                                            .ForMember(x => x.Reviews, y => { y.MapFrom(z => z.Reviews.Take(3)); });
+                                            .ForMember(x => x.Reviews, y => { y.MapFrom(z => z.Reviews.Take(3)); })
+                                            .ForMember(x => x.RemainQuantity, y => { y.MapFrom(z => z.QuantityIn - z.QuantityOut); });
             CreateMap<Book, BookForUserRelatedListDto>();
             CreateMap<Book, BookForUserSearchListDto>().ForMember(x => x.ReviewCount, y => { y.MapFrom(z => z.Reviews.Count); })
                                                         .ForMember(x => x.Rating, y => {
@@ -100,6 +102,18 @@ namespace BookStoreProject.AutoMapper
             #region Subcriber
             CreateMap<SubcriberForModalDto, Subcriber>().ForMember(x => x.CreatedDate, opt => opt.Ignore())
                                                         .ForMember(x => x.SubcriberId, opt => opt.Ignore());
+            #endregion
+
+            #region WishList
+            CreateMap<WishList, WishListForUserListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
+                                                        .ForMember(x => x.ImageLink, y => { y.MapFrom(z => z.Book.ImageLink); })
+                                                        .ForMember(x => x.OriginalPrice, y => { y.MapFrom(z => z.Book.OriginalPrice); })
+                                                        .ForMember(x => x.Price, y => { y.MapFrom(z => z.Book.Price); })
+                                                        .ForMember(x => x.ReviewCount, y => { y.MapFrom(z => z.Book.Reviews.Count); })
+                                                        .ForMember(x => x.Rating, y =>
+                                                        {
+                                                            y.MapFrom(z => z.Book.Reviews.Any() ? z.Book.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Book.Reviews.Count : 0);
+                                                        });
             #endregion
         }
     }
