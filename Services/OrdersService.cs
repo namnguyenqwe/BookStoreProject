@@ -64,7 +64,9 @@ namespace BookStoreProject.Services
         }
         public async Task<Orders> GetOrderByIdAsync(int orderId)
         {
-            return await _dbContext.Orders.FirstOrDefaultAsync(x => x.OrderID == orderId);
+            return await _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Coupon)
+                                           .Include(x => x.Recipient).ThenInclude(x => x.District).ThenInclude(x => x.City)
+                                           .Include(x => x.OrderItems).ThenInclude(x => x.Book).FirstOrDefaultAsync(x => x.OrderID == orderId);
         }
 
         public async Task<bool> UpdateOrderAsync(Orders order)

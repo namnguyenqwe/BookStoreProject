@@ -141,7 +141,16 @@ namespace BookStoreProject.AutoMapper
                                                 .ForMember(x => x.Email, y => { y.MapFrom(z => z.Recipent.Email); })
                                                 .ForMember(x=>x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); });
         
-            CreateMap<Orders, OrderForDetailDto>();
+            CreateMap<Orders, OrderForDetailDto>().ForMember(x => x.Email, y => { y.MapFrom(z => z.Recipient.Email); })
+                                                  .ForMember(x => x.NameOfRecipient, y => { y.MapFrom(z => z.Recipient.Name); })
+                                                  .ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); })
+                                                  .ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
+                                                  .ForMember(x => x.Total1, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price)); })
+                                                  .ForMember(x => x.Discount, y => { y.MapFrom(z => z.Coupon.Discount); })
+                                                  .ForMember(x => x.Pay, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price) - (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100)); })
+                                                  .ForMember(x => x.Total2, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price) - (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100) + z.ShippingFee); }); ;
+
+
             CreateMap<OrderForCreateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore());
             CreateMap<OrderForUpdateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore())
                                                   .ForMember(x => x.ApplicationUserID, opt => opt.Ignore())
