@@ -39,7 +39,8 @@ namespace BookStoreProject.AutoMapper
             CreateMap<Orders, OrderForDetailDto>();
 
             CreateMap<OrderForCreateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore());
-                                                
+            CreateMap<OrderForUpdateDto, Orders>();
+
 
             #endregion
         }

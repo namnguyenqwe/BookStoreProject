@@ -23,5 +23,6 @@ namespace BookStoreProject.Models
         public ApplicationUser ApplicationUser { get; set; }
         public Recipient Recipient { get; set; }
         public Coupon Coupon { get; set; }
+
     }
 }

@@ -45,7 +45,7 @@ namespace BookStoreProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] OrderForCreateDto input)
+        public async Task<IActionResult> CreateOrder([FromBody]OrderForCreateDto input)
         {
             if (ModelState.IsValid)
             {
@@ -53,6 +53,26 @@ namespace BookStoreProject.Controllers
                 var result = await _ordersService.CreateOrderAsync(order);
                 if (result)
                     return Ok();
+            }
+            return BadRequest(ModelState);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> UpdateBook(int orderId, [FromBody] OrderForUpdateDto input)
+        {
+            if (ModelState.IsValid)
+            {
+                var orderInDB = await _ordersService.GetOrderByIdAsync(orderId);
+                if (orderInDB == null)
+                {
+                    return NotFound(orderId);
+                }
+                var result = await _ordersService.UpdateOrderAsync(_mapper.Map(input, orderInDB));
+                if (result)
+                {
+                    return Ok();
+                }
             }
             return BadRequest(ModelState);
         }
@@ -85,7 +105,7 @@ namespace BookStoreProject.Controllers
         }
 
         [HttpDelete("{orderId}")]
-        public async Task<IActionResult> DeleteBook(int orderId)
+        public async Task<IActionResult> DeleteOrder(int orderId)
         {
             var order = await _ordersService.GetOrderByIdAsync(orderId);
             if (order == null)
@@ -99,6 +119,7 @@ namespace BookStoreProject.Controllers
         }
 
 
+       
 
 
 
