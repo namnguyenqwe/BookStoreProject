@@ -20,6 +20,7 @@ namespace BookStoreProject.Services
         Task<bool> UpdateOrderAsync(Orders order);
         IEnumerable<Orders> GetOders(string keyword);
         IEnumerable<OrderForListDto> GetOrdersPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId");
+        Task<IEnumerable<Orders>> GetOrder(string applicationUserId);
     }
     public class OrdersService:IOrdersService
     {
@@ -65,7 +66,8 @@ namespace BookStoreProject.Services
         }
         public async Task<Orders> GetOrderByIdAsync(int orderId)
         {
-            return await _dbContext.Orders.FirstOrDefaultAsync(x => x.OrderID == orderId);
+            //return await _dbContext.Orders.FirstOrDefaultAsync(x => x.OrderID == orderId);
+            return await _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.OrderItems).ThenInclude(x => x.Book).Include(x => x.Recipient).ThenInclude(x => x.District).ThenInclude(x => x.City).FirstOrDefaultAsync(x => x.OrderID == orderId);
         }
 
         public async Task<bool> UpdateOrderAsync(Orders order)
@@ -132,6 +134,9 @@ namespace BookStoreProject.Services
             return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient).ThenInclude(x=>x.District).ThenInclude(x=>x.City).AsEnumerable();
         }
 
-      
+        public async Task<IEnumerable<Orders>> GetOrder(string applicationUserId)
+        {
+            return await _dbContext.Orders.Include(x => x.ApplicationUser).Where(x => x.ApplicationUserID == applicationUserId).ToListAsync();
+        }
     }
 }

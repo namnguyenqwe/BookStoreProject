@@ -41,6 +41,7 @@ namespace BookStoreProject.Controllers
             var order = await _ordersService.GetOrderByIdAsync(orderId);
             if (order == null)
                 return NotFound();
+            
             else return Ok(_mapper.Map<OrderForDetailDto>(order));
         }
 
@@ -118,8 +119,36 @@ namespace BookStoreProject.Controllers
             return Ok();
         }
 
+        /*[HttpGet("user")]
+        public async Task<IActionResult> GetWishList()
+        {
+            var userId = GetUserId();
+            if (userId == "error")
+            {
+                return Unauthorized();
+            }
+            var order = await _ordersService.GetOrder(userId);
+            var orderForReturn = _mapper.Map<IEnumerable<Orders>, IEnumerable<OrderForUserListDto>>(order);
+            if (order == null)
+                return NotFound();
+            return Ok(new { data = orderForReturn });
+        }*/
 
-       
+        [NonAction]
+        public string GetUserId()
+        {
+            string userId;
+            try
+            {
+                userId = User.Claims.First(c => c.Type == "UserID").Value;
+            }
+            catch
+            {
+                return "error";
+            }
+            return userId;
+        }
+
 
 
 
