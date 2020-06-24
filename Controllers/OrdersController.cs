@@ -67,5 +67,39 @@ namespace BookStoreProject.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] OrderForUpdateDto input)
+        {
+            if (ModelState.IsValid)
+            {
+                var orderInDB = await _ordersService.GetOrderByIdAsync(orderId);
+                if (orderInDB == null)
+                {
+                    return NotFound(orderId);
+                }
+                var result = await _ordersService.UpdateOrderAsync(_mapper.Map(input, orderInDB));
+                if (result)
+                {
+                    return Ok();
+                }
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> DeleteOrder(int orderId)
+        {
+            var order = await _ordersService.GetOrderByIdAsync(orderId);
+            if (order == null)
+                return NotFound(orderId);
+            var result = await _ordersService.DeleteOrderAsync(order.OrderID);
+            if (!result)
+            {
+                return BadRequest("Có lỗi trong quá trình xóa dữ liệu: ");
+            }
+            return Ok();
+        }
+
     }
 }

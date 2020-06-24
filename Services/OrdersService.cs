@@ -140,6 +140,24 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.Date).Skip((page - 1) * pageSize).Take(pageSize);
             }
+            if (criteria.Equals("address"))
+            {
+                if (sort == 0)
+                {
+                    return list.OrderByDescending(x => x.Address).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                else
+                    return list.OrderBy(x => x.Address).Skip((page - 1) * pageSize).Take(pageSize);
+            }
+            if (criteria.Equals("shippingfee"))
+            {
+                if (sort == 0)
+                {
+                    return list.OrderByDescending(x => x.ShippingFee).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                else
+                    return list.OrderBy(x => x.ShippingFee).Skip((page - 1) * pageSize).Take(pageSize);
+            }
             if (criteria.Equals("status"))
             {
                 if (sort == 0)
