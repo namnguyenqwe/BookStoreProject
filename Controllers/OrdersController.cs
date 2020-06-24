@@ -33,7 +33,7 @@ namespace BookStoreProject.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("{orderId}")]
-        public async Task<IActionResult> GetBookByIdForAdmin(int orderId)
+        public async Task<IActionResult> GetOrderByIdForAdmin(int orderId)
         {
             var order = await _ordersService.GetOrderByIdAsync(orderId);
             if (order == null)
