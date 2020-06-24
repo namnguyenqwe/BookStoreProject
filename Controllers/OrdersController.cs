@@ -67,5 +67,19 @@ namespace BookStoreProject.Controllers
             }
         }
 
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> DeleteOrder(int orderId)
+        {
+            var order = await _ordersService.GetOrderByIdAsync(orderId);
+            if (order == null)
+                return NotFound(orderId);
+            var result = await _ordersService.DeleteOrderAsync(order.OrderID);
+            if (!result)
+            {
+                return BadRequest("Có lỗi trong quá trình xóa dữ liệu: ");
+            }
+            return Ok();
+        }
+
     }
 }
