@@ -139,7 +139,7 @@ namespace BookStoreProject.AutoMapper
                                                 .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
                                                 .ForMember(x => x.Coupon, y => { y.MapFrom(z => z.CouponID); })
                                                 .ForMember(x => x.Email, y => { y.MapFrom(z => z.Recipent.Email); })
-                                                .ForMember(x=>x.Address, y => { y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); });
+                                                .ForMember(x=>x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); });
         
             CreateMap<Orders, OrderForDetailDto>();
             CreateMap<OrderForCreateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore());
