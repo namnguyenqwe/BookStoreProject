@@ -8,6 +8,7 @@ using BookStoreProject.Repositorys;
 using BookStoreProject.Dtos.Order;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookStoreProject.Services
 {
@@ -122,13 +123,13 @@ namespace BookStoreProject.Services
             if (!string.IsNullOrEmpty(keyword))
             {
 
-                return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient)
+                return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient).ThenInclude(x=>x.District).ThenInclude(x=>x.City)
                     .Where(x =>
                         x.ApplicationUser.FullName.ToUpper().Contains(keyword.ToUpper()) ||
-                        x.Recipient.Name.ToUpper().Contains(keyword.ToUpper()))
+                        x.Recipient.Name.ToUpper().Contains(keyword.ToUpper()))                    
                     .AsEnumerable();
             }
-            return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient).AsEnumerable();
+            return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient).ThenInclude(x=>x.District).ThenInclude(x=>x.City).AsEnumerable();
         }
 
       

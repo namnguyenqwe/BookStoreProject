@@ -59,7 +59,7 @@ namespace BookStoreProject.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{orderId}")]
-        public async Task<IActionResult> UpdateBook(int orderId, [FromBody] OrderForUpdateDto input)
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] OrderForUpdateDto input)
         {
             if (ModelState.IsValid)
             {
