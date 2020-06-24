@@ -177,6 +177,15 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.Note).Skip((page - 1) * pageSize).Take(pageSize);
             }
+            if (criteria.Equals("email"))
+            {
+                if (sort == 0)
+                {
+                    return list.OrderByDescending(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                else
+                    return list.OrderBy(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+            }
             return null;
         }
 
