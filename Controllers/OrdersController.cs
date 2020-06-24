@@ -119,8 +119,9 @@ namespace BookStoreProject.Controllers
             return Ok();
         }
 
-        /*[HttpGet("user")]
-        public async Task<IActionResult> GetWishList()
+        [Authorize]
+        [HttpGet("user")]
+        public async Task<IActionResult> GetOrder()
         {
             var userId = GetUserId();
             if (userId == "error")
@@ -132,7 +133,18 @@ namespace BookStoreProject.Controllers
             if (order == null)
                 return NotFound();
             return Ok(new { data = orderForReturn });
-        }*/
+        }
+
+        [HttpGet("user/{orderId}")]
+        public async Task<IActionResult> GetOrderByIdForUser(int orderId)
+        {
+            var order = await _ordersService.GetOrderByIdForUserAsync(orderId);
+            if (order == null)
+                return NotFound(orderId);
+            else
+                return Ok(_mapper.Map<OrderForUserDetailDto>(order));
+
+        }
 
         [NonAction]
         public string GetUserId()

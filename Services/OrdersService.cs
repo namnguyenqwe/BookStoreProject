@@ -18,9 +18,12 @@ namespace BookStoreProject.Services
         Task<Orders> GetOrderByIdAsync(int orderId);
         Task<bool> CreateOrderAsync(Orders orderCreate);
         Task<bool> UpdateOrderAsync(Orders order);
+        Task<Orders> GetOrderByIdForUserAsync(int orderId);
+
         IEnumerable<Orders> GetOders(string keyword);
         IEnumerable<OrderForListDto> GetOrdersPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId");
         Task<IEnumerable<Orders>> GetOrder(string applicationUserId);
+        
     }
     public class OrdersService:IOrdersService
     {
@@ -137,7 +140,19 @@ namespace BookStoreProject.Services
 
         public async Task<IEnumerable<Orders>> GetOrder(string applicationUserId)
         {
-            return await _dbContext.Orders.Include(x => x.ApplicationUser).Where(x => x.ApplicationUserID == applicationUserId).ToListAsync();
+            return await _dbContext.Orders.Include(x=>x.Coupon)
+                .Include(x=>x.ApplicationUser).Include(x=>x.OrderItems).ThenInclude(x=>x.Book)
+                .Include(x=>x.Recipient).ThenInclude(x=>x.District).ThenInclude(x=>x.City)
+                .Where(x => x.ApplicationUserID == applicationUserId).ToListAsync();
+        }
+
+        public async Task<Orders> GetOrderByIdForUserAsync(int orderId)
+        {
+            return await _dbContext.Orders.Include(x => x.Coupon)
+                          .Include(x => x.ApplicationUser)
+                          .Include(x => x.OrderItems).ThenInclude(x=>x.Book)
+                          .Include(x=>x.Recipient).ThenInclude(x=>x.District).ThenInclude(x=>x.City)
+                          .FirstOrDefaultAsync(x => x.OrderID == orderId);
         }
     }
 }
