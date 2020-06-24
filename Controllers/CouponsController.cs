@@ -80,7 +80,7 @@ namespace BookStoreProject.Controllers
 
                 return Ok(paginationSet);
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
                 return BadRequest();
             }
@@ -109,7 +109,7 @@ namespace BookStoreProject.Controllers
             return BadRequest(ModelState);
         }
         [HttpPut("{couponId}")]
-        public async Task<IActionResult> UpdateCoupon(string couponId,[FromBody]CouponForModalDto input)
+        public async Task<IActionResult> UpdateCoupon(string couponId, [FromBody] CouponForModalDto input)
         {
             if (ModelState.IsValid)
             {
@@ -124,6 +124,14 @@ namespace BookStoreProject.Controllers
                 }
             }
             return BadRequest(ModelState);
-        }    
+        }
+        [HttpGet("check/{couponId}")]
+        public async Task<IActionResult> CheckCoupon(string couponId)
+        {
+            var discount = await _couponService.IsCouponAvailable(couponId);
+            if (discount == null)
+                return NotFound(new { message = "Mã giảm giả không còn khả dụng hoặc không tồn tại" });
+            return Ok(new { Discount = discount });
+        }
     }
 }

@@ -13,7 +13,9 @@ namespace BookStoreProject.Services
         Task<bool> CreateCartItem(CartItems cartItemCreate);
         Task<bool> UpdateCartItem(CartItems cartItemUpdate);
         Task<bool> DeleteCartItem(IEnumerable<CartItemForDeleteDto> bookIds, string applicationuserId);
+        Task<bool> DeleteCartItem(int bookId, string applicationuserId);
         Task<IEnumerable<CartItems>> GetCartItemsByUserId(string applicationuserId);
+        Task<CartItems> GetCartItemById(int bookId, string applicationuserId);
     }
     public class CartItemService : ICartItemService
     {
@@ -58,6 +60,29 @@ namespace BookStoreProject.Services
             {
                 throw ex;
             }
+        }
+
+        public async Task<bool> DeleteCartItem(int bookId, string applicationuserId)
+        {
+            try
+            {
+                 var cartItemInDB = await _dbContext.CartItems
+                                .FirstOrDefaultAsync(x => x.BookID == bookId && x.ApplicationUserId == applicationuserId);
+                 if (cartItemInDB == null)
+                     return false;
+                 _dbContext.Remove(cartItemInDB);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<CartItems> GetCartItemById(int bookId, string applicationuserId)
+        {
+            return await _dbContext.CartItems.FirstOrDefaultAsync(x => x.BookID == bookId && x.ApplicationUserId == applicationuserId);
         }
 
         public async Task<IEnumerable<CartItems>> GetCartItemsByUserId(string applicationuserId)

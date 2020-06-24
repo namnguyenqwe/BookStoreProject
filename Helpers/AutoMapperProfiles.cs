@@ -4,6 +4,7 @@ using BookStoreProject.Dtos.ApplicationUser;
 using BookStoreProject.Dtos.Book;
 using BookStoreProject.Dtos.CartItem;
 using BookStoreProject.Dtos.Category;
+using BookStoreProject.Dtos.City;
 using BookStoreProject.Dtos.Coupon;
 using BookStoreProject.Dtos.District;
 using BookStoreProject.Dtos.Publisher;
@@ -81,7 +82,15 @@ namespace BookStoreProject.AutoMapper
             CreateMap<CartItems, CartItemForUserListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
                                                           .ForMember(x => x.Author, y => { y.MapFrom(z => z.Book.Author); })
                                                           .ForMember(x => x.Price, y => { y.MapFrom(z => z.Book.Price); })
+                                                          .ForMember(x => x.ImageLink, y => { y.MapFrom(z => z.Book.ImageLink); })
                                                           .ForMember(x => x.OriginalPrice, y => { y.MapFrom(z => z.Book.OriginalPrice); });
+            CreateMap<CartItems, CartItemForPaymentListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
+                                                         .ForMember(x => x.Price, y => { y.MapFrom(z => z.Book.Price); })
+                                                         .ForMember(x => x.ImageLink, y => { y.MapFrom(z => z.Book.ImageLink); });
+            CreateMap<CartItemForUserUpdateDto, CartItems>().ForMember(x => x.CreatedDate, opt => opt.Ignore())
+                                                            .ForMember(x => x.ApplicationUserId, opt => opt.Ignore())
+                                                            .ForMember(x => x.BookID, opt => opt.Ignore());
+            CreateMap<CartItems, CartItemForUserUpdateDto>();
             #endregion
 
             #region District
@@ -91,6 +100,11 @@ namespace BookStoreProject.AutoMapper
                                                        .ForMember(x => x.CityID, opt => opt.Ignore())
                                                        .ForMember(x => x.type, opt => opt.Ignore())
                                                        .ForMember(x => x.district, opt => opt.Ignore());
+            CreateMap<District, DistrictForUserListDto>();
+            #endregion
+
+            #region City
+            CreateMap<City,CityForUserListDto>();
             #endregion
 
             #region ApplicationUser

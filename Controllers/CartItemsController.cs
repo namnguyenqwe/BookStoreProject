@@ -9,6 +9,7 @@ using BookStoreProject.Models;
 using BookStoreProject.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace BookStoreProject.Controllers
 {
@@ -22,6 +23,23 @@ namespace BookStoreProject.Controllers
         {
             _cartItemService = cartItemService;
             _mapper = mapper;
+        }
+        [HttpPut("{bookId}")]
+        public async Task<IActionResult> UpdateCartItem(int bookId, [FromBody] CartItemForUserUpdateDto input)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = GetUserId();
+                if (userId == "error")
+                {
+                    return Unauthorized();
+                }
+                var cartItemInDB = await _cartItemService.GetCartItemById(bookId, userId);
+                var result = await _cartItemService.UpdateCartItem(_mapper.Map(input, cartItemInDB));
+                if (result)
+                    return RedirectToAction("GetCartItemsByUserId");
+            }
+            return BadRequest(ModelState);
         }
         [HttpGet]
         public async Task<IActionResult> GetCartItemsByUserId()
@@ -43,8 +61,8 @@ namespace BookStoreProject.Controllers
             }
 
         }
-        [HttpPost("{bookId}")]
-        public async Task<IActionResult> CreateCartItem(int bookId)
+        [HttpPost]
+        public async Task<IActionResult> CreateCartItem([FromBody] CartItemForUserCreateDto input)
         {
             try
             {
@@ -53,9 +71,18 @@ namespace BookStoreProject.Controllers
                 {
                     return Unauthorized();
                 }
+                var cartItemInDB = await _cartItemService.GetCartItemById(input.BookId, userId);
+                if (cartItemInDB != null)
+                {
+                    cartItemInDB.Quantity++;
+                    var isSuccess = await _cartItemService.UpdateCartItem(cartItemInDB);
+                    if (isSuccess)
+                        return Ok();
+                    return BadRequest(new { message = "Có lỗi trong quá trình lưu dữ liệu"});
+                }    
                 var cartItem = new CartItems()
                 {
-                    BookID = bookId,
+                    BookID = input.BookId,
                     ApplicationUserId = userId,
                     Quantity = 1,
                     CreatedDate = DateTime.Now
@@ -69,6 +96,26 @@ namespace BookStoreProject.Controllers
             {
                 return BadRequest();
             }
+        }
+        [HttpDelete("{bookId}")]
+        public async Task<IActionResult> DeleteCartItem(int bookId)
+        {
+            var userId = GetUserId();
+            if (userId == "error")
+            {
+                return Unauthorized();
+            }
+            var cartItem = await _cartItemService.GetCartItemById(bookId, userId);
+            if (cartItem == null)
+            {
+                return NotFound(bookId);
+            }
+            var result = await _cartItemService.DeleteCartItem(bookId, userId);
+            if (!result)
+            {
+                return BadRequest("Có lỗi trong quá trình xóa dữ liệu: ");
+            }
+            return RedirectToAction("GetCartItemsByUserId");
         }
 
         [NonAction]
