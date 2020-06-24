@@ -140,7 +140,13 @@ namespace BookStoreProject.AutoMapper
                                                 .ForMember(x=>x.Address, y => { y.MapFrom(z => z.Recipent.Address); });
             CreateMap<Orders, OrderForDetailDto>();
             CreateMap<OrderForCreateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore());
-            CreateMap<OrderForUpdateDto, Orders>();
+            CreateMap<OrderForUpdateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore())
+                                                  .ForMember(x => x.ApplicationUserID, opt => opt.Ignore())
+                                                  .ForMember(x => x.Date, opt => opt.Ignore())
+                                                  .ForMember(x => x.RecipientID, opt => opt.Ignore())
+                                                  .ForMember(x => x.CouponID, opt => opt.Ignore())
+                                                  .ForMember(x => x.ShippingFee, opt => opt.Ignore())
+                                                  .ForMember(x => x.Note, opt => opt.Ignore());
 
             #endregion
         }
