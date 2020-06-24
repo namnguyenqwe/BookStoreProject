@@ -44,6 +44,19 @@ namespace BookStoreProject.Controllers
             else return Ok(_mapper.Map<OrderForDetailDto>(order));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder([FromBody] OrderForCreateDto input)
+        {
+            if (ModelState.IsValid)
+            {
+                var order = _mapper.Map<Orders>(input);
+                var result = await _ordersService.CreateOrderAsync(order);
+                if (result)
+                    return Ok();
+            }
+            return BadRequest(ModelState);
+        }
+
         [Authorize(Roles = "Admin")]
         public IActionResult GetAllOrder(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
         {

@@ -12,6 +12,7 @@ namespace BookStoreProject.Models
     {
         public int RecipientID { get; set; }
 
+        public string ApplicationUserID { get; set; }
         public string? Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -21,5 +22,7 @@ namespace BookStoreProject.Models
         public ICollection<Orders> Orders { get; set; }
         public City City { get; set; }
         public District District { get; set; }
+
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }
