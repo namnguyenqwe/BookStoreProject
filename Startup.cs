@@ -141,6 +141,7 @@ namespace BookStoreProject
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<IDistrictService, DistrictService>();
+            services.AddScoped<IOrdersService, OrdersService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
             services.AddCors();
         }
