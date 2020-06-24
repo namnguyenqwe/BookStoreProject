@@ -38,7 +38,7 @@ namespace BookStoreProject.Controllers
             var order = await _ordersService.GetOrderByIdAsync(orderId);
             if (order == null)
                 return NotFound();
-            else return Ok(_mapper.Map<OrderForDetailDto>(order));
+            else return Ok(_mapper..ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); }); .ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); }); y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city);Map<OrderForDetailDto>(order));
         }
 
         [Authorize(Roles = "Admin")]
