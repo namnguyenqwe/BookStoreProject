@@ -32,6 +32,8 @@ namespace BookStoreProject.Controllers
             _mapper = mapper;
         }
 
+
+
         [Authorize(Roles = "Admin")]
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetOrderByIdForAdmin(int orderId)
@@ -42,7 +44,7 @@ namespace BookStoreProject.Controllers
             else return Ok(_mapper.Map<OrderForDetailDto>(order));
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllOrder(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
         {
             try
@@ -53,7 +55,7 @@ namespace BookStoreProject.Controllers
                 var listforDto = _mapper.Map<IEnumerable<Orders>, IEnumerable<OrderForListDto>>(list);
                 int totalCount = list.Count();
                 //return Ok(totalCount);
-                var response = _ordersService.GetBooksPerPage(listforDto, page, pageSize, sort, criteria);
+                var response = _ordersService.GetOrdersPerPage(listforDto, page, pageSize, sort, criteria);
 
                 var paginationSet = new PaginationSet<OrderForListDto>()
                 {
@@ -67,6 +69,20 @@ namespace BookStoreProject.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> DeleteBook(int orderId)
+        {
+            var order = await _ordersService.GetOrderByIdAsync(orderId);
+            if (order == null)
+                return NotFound(orderId);
+            var result = await _ordersService.DeleteOrderAsync(order.OrderID);
+            if (!result)
+            {
+                return BadRequest("Có lỗi trong quá trình xóa dữ liệu: ");
+            }
+            return Ok();
         }
 
 
