@@ -2,6 +2,7 @@
 using BookStoreProject.Dtos.Admin;
 using BookStoreProject.Dtos.Book;
 using BookStoreProject.Dtos.Category;
+using BookStoreProject.Dtos.Order;
 using BookStoreProject.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,16 @@ namespace BookStoreProject.AutoMapper
 
             #region Applicationuser
             CreateMap<ApplicationUser, UserForListDto>().ForMember(x => x.Id, y => { y.MapFrom(z => z.Id); }); ;
+            #endregion
+
+            #region
+            CreateMap<Orders, OrderForListDto>().ForMember(x => x.Id, y => { y.MapFrom(z => z.OrderID); })
+                                                .ForMember(x => x.NameOfUser, y => { y.MapFrom(z => z.ApplicationUser.FullName); })
+                                                .ForMember(x => x.NameOfRecipent, y => { y.MapFrom(z => z.Recipient.Name); })
+                                                .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
+                                                .ForMember(x => x.Coupon, y => { y.MapFrom(z => z.Coupon.CouponID); });
+            CreateMap<Orders, OrderForDetailDto>();
+
             #endregion
         }
     }

@@ -115,6 +115,7 @@ namespace BookStoreProject
             services.AddTransient<IImageWriter, ImageWriter>();
             services.AddTransient<IImageFileService, ImageFileService>();
 
+            services.AddScoped<IOrdersService, OrdersService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();
