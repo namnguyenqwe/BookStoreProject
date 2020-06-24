@@ -15,8 +15,8 @@ namespace BookStoreProject.Services
     {
         Task<bool> DeleteOrderAsync(int orderId);
         Task<Orders> GetOrderByIdAsync(int orderId);
-        Task<bool> CreateBookAsync(Orders orderCreate);
-        Task<bool> UpdateBookAsync(Orders order);
+        Task<bool> CreateOrderAsync(Orders orderCreate);
+        Task<bool> UpdateOrderAsync(Orders order);
         IEnumerable<Orders> GetOders(string keyword);
         IEnumerable<OrderForListDto> GetOrdersPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId");
     }
@@ -30,7 +30,7 @@ namespace BookStoreProject.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async Task<bool> CreateBookAsync(Orders orderCreate)
+        public async Task<bool> CreateOrderAsync(Orders orderCreate)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace BookStoreProject.Services
             return await _dbContext.Orders.FirstOrDefaultAsync(x => x.OrderID == orderId);
         }
 
-        public async Task<bool> UpdateBookAsync(Orders order)
+        public async Task<bool> UpdateOrderAsync(Orders order)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace BookStoreProject.Services
             }
         }
 
-        public IEnumerable<OrderForListDto> GetOsPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
+        public IEnumerable<OrderForListDto> GetOrdersPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
         {
             criteria = criteria.ToLower();
 
@@ -168,7 +168,7 @@ namespace BookStoreProject.Services
 
                 return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient)
                     .Where(x =>
-                        x.ApplicationUser.FullName.ToUpper().Contains(keyword.ToUpper()) ||
+                        x.ApplicationUser.Name.ToUpper().Contains(keyword.ToUpper()) ||
                         x.Recipient.Name.ToUpper().Contains(keyword.ToUpper()))
                     .AsEnumerable();
             }
