@@ -10,6 +10,7 @@ using BookStoreProject.Dtos.Publisher;
 using BookStoreProject.Dtos.Review;
 using BookStoreProject.Dtos.Subcriber;
 using BookStoreProject.Dtos.WishList;
+using BookStoreProject.Dtos.Order;
 using BookStoreProject.Models;
 using System;
 using System.Collections.Generic;
@@ -114,6 +115,16 @@ namespace BookStoreProject.AutoMapper
                                                         {
                                                             y.MapFrom(z => z.Book.Reviews.Any() ? z.Book.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Book.Reviews.Count : 0);
                                                         });
+            #endregion
+
+            #region Order
+            CreateMap<Orders, OrderForListDto>().ForMember(x => x.Id, y => { y.MapFrom(z => z.OrderID); })
+                                                .ForMember(x => x.NameOfUser, y => { y.MapFrom(z => z.ApplicationUser.Name); })
+                                                .ForMember(x => x.NameOfRecipent, y => { y.MapFrom(z => z.Recipient.Name); })
+                                                .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
+                                                .ForMember(x => x.Coupon, y => { y.MapFrom(z => z.Coupon.CouponID); });
+            CreateMap<Orders, OrderForDetailDto>();
+
             #endregion
         }
     }

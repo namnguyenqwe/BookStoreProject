@@ -138,6 +138,7 @@ namespace BookStoreProject
             services.AddScoped<IShippingService, ShippingService>();
             services.AddScoped<IWishListService, WishListService>();
             services.AddScoped<ISubcriberService, SubcriberService>();
+            services.AddScoped<IOrdersService, OrdersService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
             services.AddCors();
         }
