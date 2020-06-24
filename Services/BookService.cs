@@ -22,7 +22,7 @@ namespace BookStoreProject.Services
         IEnumerable<Book> GetBooks(string keyword);
         IEnumerable<BookForListDto> GetBooksPerPage(IEnumerable<BookForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "BookId");
         Task<IEnumerable<BookForUserListDto>> GetLatestBooks(int? num);
-        Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int? num);
+        Task<IEnumerable<BookForUserPopularListDto>> GetPopularBooks(int? num);
         Task<ICollection<Book>> GetRelatedBooks(int bookId, int num);
         IEnumerable<Book> GetBooksForUser(string keyword);
         Task<IEnumerable<Book>> GetBooksByCategoryId(int categoryId);
@@ -217,12 +217,12 @@ namespace BookStoreProject.Services
                 Information = x.Information,
                 ReviewCount = x.Reviews.Any() ? x.Reviews.Count : 0,
                 ImageLink = x.ImageLink,
-                Rating = x.Reviews.Any() ? (int)(x.Reviews.Aggregate((a,b) => new Review { Rating = a.Rating + b.Rating}).Rating / x.Reviews.Count) : 0
+                Rating = x.Reviews.Any() ?  (int) Math.Round((double)(x.Reviews.Aggregate((a,b) => new Review { Rating = a.Rating + b.Rating}).Rating / (double)x.Reviews.Count)) : 0
             }) ;
             return num != null ? listForReturn.Take((int)num) : listForReturn; 
         }
 
-        public async Task<IEnumerable<BookForUserListDto>> GetPopularBooks(int? num)
+        public async Task<IEnumerable<BookForUserPopularListDto>> GetPopularBooks(int? num)
         {
             /* var latestBookList = await _dbContext.Books.Include(x => x.OrderItems)
                                      .ThenInclude(x => x.Order).ToListAsync();
@@ -245,16 +245,17 @@ namespace BookStoreProject.Services
                                         .GroupBy(x => x.Book)
                                         .Where(x => x.Key.Status == true)
                                       .OrderByDescending(x => x.Aggregate((a,b) => new OrderItems {Quantity = a.Quantity + b.Quantity }).Quantity)
-                                        .Select(x => new BookForUserListDto
+                                        .Select(x => new BookForUserPopularListDto
                                         {
                                             BookID = x.Key.BookID,
                                             NameBook = x.Key.NameBook,
                                             OriginalPrice = x.Key.OriginalPrice,
                                             Price = x.Key.Price,
                                             Information = x.Key.Information,
+                                            Author = x.Key.Author,
                                             ReviewCount = x.Key.Reviews.Any() ? x.Key.Reviews.Count : 0,
                                             ImageLink = x.Key.ImageLink,
-                                            Rating = x.Key.Reviews.Any() ? (int)(x.Key.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / x.Key.Reviews.Count) : 0
+                                            Rating = x.Key.Reviews.Any() ? (int)Math.Round( (double) (x.Key.Reviews.Aggregate((a, b) => new Review { Rating = a.Rating + b.Rating }).Rating / (double) x.Key.Reviews.Count)) : 0
                                         }).ToList();
             return num != null ? list.Take((int)num) : list;
             //return listForReturn;

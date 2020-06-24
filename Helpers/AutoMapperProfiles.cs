@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStoreProject.Dtos.Recipient;
 
 namespace BookStoreProject.AutoMapper
 {
@@ -35,7 +36,7 @@ namespace BookStoreProject.AutoMapper
                                             .ForMember(x => x.publisher, y => { y.MapFrom(z => z.Publisher.publisher); })
                                             .ForMember(x => x.ReviewCount, y => { y.MapFrom(z => z.Reviews.Count); })
                                             .ForMember(x => x.Rating, y => {
-                                                y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Reviews.Count : 0);
+                                                y.MapFrom(z => z.Reviews.Any() ? (int) Math.Round((double)(z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / (double) z.Reviews.Count)) : 0);
                                             })
                                             .ForMember(x => x.Reviews, y => { y.MapFrom(z => z.Reviews.Take(3)); })
                                             .ForMember(x => x.RemainQuantity, y => { y.MapFrom(z => z.QuantityIn - z.QuantityOut); });
@@ -77,6 +78,7 @@ namespace BookStoreProject.AutoMapper
             #region Coupon
             CreateMap<Coupon, CouponForListDto>();
             CreateMap<CouponForModalDto, Coupon>();
+            CreateMap<Coupon, CouponForPaymentDto>();
             #endregion
 
             #region CartItem
@@ -139,6 +141,13 @@ namespace BookStoreProject.AutoMapper
                                                 .ForMember(x => x.Coupon, y => { y.MapFrom(z => z.Coupon.CouponID); });
             CreateMap<Orders, OrderForDetailDto>();
 
+            #endregion
+
+            #region Recipient
+            CreateMap<RecipientForCreateDto, Recipient>().ForMember(x => x.RecipientID, opt => opt.Ignore())
+                                                        .ForMember(x => x.ApplicationUserID, opt => opt.Ignore());
+            CreateMap<Recipient, RecipientForUserListDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); })
+                                                           .ForMember(x => x.district, y => { y.MapFrom(z => z.District.district); });
             #endregion
         }
     }

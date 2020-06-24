@@ -147,7 +147,7 @@ namespace BookStoreProject.Controllers
                 var review = _mapper.Map<Review>(input);
                 var result = await _reviewService.CreateReview(review);
                 if (result)
-                    return Ok();
+                    return Ok(new { message = "Review của bạn được đăng thành công !" });
             }
             return StatusCode(201, new { message = "Invalid review" });
         }

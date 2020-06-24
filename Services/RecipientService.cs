@@ -11,7 +11,9 @@ namespace BookStoreProject.Services
     {
         Task<bool> CreateRecipient(Recipient recipientCreate);
         Task<IEnumerable<Recipient>> GetRecipientsByApplicationUserId(string applicationUserId);
-
+        Task<bool> UpdateRecipient(Recipient recipientUpdate);
+        Task<Recipient> GetRecipientById(int recipientId, string applicationUserId);
+    }
         public class RecipientService : IRecipientService
         {
             private readonly BookStoreDbContext _dbContext;
@@ -23,6 +25,18 @@ namespace BookStoreProject.Services
             {
                 try
                 {
+                    if (recipientCreate.Default == true)
+                    {
+                        var RecipientInDB = await _dbContext.Recipients
+                        .FirstOrDefaultAsync(x => x.Default == true && x.ApplicationUserID == recipientCreate.ApplicationUserID);
+                        if (RecipientInDB != null)
+                        {
+                            RecipientInDB.Default = false;
+                            var result = await UpdateRecipient(RecipientInDB);
+                            if (!result)
+                                return false;
+                        }    
+                    }    
                     _dbContext.Recipients.Add(recipientCreate);
                     await _dbContext.SaveChangesAsync();
                     return true;
@@ -33,9 +47,29 @@ namespace BookStoreProject.Services
                 }
             }
 
-            public async Task<IEnumerable<Recipient>> GetRecipientsByApplicationUserId(string applicationUserId)
+        public async Task<Recipient> GetRecipientById(int recipientId, string applicationUserId)
+        {
+            return await _dbContext.Recipients
+                    .FirstOrDefaultAsync(x => x.RecipientID == recipientId && x.ApplicationUserID == applicationUserId);
+        }
+
+        public async Task<IEnumerable<Recipient>> GetRecipientsByApplicationUserId(string applicationUserId)
             {
                 return await _dbContext.Recipients.Where(x => x.ApplicationUserID == applicationUserId).ToListAsync();
             }
-        }
+
+            public async Task<bool> UpdateRecipient(Recipient recipientUpdate)
+            {
+                try
+                {
+                    _dbContext.Recipients.Update(recipientUpdate);
+                    await _dbContext.SaveChangesAsync();
+                    return true; 
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+    }
     }

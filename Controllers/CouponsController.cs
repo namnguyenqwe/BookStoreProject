@@ -128,10 +128,10 @@ namespace BookStoreProject.Controllers
         [HttpGet("check/{couponId}")]
         public async Task<IActionResult> CheckCoupon(string couponId)
         {
-            var discount = await _couponService.IsCouponAvailable(couponId);
-            if (discount == null)
-                return NotFound(new { message = "Mã giảm giả không còn khả dụng hoặc không tồn tại" });
-            return Ok(new { Discount = discount });
+            var coupon = await _couponService.IsCouponAvailable(couponId);
+            if (coupon == null)
+                return NotFound(new { message = "Mã giảm giá không còn khả dụng hoặc không tồn tại" });
+            return Ok(_mapper.Map<CouponForPaymentDto>(coupon));
         }
     }
 }
