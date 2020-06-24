@@ -18,7 +18,7 @@ namespace BookStoreProject.Services
         Task<bool> CreateBookAsync(Orders orderCreate);
         Task<bool> UpdateBookAsync(Orders order);
         IEnumerable<Orders> GetOders(string keyword);
-        IEnumerable<OrderForListDto> GetBooksPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId");
+        IEnumerable<OrderForListDto> GetOrdersPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId");
     }
     public class OrdersService:IOrdersService
     {
@@ -82,7 +82,7 @@ namespace BookStoreProject.Services
             }
         }
 
-        public IEnumerable<OrderForListDto> GetBooksPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
+        public IEnumerable<OrderForListDto> GetOrdersPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
         {
             criteria = criteria.ToLower();
             
@@ -100,10 +100,10 @@ namespace BookStoreProject.Services
             {
                 if (sort == 0)
                 {
-                    return list.OrderByDescending(x => x.Name).Skip((page - 1) * pageSize).Take(pageSize);
+                    return list.OrderByDescending(x => x.NameOfUser).Skip((page - 1) * pageSize).Take(pageSize);
                 }
                 else
-                    return list.OrderBy(x => x.Name).Skip((page - 1) * pageSize).Take(pageSize);
+                    return list.OrderBy(x => x.NameOfUser).Skip((page - 1) * pageSize).Take(pageSize);
             }
             if (criteria.Equals("nameofrecipent"))
             {
