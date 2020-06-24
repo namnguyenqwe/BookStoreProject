@@ -13,8 +13,8 @@ namespace BookStoreProject.Dtos.Recipient
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Name { get; set; }
 
-        [EmailAddress]
-        public string Email { get; set; }
+       // [EmailAddress]
+      //  public string Email { get; set; }
 
         [Phone]
         public string Phone { get; set; }

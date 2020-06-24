@@ -544,3 +544,75 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624042052_ChangeRecipientTable')
+BEGIN
+    ALTER TABLE [Recipient] ADD [ApplicationUserID] nvarchar(450) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624042052_ChangeRecipientTable')
+BEGIN
+    ALTER TABLE [Recipient] ADD [Default] bit NOT NULL DEFAULT CAST(0 AS bit);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624042052_ChangeRecipientTable')
+BEGIN
+    CREATE INDEX [IX_Recipient_ApplicationUserID] ON [Recipient] ([ApplicationUserID]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624042052_ChangeRecipientTable')
+BEGIN
+    ALTER TABLE [Recipient] ADD CONSTRAINT [FK_Recipient_AspNetUsers_ApplicationUserID] FOREIGN KEY ([ApplicationUserID]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624042052_ChangeRecipientTable')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200624042052_ChangeRecipientTable', N'3.1.4');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624142440_RemoveAtrrInRecipientTable')
+BEGIN
+    ALTER TABLE [Recipient] DROP CONSTRAINT [FK_Recipient_AspNetUsers_ApplicationUserID];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624142440_RemoveAtrrInRecipientTable')
+BEGIN
+    EXEC sp_rename N'[Recipient].[ApplicationUserID]', N'ApplicationUserId', N'COLUMN';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624142440_RemoveAtrrInRecipientTable')
+BEGIN
+    EXEC sp_rename N'[Recipient].[IX_Recipient_ApplicationUserID]', N'IX_Recipient_ApplicationUserId', N'INDEX';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624142440_RemoveAtrrInRecipientTable')
+BEGIN
+    ALTER TABLE [Recipient] ADD CONSTRAINT [FK_Recipient_AspNetUsers_ApplicationUserId] FOREIGN KEY ([ApplicationUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200624142440_RemoveAtrrInRecipientTable')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200624142440_RemoveAtrrInRecipientTable', N'3.1.4');
+END;
+
+GO
+

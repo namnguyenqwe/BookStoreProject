@@ -27,12 +27,12 @@ namespace BookStoreProject.Controllers
         {
             try
             {
-                var userId = GetUserId();
-                if (userId == "error")
+                var userEmail = GetUserEmail();
+                if (userEmail == "error")
                 {
                     return Unauthorized();
                 }
-                var recipients = await _recipientService.GetRecipientsByApplicationUserId(userId);
+                var recipients = await _recipientService.GetRecipientsByEmail(userEmail);
                 var recipientsForReturn = _mapper.Map<IEnumerable<Recipient>, IEnumerable<RecipientForUserListDto>>(recipients);
                 return Ok(new { data = recipientsForReturn });
             }
@@ -41,18 +41,33 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet("default")]
+        public async Task<IActionResult> GetDefaultRecipient()
+        {
+            var userEmail = GetUserEmail();
+            if (userEmail == "error")
+            {
+                return Unauthorized();
+            }
+            var recipient = await _recipientService.GetDefaultRecipient(userEmail);
+            if (recipient == null)
+                return NotFound(new { message = "Không tìm thấy người nhận" });
+            return Ok(_mapper.Map<RecipientForDefaultDto>(recipient));
+        }
         [HttpPost]
         public async Task<IActionResult> CreateRecipient([FromBody] RecipientForCreateDto input)
         {
             if (ModelState.IsValid)
             {
-                var userId = GetUserId();
-                if (userId == "error")
+               // var userId = GetUserId();
+                var userEmail = GetUserEmail();
+                if (userEmail == "error")
                 {
                     return Unauthorized();
                 }
                 var recipient = _mapper.Map<Recipient>(input);
-                recipient.ApplicationUserID = userId;
+                //recipient.ApplicationUserID = userId;
+                recipient.Email = userEmail;
                 var result = await _recipientService.CreateRecipient(recipient);
                 if (result)
                     return Ok();
@@ -64,39 +79,40 @@ namespace BookStoreProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = GetUserId();
-                if (userId == "error")
+                var userEmail = GetUserEmail();
+                if (userEmail == "error")
                 {
                     return Unauthorized();
                 }
-                var recipientInDB = await _recipientService.GetRecipientById(recipientId,userId);
+                var recipientInDB = await _recipientService.GetRecipientById(recipientId,userEmail);
                 if (recipientInDB == null)
                 {
                     return NotFound(recipientId);
                 }
                 var recipientUpdate = _mapper.Map(input, recipientInDB);
-                recipientUpdate.ApplicationUserID = userId;
+                recipientUpdate.Email = userEmail;
                 var result = await _recipientService.UpdateRecipient(recipientUpdate);
                 if (result)
                 {
-                    return Ok();
+                    return Ok(new { message = "Thay đổi thông tin thành công !"});
                 }
             }
             return BadRequest(ModelState);
         }
+       
         [NonAction]
-        public string GetUserId()
+        public string GetUserEmail()
         {
-            string userId;
+            string userEmail;
             try
             {
-                userId = User.Claims.First(c => c.Type == "UserID").Value;
+                userEmail = User.Claims.First(c => c.Type == "Email").Value;
             }
             catch
             {
                 return "error";
             }
-            return userId;
+            return userEmail;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BookStoreProject.Dtos.Recipient
 {
-    public class RecipientForUserListDto
+    public class RecipientForDefaultDto
     {
         public int RecipientID { get; set; }
         public string Name { get; set; }
@@ -14,5 +14,6 @@ namespace BookStoreProject.Dtos.Recipient
         public string city { get; set; }
         public string district { get; set; }
         public bool Default { get; set; }
+        public int? Fee { get; set; }
     }
 }

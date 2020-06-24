@@ -25,15 +25,20 @@ namespace BookStoreProject.Services
         }
         public async Task<PaymentForListDto> GetPaymentList(string applicationUserId)
         {
-            var cartItems = await _dbContext.CartItems.Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
+            var cartItems = await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
             var cartItemsForReturn = _mapper.Map<IEnumerable<CartItems>,IEnumerable<CartItemForPaymentListDto>>(cartItems);
-            var TotalPrice = cartItemsForReturn
-                            .Aggregate((a, b) => new CartItemForPaymentListDto { Price = a.Price * a.Quantity + b.Price * b.Quantity })
-                            .Price;
+            var Total = cartItemsForReturn
+                            .Aggregate((a, b) => new CartItemForPaymentListDto 
+                            { 
+                                Quantity = 1,
+                                Price = a.Price * a.Quantity + b.Price * b.Quantity ,
+                                Weight = a.Weight + b.Weight
+                            });
             return new PaymentForListDto()
             {
                 CartItems = cartItemsForReturn,
-                TotalPrice = TotalPrice
+                TotalPrice = Total.Price,
+                TotalWeight = Total.Weight
             };
         }
     }

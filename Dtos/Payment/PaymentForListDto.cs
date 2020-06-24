@@ -10,5 +10,6 @@ namespace BookStoreProject.Dtos.Payment
     {
         public IEnumerable<CartItemForPaymentListDto> CartItems { get; set; }
         public decimal? TotalPrice { get; set; }
+        public float? TotalWeight { get; set; }
     }
 }

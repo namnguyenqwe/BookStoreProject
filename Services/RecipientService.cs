@@ -10,9 +10,10 @@ namespace BookStoreProject.Services
     public interface IRecipientService
     {
         Task<bool> CreateRecipient(Recipient recipientCreate);
-        Task<IEnumerable<Recipient>> GetRecipientsByApplicationUserId(string applicationUserId);
+        Task<IEnumerable<Recipient>> GetRecipientsByEmail(string email);
         Task<bool> UpdateRecipient(Recipient recipientUpdate);
-        Task<Recipient> GetRecipientById(int recipientId, string applicationUserId);
+        Task<Recipient> GetRecipientById(int recipientId, string email);
+        Task<Recipient> GetDefaultRecipient(string email);
     }
         public class RecipientService : IRecipientService
         {
@@ -28,7 +29,7 @@ namespace BookStoreProject.Services
                     if (recipientCreate.Default == true)
                     {
                         var RecipientInDB = await _dbContext.Recipients
-                        .FirstOrDefaultAsync(x => x.Default == true && x.ApplicationUserID == recipientCreate.ApplicationUserID);
+                        .FirstOrDefaultAsync(x => x.Default == true && x.Email == recipientCreate.Email);
                         if (RecipientInDB != null)
                         {
                             RecipientInDB.Default = false;
@@ -47,15 +48,22 @@ namespace BookStoreProject.Services
                 }
             }
 
-        public async Task<Recipient> GetRecipientById(int recipientId, string applicationUserId)
+        public async Task<Recipient> GetDefaultRecipient(string email)
         {
-            return await _dbContext.Recipients
-                    .FirstOrDefaultAsync(x => x.RecipientID == recipientId && x.ApplicationUserID == applicationUserId);
+            return await _dbContext.Recipients.Include(x => x.District)
+                    .FirstOrDefaultAsync(x => x.Email == email && x.Default == true);
         }
 
-        public async Task<IEnumerable<Recipient>> GetRecipientsByApplicationUserId(string applicationUserId)
+        public async Task<Recipient> GetRecipientById(int recipientId, string email)
+        {
+            return await _dbContext.Recipients
+                    .FirstOrDefaultAsync(x => x.RecipientID == recipientId && x.Email == email);
+        }
+
+        public async Task<IEnumerable<Recipient>> GetRecipientsByEmail(string email)
             {
-                return await _dbContext.Recipients.Where(x => x.ApplicationUserID == applicationUserId).ToListAsync();
+                return await _dbContext.Recipients.Include(x => x.City)
+                               .Include(x => x.District).Where(x => x.Email == email).ToListAsync();
             }
 
             public async Task<bool> UpdateRecipient(Recipient recipientUpdate)

@@ -11,7 +11,7 @@ namespace BookStoreProject.Models
     public class Recipient
     {
         public int RecipientID { get; set; }
-        public string ApplicationUserID { get; set; }
+       // public string ApplicationUserID { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }

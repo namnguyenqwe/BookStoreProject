@@ -11,5 +11,6 @@ namespace BookStoreProject.Dtos.CartItem
         public string ImageLink { get; set; }
         public decimal? Price { get; set; }
         public int? Quantity { get; set; }
+        public float? Weight { get; set; }
     }
 }

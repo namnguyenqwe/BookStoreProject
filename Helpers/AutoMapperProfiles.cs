@@ -139,7 +139,7 @@ namespace BookStoreProject.AutoMapper
                                                 .ForMember(x => x.NameOfRecipent, y => { y.MapFrom(z => z.Recipient.Name); })
                                                 .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
                                                 .ForMember(x => x.Coupon, y => { y.MapFrom(z => z.CouponID); })
-                                                .ForMember(x=>x.Address, y => { y.MapFrom(z => z.Recipent.Address); });
+                                                .ForMember(x=>x.Address, y => { y.MapFrom(z => z.Recipient.Address); });
             CreateMap<Orders, OrderForDetailDto>();
             CreateMap<OrderForCreateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore());
             CreateMap<OrderForUpdateDto, Orders>();
@@ -148,9 +148,10 @@ namespace BookStoreProject.AutoMapper
 
             #region Recipient
             CreateMap<RecipientForCreateDto, Recipient>().ForMember(x => x.RecipientID, opt => opt.Ignore())
-                                                        .ForMember(x => x.ApplicationUserID, opt => opt.Ignore());
+                                                        .ForMember(x => x.Email, opt => opt.Ignore());
             CreateMap<Recipient, RecipientForUserListDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); })
                                                            .ForMember(x => x.district, y => { y.MapFrom(z => z.District.district); });
+            CreateMap<Recipient,RecipientForDefaultDto>().ForMember(x => x.Fee, y => { y.MapFrom(z => z.District.Fee); });
             #endregion
         }
     }
