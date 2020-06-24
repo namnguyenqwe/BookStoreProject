@@ -51,7 +51,7 @@ namespace BookStoreProject.Controllers
 
                 var listforDto = _mapper.Map<IEnumerable<Orders>, IEnumerable<OrderForListDto>>(list);
                 int totalCount = list.Count();               
-                var response = _ordersService.GetBooksPerPage(listforDto, page, pageSize, sort, criteria);
+                var response = _ordersService.GetOrdersPerPage(listforDto, page, pageSize, sort, criteria);
 
                 var paginationSet = new PaginationSet<OrderForListDto>()
                 {
