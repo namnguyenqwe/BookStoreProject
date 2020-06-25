@@ -76,16 +76,16 @@ namespace BookStoreProject.Controllers
                 var userEmail = GetUserEmail();
                 if (userEmail == "error")
                 {
-                    return Unauthorized();
+                    return Unauthorized(new { message = "Unauthorized" });
                 }
                 var recipient = _mapper.Map<Recipient>(input);
                 //recipient.ApplicationUserID = userId;
                 recipient.Email = userEmail;
                 var result = await _recipientService.CreateRecipient(recipient);
                 if (result)
-                    return Ok();
+                    return Ok(new { message = "Thêm người nhận thành công!" });
             }
-            return BadRequest(new { message = "Invalid review" });
+            return BadRequest(new { message = "Invalid recipient" });
         }
         [HttpPut("{recipientId}")]
         public async Task<IActionResult> UpdateRecipient(int recipientId, [FromBody] RecipientForCreateDto input)
@@ -95,7 +95,7 @@ namespace BookStoreProject.Controllers
                 var userEmail = GetUserEmail();
                 if (userEmail == "error")
                 {
-                    return Unauthorized();
+                    return Unauthorized(new { message = "Unauthorized" });
                 }
                 var recipientInDB = await _recipientService.GetRecipientById(recipientId,userEmail);
                 if (recipientInDB == null)
@@ -110,7 +110,7 @@ namespace BookStoreProject.Controllers
                     return Ok(new { message = "Thay đổi thông tin thành công !"});
                 }
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
        
         [NonAction]

@@ -92,7 +92,7 @@ namespace BookStoreProject.Controllers
                     return Ok();
                 else return BadRequest(new { message = "Email already exists !" });
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [HttpPut("{subcriberId}")]
         public async Task<IActionResult> UpdateSubcriber(int subcriberId, [FromBody] SubcriberForModalDto input)

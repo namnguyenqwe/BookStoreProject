@@ -106,7 +106,7 @@ namespace BookStoreProject.Controllers
                 if (result)
                     return Ok();
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [HttpPut("{couponId}")]
         public async Task<IActionResult> UpdateCoupon(string couponId, [FromBody] CouponForModalDto input)

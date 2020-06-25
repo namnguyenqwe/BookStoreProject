@@ -39,7 +39,7 @@ namespace BookStoreProject.Controllers
                 if (result)
                     return RedirectToAction("GetCartItemsByUserId");
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [HttpGet]
         public async Task<IActionResult> GetCartItemsByUserId()
@@ -77,7 +77,7 @@ namespace BookStoreProject.Controllers
                     cartItemInDB.Quantity++;
                     var isSuccess = await _cartItemService.UpdateCartItem(cartItemInDB);
                     if (isSuccess)
-                        return Ok();
+                        return Ok(new { message = "Thêm vào giỏ hàng thành công" });
                     return BadRequest(new { message = "Có lỗi trong quá trình lưu dữ liệu"});
                 }    
                 var cartItem = new CartItems()
@@ -89,7 +89,7 @@ namespace BookStoreProject.Controllers
                 };
                 var result = await _cartItemService.CreateCartItem(cartItem);
                 if (result)
-                    return Ok();
+                    return Ok(new { message = "Thêm vào giỏ hàng thành công" });
                 return BadRequest();
             }
             catch(System.Exception)
@@ -113,7 +113,7 @@ namespace BookStoreProject.Controllers
             var result = await _cartItemService.DeleteCartItem(bookId, userId);
             if (!result)
             {
-                return BadRequest("Có lỗi trong quá trình xóa dữ liệu: ");
+                return BadRequest(new { message = "Có lỗi xảy ra, vui lòng thử lại" });
             }
             return RedirectToAction("GetCartItemsByUserId");
         }

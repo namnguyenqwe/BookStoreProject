@@ -96,7 +96,7 @@ namespace BookStoreProject.Controllers
                     return Ok();
                 }    
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
     }
 }

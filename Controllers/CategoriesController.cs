@@ -49,7 +49,7 @@ namespace BookStoreProject.Controllers
                 if (result)
                     return Ok();
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [HttpPut("{categoryId}")]
         public async Task<IActionResult> UpdateCategory(int categoryId, [FromBody] CategoryDto input)
@@ -65,7 +65,7 @@ namespace BookStoreProject.Controllers
                     return Ok();
                 }    
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [HttpGet]
         public IActionResult GetAllCategories(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "categoryid")

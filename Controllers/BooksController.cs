@@ -60,7 +60,7 @@ namespace BookStoreProject.Controllers
                 if (result)
                     return Ok();
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [Authorize(Roles = "Admin")]
         [HttpPut("{bookId}")]
@@ -79,7 +79,7 @@ namespace BookStoreProject.Controllers
                     return Ok();
                 }
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [Authorize(Roles = "Admin")]
         [HttpGet]

@@ -140,7 +140,7 @@ namespace BookStoreProject.Controllers
                 var userId = GetUserId();
                 if (userId == "error")
                 {
-                    return StatusCode(201,new { message = "unauthorized"});
+                    return Unauthorized(new { message = "unauthorized"});
                 }
                 input.ApplicationUserId = userId;
                 input.Date = DateTime.Now;
@@ -149,7 +149,7 @@ namespace BookStoreProject.Controllers
                 if (result)
                     return Ok(new { message = "Review của bạn được đăng thành công !" });
             }
-            return StatusCode(201, new { message = "Invalid review" });
+            return BadRequest(new { message = "Invalid review" });
         }
         [NonAction]
         public string GetUserId()

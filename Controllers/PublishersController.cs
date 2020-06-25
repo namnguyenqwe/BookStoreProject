@@ -107,7 +107,7 @@ namespace BookStoreProject.Controllers
                 if (result)
                     return Ok();
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [HttpPut("{publisherId}")]
         public async Task<IActionResult> UpdatePublisher(int publisherId, [FromBody] PublisherDto input)
@@ -123,7 +123,7 @@ namespace BookStoreProject.Controllers
                     return Ok();
                 }    
             }
-            return BadRequest(ModelState);
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
         [HttpDelete("{publisherId}")]
         public async Task<IActionResult> DeletePublisher(int publisherId)
