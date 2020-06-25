@@ -35,7 +35,7 @@ namespace BookStoreProject.Models
         public DbSet<OrderItems> OrderItems { get; set; }
         public DbSet<Recipient> Recipients { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
-
+        public DbSet<Contact> Contacts { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Subcriber> Subcribers { get; set; }

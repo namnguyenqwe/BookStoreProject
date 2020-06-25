@@ -29,6 +29,6 @@ namespace BookStoreProject.Models
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Orders> Orders { get; set; }
 
-        public ICollection<Recipient> Recipients { get; set; }
+        // public ICollection<Recipient> Recipients { get; set; }
     }
 }

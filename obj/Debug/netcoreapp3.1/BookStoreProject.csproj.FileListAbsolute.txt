@@ -186,3 +186,4 @@ F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\System.Ide
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BookStoreProjectDUT - Web Deploy.json
 C:\Users\A\Desktop\DACNPM_2020\BookStoreAPI\BookStoreProject\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
 >>>>>>> 8ff846b076518ec90d78a5a20bafd11ae7410ebe
+F:\assignments\CNPM\Back-end\BookStoreProject\bin\Debug\netcoreapp3.1\Enums.NET.dll

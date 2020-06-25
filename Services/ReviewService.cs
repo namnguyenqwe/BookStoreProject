@@ -112,10 +112,16 @@ namespace BookStoreProject.Services
                                     .OrderByDescending(x => x.Date.Year)
                                    .ThenByDescending(x => x.Date.Month)
                                    .ThenByDescending(x => x.Date.Day)
+                                   .ThenByDescending(x => x.Date.Hour)
+                                   .ThenByDescending(x => x.Date.Minute)
+                                   .ThenByDescending(x => x.Date.Second)
                                 : list.Where(x => isPurchased == null ? x.isPurchased != null : x.isPurchased == isPurchased)
                                     .OrderBy(x => x.Date.Year)
                                    .ThenBy(x => x.Date.Month)
-                                   .ThenBy(x => x.Date.Day);
+                                   .ThenBy(x => x.Date.Day)
+                                   .ThenBy(x => x.Date.Hour)
+                                   .ThenBy(x => x.Date.Minute)
+                                   .ThenBy(x => x.Date.Second);
         }
 
         public async Task<bool> isPurchased(Review review)

@@ -6,13 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace BookStoreProject.Services
 {
     public interface IPaymentService
     {
-        Task<PaymentForListDto> GetPaymentList(string applicationUserId);
+        Task<PaymentForListDto> GetPaymentList(string applicationUserId, string[] BookIds);
+        Task<bool> SavePaymentBill(Orders orderCreate);
+        Task<bool> SaveBillItems(Orders order);
     }
     public class PaymentService : IPaymentService
     {
@@ -23,23 +26,89 @@ namespace BookStoreProject.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async Task<PaymentForListDto> GetPaymentList(string applicationUserId)
+        public async Task<PaymentForListDto> GetPaymentList(string applicationUserId, string[] bookIds)
         {
-            var cartItems = await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
-            var cartItemsForReturn = _mapper.Map<IEnumerable<CartItems>,IEnumerable<CartItemForPaymentListDto>>(cartItems);
-            var Total = cartItemsForReturn
-                            .Aggregate((a, b) => new CartItemForPaymentListDto 
-                            { 
-                                Quantity = 1,
-                                Price = a.Price * a.Quantity + b.Price * b.Quantity ,
-                                Weight = a.Weight + b.Weight
-                            });
-            return new PaymentForListDto()
+            try 
             {
-                CartItems = cartItemsForReturn,
-                TotalPrice = Total.Price,
-                TotalWeight = Total.Weight
-            };
+                bookIds = bookIds.Distinct().ToArray();
+                List<CartItems> cartItems = new List<CartItems>();
+                foreach (var bookId in bookIds)
+                {
+                    var cartItem = await _dbContext.CartItems.Include(x => x.Book)
+                                        .FirstOrDefaultAsync(x => x.ApplicationUserId == applicationUserId && x.BookID == Convert.ToInt32(bookId));
+                    cartItems.Add(cartItem);
+                }
+                //var cartItems = await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
+                var cartItemsForReturn = _mapper.Map<IEnumerable<CartItems>, IEnumerable<CartItemForPaymentListDto>>(cartItems);
+                var cartItemsToRemove =  (await _dbContext.CartItems.ToListAsync()).Except(cartItems).ToList();
+                if (cartItemsToRemove.Any())
+                {
+                    _dbContext.CartItems.RemoveRange(cartItemsToRemove);
+                }
+                await _dbContext.SaveChangesAsync();
+                var Total = cartItemsForReturn
+                                .Aggregate((a, b) => new CartItemForPaymentListDto
+                                {
+                                    Quantity = 1,
+                                    Price = a.Price * a.Quantity + b.Price * b.Quantity,
+                                    Weight = a.Weight + b.Weight
+                                });
+                return new PaymentForListDto()
+                {
+                    CartItems = cartItemsForReturn,
+                    TotalPrice = Total.Price,
+                    TotalWeight = Total.Weight
+                };
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+           
+        }
+
+        public async Task<bool> SaveBillItems(Orders order)
+        {
+            try
+            {
+                var orderID = await _dbContext.Orders.Where(x => x.ApplicationUserID == order.ApplicationUserID &&
+                            x.CouponID == order.CouponID &&
+                            x.Date == order.Date &&
+                            x.Note == order.Note &&
+                            x.RecipientID == order.RecipientID &&
+                            x.ShippingFee == order.ShippingFee)
+                            .Select(x => x.OrderID).FirstOrDefaultAsync();
+                var cartItems = await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == order.ApplicationUserID).ToListAsync();
+                var orderItems = cartItems.Select(x => new OrderItems()
+                {
+                    OrderID = orderID,
+                    BookID = x.BookID,
+                    Quantity = x.Quantity,
+                    Price = x.Quantity * x.Book.Price
+                });
+                _dbContext.OrderItems.AddRange(orderItems);
+                _dbContext.CartItems.RemoveRange(cartItems);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> SavePaymentBill(Orders orderCreate)
+        {
+            try
+            {
+                _dbContext.Orders.Add(orderCreate);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

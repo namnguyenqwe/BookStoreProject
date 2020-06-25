@@ -50,7 +50,7 @@ namespace BookStoreProject.Services
 
         public async Task<Recipient> GetDefaultRecipient(string email)
         {
-            return await _dbContext.Recipients.Include(x => x.District)
+            return await _dbContext.Recipients.Include(x => x.District).Include(x => x.City)
                     .FirstOrDefaultAsync(x => x.Email == email && x.Default == true);
         }
 

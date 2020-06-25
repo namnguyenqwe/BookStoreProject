@@ -8,6 +8,7 @@ using BookStoreProject.Repositorys;
 using BookStoreProject.Dtos.Order;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BookStoreProject.Services
 {
@@ -176,6 +177,15 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.Note).Skip((page - 1) * pageSize).Take(pageSize);
             }
+            if (criteria.Equals("email"))
+            {
+                if (sort == 0)
+                {
+                    return list.OrderByDescending(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                else
+                    return list.OrderBy(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+            }
             return null;
         }
 
@@ -184,13 +194,13 @@ namespace BookStoreProject.Services
             if (!string.IsNullOrEmpty(keyword))
             {
 
-                return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient)
+                return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient).ThenInclude(x => x.District).ThenInclude(x => x.City)
                     .Where(x =>
                         x.ApplicationUser.Name.ToUpper().Contains(keyword.ToUpper()) ||
                         x.Recipient.Name.ToUpper().Contains(keyword.ToUpper()))
                     .AsEnumerable();
             }
-            return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient).AsEnumerable();
+            return _dbContext.Orders.Include(x => x.ApplicationUser).Include(x => x.Recipient).ThenInclude(x => x.District).ThenInclude(x => x.City).AsEnumerable();
         }
     }
 }

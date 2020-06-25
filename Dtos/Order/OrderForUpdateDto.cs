@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookStoreProject.Dtos.Order
 {
     public class OrderForUpdateDto
     {
-        //public string ApplicationUserID { get; set; }
+        public string ApplicationUserID { get; set; }
 
-        //public DateTime? Date { get; set; }
-        //public string CouponID { get; set; }
+        public DateTime? Date { get; set; }
+        public string CouponID { get; set; }
 
-        //[Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
-        //public decimal? ShippingFee { get; set; }
+        [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
+        public decimal? ShippingFee { get; set; }
         public string? Status { get; set; }
-        //public string? Note { get; set; }
+        public string? Note { get; set; }
     }
 }

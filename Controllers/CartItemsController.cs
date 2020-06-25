@@ -53,7 +53,7 @@ namespace BookStoreProject.Controllers
                 }
                 var cartItems = await _cartItemService.GetCartItemsByUserId(userId);
                 var response = _mapper.Map<IEnumerable<CartItems>, IEnumerable<CartItemForUserListDto>>(cartItems);
-                return Ok(response);
+                return Ok(new { data = response });
             }
             catch (System.Exception)
             {

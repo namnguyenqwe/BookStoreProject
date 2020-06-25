@@ -17,7 +17,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using BookStoreProject.Dtos.Recipient;
+
+using System.Runtime.CompilerServices;
+using BookStoreProject.Dtos.Payment;
+using BookStoreProject.Dtos.Contact;
+using EnumsNET;
 
 namespace BookStoreProject.AutoMapper
 {
@@ -43,7 +49,7 @@ namespace BookStoreProject.AutoMapper
             CreateMap<Book, BookForUserRelatedListDto>();
             CreateMap<Book, BookForUserSearchListDto>().ForMember(x => x.ReviewCount, y => { y.MapFrom(z => z.Reviews.Count); })
                                                         .ForMember(x => x.Rating, y => {
-                                                            y.MapFrom(z => z.Reviews.Any() ? z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / z.Reviews.Count : 0);
+                                                            y.MapFrom(z => z.Reviews.Any() ? (int)Math.Round((double)(z.Reviews.Aggregate((a, b) => new Review { BookID = 0, Rating = a.Rating + b.Rating }).Rating / (double)z.Reviews.Count)) : 0);
                                                         });
             #endregion
 
@@ -89,7 +95,8 @@ namespace BookStoreProject.AutoMapper
                                                           .ForMember(x => x.OriginalPrice, y => { y.MapFrom(z => z.Book.OriginalPrice); });
             CreateMap<CartItems, CartItemForPaymentListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
                                                          .ForMember(x => x.Price, y => { y.MapFrom(z => z.Book.Price); })
-                                                         .ForMember(x => x.ImageLink, y => { y.MapFrom(z => z.Book.ImageLink); });
+                                                         .ForMember(x => x.ImageLink, y => { y.MapFrom(z => z.Book.ImageLink); })
+                                                         .ForMember(x => x.Weight, y => { y.MapFrom(z => z.Book.Weight); });
             CreateMap<CartItemForUserUpdateDto, CartItems>().ForMember(x => x.CreatedDate, opt => opt.Ignore())
                                                             .ForMember(x => x.ApplicationUserId, opt => opt.Ignore())
                                                             .ForMember(x => x.BookID, opt => opt.Ignore());
@@ -139,10 +146,19 @@ namespace BookStoreProject.AutoMapper
                                                 .ForMember(x => x.NameOfRecipent, y => { y.MapFrom(z => z.Recipient.Name); })
                                                 .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
                                                 .ForMember(x => x.Coupon, y => { y.MapFrom(z => z.CouponID); })
-                                                .ForMember(x=>x.Address, y => { y.MapFrom(z => z.Recipient.Address); });
+                                                .ForMember(x => x.Email, y => { y.MapFrom(z => z.Recipient.Email); })
+                                                .ForMember(x=> x.Address, y => { y.MapFrom(z => z.Recipient.Address + "," + z.Recipient.District.district + "," + z.Recipient.City.city); });
+        
+
             CreateMap<Orders, OrderForDetailDto>();
             CreateMap<OrderForCreateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore());
-            CreateMap<OrderForUpdateDto, Orders>();
+            CreateMap<OrderForUpdateDto, Orders>().ForMember(x => x.OrderID, opt => opt.Ignore())
+                                                  .ForMember(x => x.ApplicationUserID, opt => opt.Ignore())
+                                                  .ForMember(x => x.Date, opt => opt.Ignore())
+                                                  .ForMember(x => x.RecipientID, opt => opt.Ignore())
+                                                  .ForMember(x => x.CouponID, opt => opt.Ignore())
+                                                  .ForMember(x => x.ShippingFee, opt => opt.Ignore())
+                                                  .ForMember(x => x.Note, opt => opt.Ignore());
 
             #endregion
 
@@ -151,7 +167,21 @@ namespace BookStoreProject.AutoMapper
                                                         .ForMember(x => x.Email, opt => opt.Ignore());
             CreateMap<Recipient, RecipientForUserListDto>().ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); })
                                                            .ForMember(x => x.district, y => { y.MapFrom(z => z.District.district); });
-            CreateMap<Recipient,RecipientForDefaultDto>().ForMember(x => x.Fee, y => { y.MapFrom(z => z.District.Fee); });
+            CreateMap<Recipient,RecipientForDefaultDto>().ForMember(x => x.Fee, y => { y.MapFrom(z => z.District.Fee); })
+                                                         .ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); })
+                                                         .ForMember(x => x.district, y => { y.MapFrom(z => z.District.district); });
+            CreateMap<Recipient, RecipientForUserDetailDto>();
+            #endregion
+
+            #region Contact
+            CreateMap<Contact, ContactForListDto>().ForMember(x => x.Status, y => { y.MapFrom(z => z.Status.AsString(EnumFormat.Description)); });
+            CreateMap<ContactForCreateDto, Contact>().ForMember(x => x.ContactID, opt => opt.Ignore());
+            CreateMap<ContactForUpdateDto, Contact>().ForMember(x => x.ContactID, opt => opt.Ignore())
+                                                     .ForMember(x => x.Name, opt => opt.Ignore())
+                                                     .ForMember(x => x.Email, opt => opt.Ignore())
+                                                     .ForMember(x => x.Date, opt => opt.Ignore())
+                                                     .ForMember(x => x.Message, opt => opt.Ignore())
+                                                     .ForMember(x => x.Phone, opt => opt.Ignore());
             #endregion
         }
     }

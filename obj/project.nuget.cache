@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "1a+XSyiJu0g/inWN1048nhkS2NpWOsLUY1ZYCZ8I55Q1DjE7oFB2bGCZOKPwaOLq+pacFfEhZr0ZV8m3W7T/bg==",
+  "dgSpecHash": "zrIAN8CmEoC+S6mZMVi8jIJIVYGWi1Kg9OzwV2EVUCwuTHh2WcK5xsQAc8eIGNeoxBxYkyyKBdaLlZ7RheEkFg==",
   "success": true,
   "projectFilePath": "F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\BookStoreProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enums.net\\3.0.3\\enums.net.3.0.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.4\\microsoft.aspnetcore.authentication.jwtbearer.3.1.4.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.4\\microsoft.aspnetcore.cryptography.internal.3.1.4.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\3.1.4\\microsoft.aspnetcore.cryptography.keyderivation.3.1.4.nupkg.sha512",

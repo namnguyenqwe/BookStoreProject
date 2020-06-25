@@ -41,6 +41,19 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet("{recipientId}")]
+        public async Task<IActionResult> GeRecipientById(int recipientID)
+        {
+            var userEmail = GetUserEmail();
+            if (userEmail == "error")
+            {
+                return Unauthorized();
+            }
+            var recipient = await _recipientService.GetRecipientById(recipientID,userEmail);
+            if (recipient == null)
+                return NotFound(new { message = "Không tìm thấy !" });
+            return Ok(_mapper.Map<RecipientForUserDetailDto>(recipient));
+        }
         [HttpGet("default")]
         public async Task<IActionResult> GetDefaultRecipient()
         {

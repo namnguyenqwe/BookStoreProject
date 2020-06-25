@@ -143,8 +143,17 @@ namespace BookStoreProject
             services.AddScoped<IDistrictService, DistrictService>();
             services.AddScoped<IOrdersService, OrdersService>();
             services.AddScoped<IRecipientService, RecipientService>();
+            services.AddScoped<IContactService, ContactService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles), typeof(AutoMapperProfiles));
             services.AddCors();
+
+            services.AddMvc()
+       .ConfigureApiBehaviorOptions(opt
+           =>
+       {
+           opt.InvalidModelStateResponseFactory =
+               (context => new BadRequestObjectResult(new { message = context.ModelState.Values.First().Errors[0].ErrorMessage }));
+       });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

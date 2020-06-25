@@ -305,7 +305,7 @@ namespace BookStoreProject.Services
 
         public async Task<IEnumerable<Book>> GetBooksByCategoryId(int categoryId)
         {
-            return await _dbContext.Books.Where(x => x.CategoryID == categoryId).ToListAsync();
+            return await _dbContext.Books.Include(x => x.Reviews).Where(x => x.CategoryID == categoryId).ToListAsync();
         }
         public async Task<bool> isPurchased(Review review)
         {

@@ -12,7 +12,7 @@ namespace BookStoreProject.Services
         Task<Coupon> GetCouponById(string couponId);
         Task<bool> CreateCoupon(Coupon couponCreate);
         Task<bool> UpdateCoupon(Coupon couponUpdate);
-        Task<bool> DeleteCoupon(string couponId);
+        //Task<bool> DeleteCoupon(string couponId);
         IEnumerable<Coupon> GetCoupons(string keyword);
         Task<Coupon> IsCouponAvailable(string couponId);
     }
@@ -37,7 +37,7 @@ namespace BookStoreProject.Services
             }
         }
 
-        public async Task<bool> DeleteCoupon(string couponId)
+      /*  public async Task<bool> DeleteCoupon(string couponId)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace BookStoreProject.Services
             {
                 throw ex;
             }
-        }
+        }*/
 
         public async Task<Coupon> GetCouponById(string couponId)
         {
