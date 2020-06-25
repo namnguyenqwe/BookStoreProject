@@ -24,7 +24,7 @@ namespace BookStoreProject.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult GetAllContacts(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "categoryid")
+        public IActionResult GetAllContacts(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "contactid")
         {
             try
             {

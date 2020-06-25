@@ -651,3 +651,42 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200625013153_CreateContactTable')
+BEGIN
+    CREATE TABLE [Contact] (
+        [ContactID] int NOT NULL IDENTITY,
+        [Name] nvarchar(max) NULL,
+        [Email] nvarchar(max) NULL,
+        [Phone] nvarchar(max) NULL,
+        [Message] nvarchar(max) NULL,
+        [Date] datetime2 NULL,
+        [Status] nvarchar(max) NULL,
+        CONSTRAINT [PK_Contact] PRIMARY KEY ([ContactID])
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200625013153_CreateContactTable')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200625013153_CreateContactTable', N'3.1.4');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200625061028_ChangeContactTable02')
+BEGIN
+    ALTER TABLE [Contact] ADD [Status] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20200625061028_ChangeContactTable02')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20200625061028_ChangeContactTable02', N'3.1.4');
+END;
+
+GO
+
