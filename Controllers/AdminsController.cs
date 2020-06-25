@@ -52,7 +52,7 @@ namespace BookStoreProject.Controllers
         public IActionResult test()
         {
             BookStoreDbContext db = new BookStoreDbContext();
-            var listUser = _context.UserRoles.ToList();
+            var listUser = _context.Roles.ToList();
             return Ok(listUser);
         }
 

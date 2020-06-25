@@ -21,6 +21,7 @@ namespace BookStoreProject.Dtos.Order
         public string? Note { get; set; }
 
         public string[] ListBook { get; set; }
+        public string[] Price { get; set; }
         public decimal Total1 { get; set; }
      
        
