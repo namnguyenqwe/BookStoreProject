@@ -153,6 +153,7 @@ namespace BookStoreProject.AutoMapper
       
         
             CreateMap<Orders, OrderForDetailDto>().ForMember(x => x.Email, y => { y.MapFrom(z => z.Recipient.Email); })
+                                                  .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
                                                   .ForMember(x => x.NameOfRecipient, y => { y.MapFrom(z => z.Recipient.Name); })
                                                   .ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); })
                                                   .ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
@@ -175,6 +176,7 @@ namespace BookStoreProject.AutoMapper
 
             CreateMap<Orders, OrderForUserDetailDto>().ForMember(x => x.Email, y => { y.MapFrom(z => z.Recipient.Email); })
                                                   .ForMember(x => x.NameOfRecipient, y => { y.MapFrom(z => z.Recipient.Name); })
+                                                  .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
                                                   .ForMember(x => x.NameOfUser, y => { y.MapFrom(z => z.ApplicationUser.Name); })
                                                   .ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); })
                                                   .ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
