@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookStoreProject.Dtos.OrderItem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace BookStoreProject.Dtos.Order
         public string? Status { get; set; }
         public string? Note { get; set; }
 
-        public string[] ListBook { get; set; }
+        public ICollection<OrderItemForListDto> OrderItems { get; set; }
         public decimal TamTinh { get; set; }
 
 

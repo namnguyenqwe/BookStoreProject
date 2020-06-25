@@ -30,7 +30,7 @@ namespace BookStoreProject.Controllers
             var userId = GetUserId();
             if (userId == "error")
             {
-                return StatusCode(201,new { message = "unauthorized"});
+                return Unauthorized(new { message = "unauthorized"});
             }
             var wishItem = new WishList()
             {
@@ -39,8 +39,8 @@ namespace BookStoreProject.Controllers
             };
             var result = await _wishListService.CreateWishItem(wishItem);
             if (result)
-                return Ok();
-            return StatusCode(201, new { message = "bad request" });
+                return Ok(new { message = "Đã thêm vào danh sách yêu thích của bạn"});
+            return BadRequest( new { message = "bad request" });
         }
         [HttpGet("{bookId}")]
         public async Task<IActionResult> GetWishListItem(int bookId)
@@ -48,7 +48,7 @@ namespace BookStoreProject.Controllers
             var userId = GetUserId();
             if (userId == "error")
             {
-                return Unauthorized();
+                return Unauthorized(new { message = "unauthorized" });
             }
             var wishItem = await _wishListService.GetWishItem(bookId, userId);
             if (wishItem == null)
@@ -61,12 +61,12 @@ namespace BookStoreProject.Controllers
             var userId = GetUserId();
             if (userId == "error")
             {
-                return Unauthorized();
+                return Unauthorized(new { message = "unauthorized" });
             }
             var wishList = await _wishListService.GetWishList(userId);
             var wishListForReturn = _mapper.Map<IEnumerable<WishList>, IEnumerable<WishListForUserListDto>>(wishList);
             if (wishList == null)
-                return NotFound();
+                return NotFound(new { message = "Không có sách nào trong wishlist của bạn" });
             return Ok(new { data = wishListForReturn });
         }
         [HttpDelete("{bookId}")]
@@ -75,15 +75,15 @@ namespace BookStoreProject.Controllers
             var userId = GetUserId();
             if (userId == "error")
             {
-                return Unauthorized();
+                return Unauthorized(new { message = "unauthorized" });
             }
             var wishItemInDB = await _wishListService.GetWishItem(bookId, userId);
             if (wishItemInDB == null)
-                return NotFound();
+                return NotFound(new { message = "Sách không tồn tại trong wishlist của bạn" });
             var result = await _wishListService.DeleteWishList(bookId, userId);
             if (!result)
                 return BadRequest(new { message = "Có lỗi trong quá trình xóa dữ liệu" });
-            return Ok();
+            return Ok(new { message = "Sách được xóa thành công" });
         }
     [NonAction]
     public string GetUserId()
