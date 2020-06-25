@@ -90,3 +90,4 @@ F:\assignments\CNPM\Back-end\BookStoreProject\bin\Release\netcoreapp3.1\Microsof
 F:\assignments\CNPM\Back-end\BookStoreProject\bin\Release\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 F:\assignments\CNPM\Back-end\BookStoreProject\bin\Release\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
 F:\assignments\CNPM\Back-end\BookStoreProject\bin\Release\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
+F:\assignments\CNPM\Back-end\BookStoreProject\bin\Release\netcoreapp3.1\Enums.NET.dll
