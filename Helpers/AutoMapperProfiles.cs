@@ -24,6 +24,7 @@ using System.Runtime.CompilerServices;
 using BookStoreProject.Dtos.Payment;
 using BookStoreProject.Dtos.Contact;
 using EnumsNET;
+using BookStoreProject.Dtos.OrderItem;
 
 namespace BookStoreProject.AutoMapper
 {
@@ -156,7 +157,7 @@ namespace BookStoreProject.AutoMapper
                                                   .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
                                                   .ForMember(x => x.NameOfRecipient, y => { y.MapFrom(z => z.Recipient.Name); })
                                                   .ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); })
-                                                  .ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
+                                                  //.ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
                                                   .ForMember(x => x.Total1, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price)); })
                                                   .ForMember(x => x.Discount, y => { y.MapFrom(z => z.Coupon.Discount); })
                                                   .ForMember(x => x.Pay, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price) - (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100)); })
@@ -179,10 +180,18 @@ namespace BookStoreProject.AutoMapper
                                                   .ForMember(x => x.Phone, y => { y.MapFrom(z => z.Recipient.Phone); })
                                                   .ForMember(x => x.NameOfUser, y => { y.MapFrom(z => z.ApplicationUser.Name); })
                                                   .ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); })
-                                                  .ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
+                                                  //.ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
                                                   .ForMember(x => x.TamTinh, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price)); })
                                                   .ForMember(x => x.Discount, y => { y.MapFrom(z => (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100)); })
                                                   .ForMember(x => x.Total, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price) - (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100) + z.ShippingFee); });
+            #endregion
+
+            #region OrderItem
+            CreateMap<OrderItems, OrderItemForListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); })
+                                                       .ForMember(x => x.Price, y => { y.MapFrom(z => z.Book.Price); })
+                                                       .ForMember(x => x.SubTotal, y => { y.MapFrom(z => z.Price); });
+            CreateMap<OrderItems, OrderItemForUserListDto>().ForMember(x => x.NameBook, y => { y.MapFrom(z => z.Book.NameBook); });
+                                                       
             #endregion
 
             #region Recipient
