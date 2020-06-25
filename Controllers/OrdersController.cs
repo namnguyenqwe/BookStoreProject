@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using BookStoreProject.Dtos.Order;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace BookStoreProject.Controllers
 {
@@ -25,11 +26,13 @@ namespace BookStoreProject.Controllers
     {
         private IOrdersService _ordersService;
         private readonly IMapper _mapper;
+        private readonly BookStoreDbContext _context;
 
-        public OrdersController(IOrdersService ordersService, IMapper mapper)
+        public OrdersController(IOrdersService ordersService, IMapper mapper,BookStoreDbContext context)
         {
             _ordersService = ordersService;
             _mapper = mapper;
+            _context = context;
         }
 
 
@@ -42,7 +45,14 @@ namespace BookStoreProject.Controllers
             if (order == null)
                 return NotFound();
             
-            else return Ok(_mapper.Map<OrderForDetailDto>(order));
+            else
+            {
+                var orderreturn = _mapper.Map<OrderForDetailDto>(order);
+                orderreturn.Pay = orderreturn.Total1 - orderreturn.Discount;
+                orderreturn.Total2 = (decimal)(orderreturn.Pay + orderreturn.ShippingFee);
+                return Ok(orderreturn);
+            }
+                
         }
 
         [HttpPost]
@@ -132,6 +142,12 @@ namespace BookStoreProject.Controllers
             var orderForReturn = _mapper.Map<IEnumerable<Orders>, IEnumerable<OrderForUserListDto>>(order);
             if (order == null)
                 return NotFound();
+            else
+            {
+                
+                
+                
+            }    
             return Ok(new { data = orderForReturn });
         }
 
@@ -142,7 +158,12 @@ namespace BookStoreProject.Controllers
             if (order == null)
                 return NotFound(orderId);
             else
-                return Ok(_mapper.Map<OrderForUserDetailDto>(order));
+            {
+                var returnorder = _mapper.Map<OrderForUserDetailDto>(order);
+                decimal a =(decimal)(returnorder.TamTinh + returnorder.ShippingFee);
+                returnorder.Total = a - returnorder.Discount;
+                return Ok(returnorder);
+            }
 
         }
 

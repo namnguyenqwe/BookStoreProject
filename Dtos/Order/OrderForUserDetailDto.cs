@@ -28,7 +28,7 @@ namespace BookStoreProject.Dtos.Order
         public decimal? ShippingFee { get; set; }
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int Discount { get; set; }
-
+        public decimal TamtinhShippingFee { get; set; }
         
         public decimal Total { get; set; }
     }
