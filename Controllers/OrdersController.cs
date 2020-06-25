@@ -87,6 +87,7 @@ namespace BookStoreProject.Controllers
             return BadRequest(ModelState);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
@@ -100,6 +101,50 @@ namespace BookStoreProject.Controllers
             }
             return Ok();
         }
+
+        [Authorize]
+        [HttpGet("user")]
+        public async Task<IActionResult> GetOrder()
+        {
+            var userId = GetUserId();
+            if (userId == "error")
+            {
+                return Unauthorized();
+            }
+            var order = await _ordersService.GetOrder(userId);
+            var orderForReturn = _mapper.Map<IEnumerable<Orders>, IEnumerable<OrderForUserListDto>>(order);
+            if (order == null)
+                return NotFound();
+            return Ok(new { data = orderForReturn });
+        }
+
+        [Authorize]
+        [HttpGet("user/{orderId}")]
+        public async Task<IActionResult> GetOrderByIdForUser(int orderId)
+        {
+            var order = await _ordersService.GetOrderByIdForUserAsync(orderId);
+            if (order == null)
+                return NotFound(orderId);
+            else
+                return Ok(_mapper.Map<OrderForUserDetailDto>(order));
+
+        }
+
+        [NonAction]
+        public string GetUserId()
+        {
+            string userId;
+            try
+            {
+                userId = User.Claims.First(c => c.Type == "UserID").Value;
+            }
+            catch
+            {
+                return "error";
+            }
+            return userId;
+        }
+
 
     }
 }

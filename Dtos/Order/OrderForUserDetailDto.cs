@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace BookStoreProject.Dtos.Order
 {
-    public class OrderForDetailDto
+    public class OrderForUserDetailDto
     {
         public int OrderID { get; set; }
-        public string ApplicationUserID { get; set; }
-        public int RecipientID { get; set; }
         public string NameOfUser { get; set; }
         public string NameOfRecipient { get; set; }
         public DateTime? Date { get; set; }
@@ -21,11 +19,15 @@ namespace BookStoreProject.Dtos.Order
         public string? Note { get; set; }
 
         public string[] ListBook { get; set; }
-        public decimal Total1 { get; set; }
+        public decimal TamTinh { get; set; }
+
+
+
         public string CouponID { get; set; }
-        public int Discount { get; set; }
-        public decimal Pay { get; set; }
         public decimal? ShippingFee { get; set; }
-        public decimal Total2 { get; set; }
+        public int Discount { get; set; }
+
+
+        public decimal Total { get; set; }
     }
 }
