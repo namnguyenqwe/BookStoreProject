@@ -38,7 +38,14 @@ namespace BookStoreProject.Controllers
             var order = await _ordersService.GetOrderByIdAsync(orderId);
             if (order == null)
                 return NotFound();
-            else return Ok(_mapper.Map<OrderForDetailDto>(order));
+            else
+            {
+                var orderreturn = _mapper.Map<OrderForDetailDto>(order);
+                orderreturn.Pay = orderreturn.Total1 - orderreturn.Discount;
+                orderreturn.Total2 = orderreturn.Pay + orderreturn.Shippingfee;
+                return Ok(orderreturn);
+            
+            }
         }
 
         [Authorize(Roles = "Admin")]
@@ -126,7 +133,12 @@ namespace BookStoreProject.Controllers
             if (order == null)
                 return NotFound(orderId);
             else
-                return Ok(_mapper.Map<OrderForUserDetailDto>(order));
+            {
+                var orderreturn = _mapper.Map<OrderForUserDetailDto>(order);
+                decimal a = (decimal)(orderreturn.TamTinh + orderreturn.ShippingFee);
+                orderreturn.Total = a - orderreturn.Discount;
+                return Ok(orderreturn);
+            }
 
         }
 
