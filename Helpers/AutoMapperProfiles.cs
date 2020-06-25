@@ -7,6 +7,7 @@ using BookStoreProject.Models;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -68,8 +69,9 @@ namespace BookStoreProject.AutoMapper
                                                   .ForMember(x => x.Address, y => { y.MapFrom(z => z.Recipient.Address + ", " + z.Recipient.District.district + ", " + z.Recipient.City.city); })
                                                   .ForMember(x => x.ListBook, y => { y.MapFrom(z => z.OrderItems.Select(y => new { y.Book.NameBook, y.Quantity, y.Price })); })
                                                   .ForMember(x => x.TamTinh, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price)); })
-                                                  .ForMember(x => x.Discount, y => { y.MapFrom(z => (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100)); })
-                                                  .ForMember(x => x.Total, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price) - (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100) + z.ShippingFee); });
+                                                  .ForMember(x => x.Discount, y => { y.MapFrom(z => (decimal)((z.OrderItems.Sum(y => y.Price) * ((int)z.Coupon.Discount)??0) / 100)); })
+                                                  .ForMember(x => x.Total, y => { y.MapFrom(z => (z.OrderItems.Sum(y => y.Price) + z.ShippingFee - ((z.OrderItems.Sum(y => y.Price)) +Convert.ToInt32(z.Coupon.Discount)  ))      ); });
+
             #endregion
         }
     }

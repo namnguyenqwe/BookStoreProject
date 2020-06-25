@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookStoreProject.Dtos.Order
 {
@@ -25,8 +26,9 @@ namespace BookStoreProject.Dtos.Order
 
         public string CouponID { get; set; }
         public decimal? ShippingFee { get; set; }
+        [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int Discount { get; set; }
-   
+
         
         public decimal Total { get; set; }
     }
