@@ -100,7 +100,7 @@ namespace BookStoreProject.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(applicationUser, "User");
+                    await _userManager.AddToRoleAsync(applicationUser, model.Role);
                     return Ok(result);
                 }
                 else
@@ -113,71 +113,9 @@ namespace BookStoreProject.Controllers
 
         }
 
-        [HttpPost]
-        [Route("AddAdmin")]
-        public async Task<IActionResult> AddAdmin(UserModel model)
-        {
-            var applicationUser = new ApplicationUser()
-            {
-                Email = model.Email,
-                UserName = model.Email,
-                Name = model.Name,
-                AvatarLink = model.AvatarLink,
-                Status = model.Status,
-            };
-            applicationUser.AccountCreateDate = DateTime.Now;
 
-            try
-            {
-                var result = await _userManager.CreateAsync(applicationUser, model.Password);
 
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(applicationUser, "Admin");
-                    return Ok(result);
-                }
-                else
-                    return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        [HttpPost]
-        [Route("AddManager")]
-        public async Task<IActionResult> AddManager(UserModel model)
-        {
-            var applicationUser = new ApplicationUser()
-            {
-                Email = model.Email,
-                UserName = model.Email,
-                Name = model.Name,
-                AvatarLink = model.AvatarLink,
-                Status = model.Status,
-            };
-            applicationUser.AccountCreateDate = DateTime.Now;
-
-            try
-            {
-                var result = await _userManager.CreateAsync(applicationUser, model.Password);
-
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(applicationUser, "Manager");
-                    return Ok(result);
-                }
-                else
-                    return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
+    
 
         [HttpPut]
         [Route("EditUser/{id}")]
