@@ -177,7 +177,7 @@ namespace BookStoreProject.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(applicationUser, "User");
+                    await _userManager.AddToRoleAsync(applicationUser, model.Role);
                     return Ok(result);
                 }
                 else
