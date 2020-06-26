@@ -54,9 +54,7 @@ namespace BookStoreProject.Services
         public IEnumerable<ApplicationUser> GetUsers(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
-            {
-               
-
+            {          
                 return _dbContext.ApplicationUsers
                     .Where(x =>
                     x.FullName.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();

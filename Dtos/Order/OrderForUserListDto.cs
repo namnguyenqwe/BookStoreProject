@@ -10,6 +10,10 @@ namespace BookStoreProject.Dtos.Order
         public int OrderId { get; set; }
 
         public DateTime Date { get; set; }
+        public decimal Tamtinh {get;set;}
+        public decimal Shippingfee { get; set; }
+        public decimal Discount { get; set; }
+         
         public string Status { get; set; }
         public decimal Total { get; set; }
     }

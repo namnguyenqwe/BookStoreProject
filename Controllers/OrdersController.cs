@@ -145,11 +145,14 @@ namespace BookStoreProject.Controllers
                 return NotFound();
             else
             {
-                
-                
-                
-            }    
+                foreach (var i in orderForReturn)
+                {
+                    i.Total = (decimal)(i.Tamtinh + i.Shippingfee - i.Discount);
+                 
+                }
+            }
             return Ok(new { data = orderForReturn });
+
         }
 
         [HttpGet("user/{orderId}")]
