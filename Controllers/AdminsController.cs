@@ -126,6 +126,14 @@ namespace BookStoreProject.Controllers
         }
 
         [HttpGet]
+        [Route("SearchUsersByStatus")]
+        public IActionResult GetUserByStatus(string status, int index, int size = 15)
+        {
+            var users = _userService.GetMultiPaging(s => s.Email.Contains(status), index, size, null);
+            return Ok(users);
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public IActionResult GetUserProfile(string id)
         {

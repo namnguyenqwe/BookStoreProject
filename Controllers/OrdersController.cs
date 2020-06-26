@@ -134,6 +134,7 @@ namespace BookStoreProject.Controllers
         [HttpGet("user")]
         public async Task<IActionResult> GetOrder()
         {
+            decimal[] a;
             var userId = GetUserId();
             if (userId == "error")
             {
@@ -145,10 +146,11 @@ namespace BookStoreProject.Controllers
                 return NotFound();
             else
             {
+                List<decimal> b;
                 foreach (var i in orderForReturn)
                 {
                     i.Total = (decimal)(i.Tamtinh + i.Shippingfee - i.Discount);
-                 
+                    
                 }
             }
             return Ok(new { data = orderForReturn });
