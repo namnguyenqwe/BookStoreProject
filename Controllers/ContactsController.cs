@@ -51,6 +51,12 @@ namespace BookStoreProject.Controllers
                     if (sort == 0) response = response.OrderByDescending(x => x.Message).Skip((page - 1) * pageSize).Take(pageSize);
                     else response = response.OrderBy(x => x.Message).Skip((page - 1) * pageSize).Take(pageSize);
                 }
+               
+                if (criteria.Equals("email"))
+                {
+                    if (sort == 0) response = response.OrderByDescending(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+                    else response = response.OrderBy(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+                }
 
                 if (criteria.Equals("date"))
                 {
@@ -61,6 +67,7 @@ namespace BookStoreProject.Controllers
                                         .ThenBy(x => x.Date.Month)
                                         .ThenBy(x => x.Date.Day).Skip((page - 1) * pageSize).Take(pageSize);
                 }
+                
 
                 else //if (criteria.Equals("status"))
                 {
