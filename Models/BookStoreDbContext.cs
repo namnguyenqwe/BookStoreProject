@@ -13,7 +13,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BookStoreProject.Models
 {
-    public class BookStoreDbContext : IdentityDbContext
+    public class BookStoreDbContext : IdentityDbContext<
+        ApplicationUser, ApplicationRole, string,
+        IdentityUserClaim<string>, ApplicationUserRole, IdentityUserLogin<string>,
+        IdentityRoleClaim<string>, IdentityUserToken<string>>
+
     {
         public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options) : base(options)
         {
@@ -24,7 +28,6 @@ namespace BookStoreProject.Models
 
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
         public DbSet<Book> Books { get; set; }
         public DbSet<WishList> WishLists { get; set; }
         public DbSet<CartItems> CartItems { get; set; }
@@ -49,7 +52,22 @@ namespace BookStoreProject.Models
             modelBuilder.Entity<Review>().HasKey(x => new { x.ApplicationUserId, x.BookID });
             modelBuilder.Entity<Categories>().HasKey(x => new { x.CategoryID });
             modelBuilder.Entity<OrderItems>().HasKey(x => new { x.OrderID, x.BookID });
-            
+
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(e => e.UserRoles)
+                .WithOne()
+                .HasForeignKey(e => e.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ApplicationUserRole>()
+                .HasOne(e => e.User);
+
+            modelBuilder.Entity<ApplicationUserRole>()
+                .HasOne(e => e.Role)
+                .WithMany(e => e.UserRoles)
+                .HasForeignKey(e => e.RoleId);
 
         }
     }

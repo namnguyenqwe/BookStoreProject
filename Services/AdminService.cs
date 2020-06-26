@@ -6,6 +6,7 @@ using BookStoreProject.Dtos.Admin;
 using BookStoreProject.Models;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookStoreProject.Services
 {
@@ -13,6 +14,7 @@ namespace BookStoreProject.Services
     {
         IEnumerable<ApplicationUser> GetUsers(string keyword);
         IEnumerable<UserForListDto> GetUsersPerPage(IEnumerable<UserForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "Id");
+        
     }
     public class AdminService : IAdminService
     {
@@ -53,6 +55,7 @@ namespace BookStoreProject.Services
         {
             if (!string.IsNullOrEmpty(keyword))
             {
+               
 
                 return _dbContext.ApplicationUsers
                     .Where(x =>

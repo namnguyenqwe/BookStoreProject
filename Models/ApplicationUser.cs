@@ -28,5 +28,19 @@ namespace BookStoreProject.Models
         public ICollection<Orders> Orders { get; set; }
 
         public ICollection<Recipient> Recipients { get; set; }
+
+       
+        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }
+    }
+
+    public class ApplicationRole : IdentityRole
+    {
+        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+    }
+
+    public class ApplicationUserRole : IdentityUserRole<string>
+    {
+        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationRole Role { get; set; }
     }
 }

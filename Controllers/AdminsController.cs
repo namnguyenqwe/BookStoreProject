@@ -49,10 +49,14 @@ namespace BookStoreProject.Controllers
         }
         [HttpGet]
         [Route("test")]
-        public IActionResult test()
+        public IActionResult test(ApplicationUser User,string role)
         {
             BookStoreDbContext db = new BookStoreDbContext();
             var listUser = _context.Roles.ToList();
+            //var user = _userManager.GetUserAsync(User);
+
+            var users = _context.ApplicationUsers.Include(x => x.UserRoles).ThenInclude(x => x.RoleId);
+
             return Ok(listUser);
         }
 
@@ -134,6 +138,9 @@ namespace BookStoreProject.Controllers
                 return Unauthorized();
             }
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
+
+            
+
 
             user.FullName = profile.FullName;
             user.AvatarLink = profile.AvatarLink;
