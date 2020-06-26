@@ -183,17 +183,22 @@ namespace BookStoreProject.Controllers
         [Route("EditUser/{id}")]
         public async Task<IActionResult> EditUser(string id, ProfileViewModel profile)
         {
-            var user = _userService.GetSingleByCondition(s => s.Id == id, null);
-
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
             user.Name = profile.Name;
             user.Email = profile.Email;
             user.UserName = profile.Email;
             user.Status = profile.Status;
             user.AvatarLink = profile.AvatarLink;
-
-            _userService.Update(user);
-            _userService.SaveChanges();
+            await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+            await _userManager.AddToRoleAsync(user, profile.Role);
+            await _userManager.UpdateAsync(user);
             return Ok(user);
+
+          
         }
 
         [HttpGet]
