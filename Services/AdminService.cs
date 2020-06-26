@@ -6,6 +6,7 @@ using BookStoreProject.Dtos.Admin;
 using BookStoreProject.Models;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BookStoreProject.Services
 {
@@ -64,6 +65,15 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.AccountCreateDate).Skip((page - 1) * pageSize).Take(pageSize);
             }
+            if (criteria.Equals("status"))
+            {
+                if (sort == 0)
+                {
+                    return list.OrderByDescending(x => x.Status).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                else
+                    return list.OrderBy(x => x.Status).Skip((page - 1) * pageSize).Take(pageSize);
+            }
             return null;
         }
 
@@ -74,7 +84,9 @@ namespace BookStoreProject.Services
 
                 return _dbContext.ApplicationUsers
                     .Where(x =>
-                    x.Name.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
+                    x.Name.ToUpper().Contains(keyword.ToUpper()) ||
+                    x.Email.ToUpper().Contains(keyword.ToUpper()) ||
+                    x.Status.ToString().Contains(keyword.ToString())).AsEnumerable();
                      
             }
             return _dbContext.ApplicationUsers.AsEnumerable();
