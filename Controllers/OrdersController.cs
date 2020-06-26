@@ -41,8 +41,9 @@ namespace BookStoreProject.Controllers
             else
             {
                 var orderreturn = _mapper.Map<OrderForDetailDto>(order);
-                orderreturn.Pay = orderreturn.Total1 - orderreturn.Discount;
-                orderreturn.Total2 = orderreturn.Pay + orderreturn.Shippingfee;
+                decimal discount = (decimal)(orderreturn.Total1 * orderreturn.Discount / 100);
+                orderreturn.Pay = orderreturn.Total1 - discount;
+                orderreturn.Total2 = (decimal)(orderreturn.Pay + orderreturn.Shippingfee);
                 return Ok(orderreturn);
             
             }
