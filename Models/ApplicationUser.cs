@@ -29,11 +29,13 @@ namespace BookStoreProject.Models
 
         public ICollection<Recipient> Recipients { get; set; }
 
-       
-        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }
+        /*public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
+        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+        public virtual ICollection<IdentityUserToken<string>> Tokens { get; set; }
+        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }*/
     }
 
-    public class ApplicationRole : IdentityRole
+    /*public class ApplicationRole : IdentityRole
     {
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
@@ -42,5 +44,5 @@ namespace BookStoreProject.Models
     {
         public virtual ApplicationUser User { get; set; }
         public virtual ApplicationRole Role { get; set; }
-    }
+    }*/
 }

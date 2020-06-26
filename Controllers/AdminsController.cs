@@ -55,7 +55,7 @@ namespace BookStoreProject.Controllers
             var listUser = _context.Roles.ToList();
             //var user = _userManager.GetUserAsync(User);
 
-            var users = _context.ApplicationUsers.Include(x => x.UserRoles).ThenInclude(x => x.RoleId);
+            //var users = _context.ApplicationUsers.Include(x => x.UserRoles).ThenInclude(x => x.RoleId);
 
             return Ok(listUser);
         }

@@ -13,10 +13,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BookStoreProject.Models
 {
-    public class BookStoreDbContext : IdentityDbContext<
+    public class BookStoreDbContext : IdentityDbContext/*<
         ApplicationUser, ApplicationRole, string,
         IdentityUserClaim<string>, ApplicationUserRole, IdentityUserLogin<string>,
-        IdentityRoleClaim<string>, IdentityUserToken<string>>
+        IdentityRoleClaim<string>, IdentityUserToken<string>>*/
 
     {
         public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options) : base(options)
@@ -54,7 +54,7 @@ namespace BookStoreProject.Models
             modelBuilder.Entity<OrderItems>().HasKey(x => new { x.OrderID, x.BookID });
 
 
-            modelBuilder.Entity<ApplicationUser>()
+            /*modelBuilder.Entity<ApplicationUser>()
                 .HasMany(e => e.UserRoles)
                 .WithOne()
                 .HasForeignKey(e => e.UserId)
@@ -67,7 +67,7 @@ namespace BookStoreProject.Models
             modelBuilder.Entity<ApplicationUserRole>()
                 .HasOne(e => e.Role)
                 .WithMany(e => e.UserRoles)
-                .HasForeignKey(e => e.RoleId);
+                .HasForeignKey(e => e.RoleId);*/
 
         }
     }
