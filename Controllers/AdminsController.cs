@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using BookStoreProject.Dtos.Admin;
 using BookStoreProject.Helpers;
+using BookStoreProject.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookStoreProject.Controllers
 {
@@ -47,17 +49,22 @@ namespace BookStoreProject.Controllers
             _mapper = mapper;
             this._context = context;
         }
-        [HttpGet]
-        [Route("test")]
-        public IActionResult test(ApplicationUser User,string role)
+        [HttpPost]
+        [Route("test/{id}")]
+        public async Task<IActionResult> test(string id)
         {
-            BookStoreDbContext db = new BookStoreDbContext();
-            var listUser = _context.Roles.ToList();
-            //var user = _userManager.GetUserAsync(User);
+            
+            var user = await _userManager.FindByIdAsync(id);
+            
+            if(user == null)
+            {
+                return NotFound();
+            }
 
-            //var users = _context.ApplicationUsers.Include(x => x.UserRoles).ThenInclude(x => x.RoleId);
-
-            return Ok(listUser);
+            await _userManager.RemoveFromRolesAsync(user,await _userManager.GetRolesAsync(user));
+            await _userManager.AddToRoleAsync(user, "User");
+       
+            return Ok();
         }
 
         [HttpGet]
@@ -139,9 +146,9 @@ namespace BookStoreProject.Controllers
             }
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
-            
 
 
+            user.Status = profile.Status;
             user.FullName = profile.FullName;
             user.AvatarLink = profile.AvatarLink;
             _userService.Update(user);
@@ -253,16 +260,24 @@ namespace BookStoreProject.Controllers
         [Route("EditUser/{id}")]
         public async Task<IActionResult> EditUser(string id,ProfileViewModel profile)
         {
-            var user =  _userService.GetSingleByCondition(s=> s.Id == id,null);
+            var user = await _userManager.FindByIdAsync(id);
 
+
+            
+            //user.Email = profile.Email;
+            // user.Status = profile.Status;
+
+            if (user == null)
+            {
+                return NotFound();
+            }
             user.FullName = profile.FullName;
-            user.Email = profile.Email;
-            user.UserName = profile.Email;
-            user.Status = profile.Status;
-            user.AvatarLink = profile.AvatarLink;
+            await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+            await _userManager.AddToRoleAsync(user, profile.Role);
+            await _userManager.UpdateAsync(user);
+           
 
-            _userService.Update(user);
-            _userService.SaveChanges();
+            
             return Ok(user);
         }
         

@@ -61,7 +61,7 @@ namespace BookStoreProject.AutoMapper
                                                   .ForMember(x => x.ShippingFee, opt => opt.Ignore())
                                                   .ForMember(x => x.Note, opt => opt.Ignore());
 
-            CreateMap<Orders, OrderForUserListDto>().ForMember(x => x.Total, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price) - (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100) + z.ShippingFee); });
+            CreateMap<Orders, OrderForUserListDto>();//.ForMember(x => x.Total, y => { y.MapFrom(z => z.OrderItems.Sum(y => y.Price) - (decimal)((z.OrderItems.Sum(y => y.Price) * z.Coupon.Discount) / 100) + z.ShippingFee); });
 
             CreateMap<Orders, OrderForUserDetailDto>().ForMember(x => x.Email, y => { y.MapFrom(z => z.Recipient.Email); })
                                                   .ForMember(x => x.NameOfRecipient, y => { y.MapFrom(z => z.Recipient.Name); })
