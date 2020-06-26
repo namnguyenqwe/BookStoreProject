@@ -16,6 +16,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "BOOK")]
     public class BooksController : ControllerBase
     {
         private IBookService _bookService;
@@ -25,7 +26,7 @@ namespace BookStoreProject.Controllers
             _bookService = bookService;
             _mapper = mapper;
         }
-        [Authorize(Roles = "Admin")]
+        
         [HttpGet("{bookId}")]
         public async Task<IActionResult> GetBookByIdForAdmin(int bookId)
         {
@@ -35,7 +36,7 @@ namespace BookStoreProject.Controllers
             else return Ok(_mapper.Map<BookForDetailDto>(book));
         }
 
-        [Authorize(Roles = "Admin")]
+        
         [HttpDelete("{bookId}")]
         public async Task<IActionResult> DeleteBook(int bookId)
         {
@@ -49,7 +50,7 @@ namespace BookStoreProject.Controllers
             }
             return Ok();
         }
-        [Authorize(Roles = "Admin")]
+        
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody] BookForCreateDto input)
         {
@@ -62,7 +63,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
-        [Authorize(Roles = "Admin")]
+        
         [HttpPut("{bookId}")]
         public async Task<IActionResult> UpdateBook(int bookId, [FromBody] BookForUpdateDto input)
         {
@@ -81,7 +82,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
-        [Authorize(Roles = "Admin")]
+        
         [HttpGet]
         public IActionResult GetAllBooks(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "BookId")
         {
@@ -109,6 +110,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [AllowAnonymous]
         [HttpGet("user")]
         public IActionResult GetAllBooks(string keyword)
         {
@@ -123,6 +125,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [AllowAnonymous]
         [HttpGet("user/{bookId}")]
         public async Task<IActionResult> GetBookByIdForUser(int bookId, int num = 5)
         {
@@ -145,6 +148,7 @@ namespace BookStoreProject.Controllers
             return Ok(book);
 
         }
+        [AllowAnonymous]
         [HttpGet("user/latest")]
         public async Task<IActionResult> GetLatestBooks(int? num)
         {
@@ -158,6 +162,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [AllowAnonymous]
         [HttpGet("user/popular")]
         public async Task<IActionResult> GetPopularBooks(int? num)
         {
@@ -171,6 +176,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [AllowAnonymous]
         [HttpGet("user/category/{categoryId}")]
         public async Task<IActionResult> GetBooksByCategoryId(int categoryId)
         {

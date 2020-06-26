@@ -35,6 +35,8 @@ using BookStoreProject.Repositorys;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using BookStoreProject.PolicyHandlers;
 
 namespace BookStoreProject
 {
@@ -148,12 +150,43 @@ namespace BookStoreProject
             services.AddCors();
 
             services.AddMvc()
-       .ConfigureApiBehaviorOptions(opt
-           =>
-       {
-           opt.InvalidModelStateResponseFactory =
-               (context => new BadRequestObjectResult(new { message = context.ModelState.Values.First().Errors[0].ErrorMessage }));
-       });
+                   .ConfigureApiBehaviorOptions(opt
+                       =>
+                   {
+                       opt.InvalidModelStateResponseFactory =
+                           (context => new BadRequestObjectResult(new { message = context.ModelState.Values.First().Errors[0].ErrorMessage }));
+                   });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("BOOK", policy =>
+                    policy.Requirements.Add(new PermissionRequirement("BOOK")));
+
+                options.AddPolicy("CATEGORY", policy =>
+                    policy.Requirements.Add(new PermissionRequirement("CATEGORY")));
+
+                options.AddPolicy("PUBLISHER", policy =>
+                    policy.Requirements.Add(new PermissionRequirement("PUBLISHER")));
+
+                options.AddPolicy("REVIEW", policy =>
+                   policy.Requirements.Add(new PermissionRequirement("REVIEW")));
+
+                options.AddPolicy("COUPON", policy =>
+                   policy.Requirements.Add(new PermissionRequirement("COUPON")));
+
+                options.AddPolicy("SHIPPING", policy =>
+                   policy.Requirements.Add(new PermissionRequirement("SHIPPING")));
+
+                options.AddPolicy("ORDER", policy =>
+                   policy.Requirements.Add(new PermissionRequirement("ORDER")));
+
+                options.AddPolicy("SUBSCRIBER", policy =>
+                   policy.Requirements.Add(new PermissionRequirement("SUBSCRIBER")));
+
+                options.AddPolicy("USER", policy =>
+                   policy.Requirements.Add(new PermissionRequirement("USER")));
+            });
+
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -76,6 +76,7 @@ namespace BookStoreProject.Controllers
                 var userForReturn = _mapper.Map<ApplicationUserForProfileDto>(user);
                 var userRoles = await _userManager.GetRolesAsync(user);
                 userForReturn.Role = userRoles.FirstOrDefault();
+                userForReturn.Permissions = await _adminService.GetPermissions(userForReturn.Role);
                 return Ok(userForReturn);
             }
         }
@@ -267,6 +268,19 @@ namespace BookStoreProject.Controllers
         {
             var roles = _context.Roles.ToList();
             return Ok(roles);
+        }
+        [HttpGet("authorization")]
+        public async Task<IActionResult> GetAuthorization()
+        {
+            try
+            {
+                var listForReturn = await _adminService.GetAuthorization();
+                return Ok(new { data = listForReturn });
+            }
+            catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [NonAction]

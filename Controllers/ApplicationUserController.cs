@@ -39,20 +39,6 @@ namespace BookStoreProject.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register(UserModel model)
         {
-            var role = new IdentityRole();
-            role.Name = "User";
-            await _roleManager.CreateAsync(role);
-
-            var role2 = new IdentityRole();
-            role2.Name = "Admin";
-            await _roleManager.CreateAsync(role2);
-
-            var role3 = new IdentityRole();
-            role3.Name = "Manager";
-            await _roleManager.CreateAsync(role3);
-
-
-
             var applicationUser = new ApplicationUser()
             {              
                 Email = model.Email,

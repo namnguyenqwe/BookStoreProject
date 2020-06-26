@@ -13,6 +13,7 @@ namespace BookStoreProject.Dtos.ApplicationUser
         public string AvatarLink { get; set; }
         public string Role { get; set; }
         public bool Status { get; set; }
+        public IEnumerable<string> Permissions { get; set; }
         public DateTime? AccountCreateDate { get; set; }
     }
 

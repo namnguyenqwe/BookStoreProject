@@ -9,6 +9,7 @@ using BookStoreProject.Dtos.Category;
 using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -17,6 +18,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy ="CATEGORY")]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
@@ -139,6 +141,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [AllowAnonymous]
         [HttpGet("user")]
         public async Task<IActionResult> GetAllCategoriesForUser()
         {
