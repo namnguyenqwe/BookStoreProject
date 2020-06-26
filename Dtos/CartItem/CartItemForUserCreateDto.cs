@@ -8,5 +8,6 @@ namespace BookStoreProject.Dtos.CartItem
     public class CartItemForUserCreateDto
     {
         public int BookId { get; set; }
+       
     }
 }

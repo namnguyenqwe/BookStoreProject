@@ -87,7 +87,13 @@ namespace BookStoreProject.Services
 
         public async Task<IEnumerable<CartItems>> GetCartItemsByUserId(string applicationuserId)
         {
-            return await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == applicationuserId).ToListAsync();
+            return await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == applicationuserId)
+                    .OrderByDescending(x => x.CreatedDate.Value.Year)
+                    .ThenByDescending(x => x.CreatedDate.Value.Month)
+                    .ThenByDescending(x => x.CreatedDate.Value.Day)
+                    .ThenByDescending(x => x.CreatedDate.Value.Hour)
+                    .ThenByDescending(x => x.CreatedDate.Value.Minute)
+                    .ThenByDescending(x => x.CreatedDate.Value.Second).ToListAsync();
         }
 
         public async Task<bool> UpdateCartItem(CartItems cartItemUpdate)

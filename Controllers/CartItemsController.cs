@@ -75,6 +75,7 @@ namespace BookStoreProject.Controllers
                 if (cartItemInDB != null)
                 {
                     cartItemInDB.Quantity++;
+                    cartItemInDB.CreatedDate = DateTime.Now;
                     var isSuccess = await _cartItemService.UpdateCartItem(cartItemInDB);
                     if (isSuccess)
                         return Ok(new { message = "Thêm vào giỏ hàng thành công" });

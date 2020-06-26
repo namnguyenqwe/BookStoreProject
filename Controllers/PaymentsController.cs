@@ -42,8 +42,9 @@ namespace BookStoreProject.Controllers
             
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePayment([FromBody] PaymentForBillDto input)
+        public async Task<IActionResult> CreatePayment([FromBody] PaymentForBillDto input, [Required] string bookIds)
         {
+            string[] BookIds = Regex.Split(bookIds, @"\D+");
             var userId = GetUserId();
             if (userId == "error")
             {
@@ -64,7 +65,7 @@ namespace BookStoreProject.Controllers
             if (!result)
                 return BadRequest(new { message = "Có lỗi xảy ra, vui lòng thử lại !" });
 
-            result = await _paymentService.SaveBillItems(order);
+            result = await _paymentService.SaveBillItems(order, BookIds);
 
             if (!result)
                 return BadRequest(new { message = "Có lỗi xảy ra, vui lòng thử lại !" });

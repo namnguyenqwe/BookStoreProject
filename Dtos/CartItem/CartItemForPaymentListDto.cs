@@ -7,6 +7,7 @@ namespace BookStoreProject.Dtos.CartItem
 {
     public class CartItemForPaymentListDto
     {
+        public int BookID { get; set; }
         public string NameBook { get; set; }
         public string ImageLink { get; set; }
         public decimal? Price { get; set; }

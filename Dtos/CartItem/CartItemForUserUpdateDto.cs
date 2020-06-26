@@ -12,5 +12,6 @@ namespace BookStoreProject.Dtos.CartItem
 
         [Range(0, Int32.MaxValue, ErrorMessage = "Value must be a positive number")]
         public int? Quantity { get; set; }
+        public DateTime? CreatedDate { get; } = DateTime.Now;
     }
 }
