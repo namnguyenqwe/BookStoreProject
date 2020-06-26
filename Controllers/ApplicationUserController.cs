@@ -87,6 +87,7 @@ namespace BookStoreProject.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
+            
             if (user != null && await _userManager.CheckPasswordAsync(user, model.PassWord))
             {
                 var role = await _userManager.GetRolesAsync(user);
@@ -153,6 +154,12 @@ namespace BookStoreProject.Controllers
             }
 
 
+        }
+        [HttpGet("statistic/all")]
+        public IActionResult GetUserCount()
+        {
+            var count = _userManager.GetUsersInRoleAsync("User").Result.Count;
+            return Ok(new { userCount = count });
         }
     }
 }

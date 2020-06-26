@@ -10,6 +10,8 @@ using BookStoreProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace BookStoreProject.Controllers
 {
@@ -117,6 +119,12 @@ namespace BookStoreProject.Controllers
             if (!result)
                 return BadRequest(new { message = "Có lỗi trong quá trình xóa dữ liệu"});
             return Ok();
-        }    
+        }
+        [HttpGet("statistic/all")]
+        public IActionResult GetSubcriberCount()
+        {
+            var subcribers = _subcriberService.GetSubcribers(null);
+            return Ok(new { subcirberCount = subcribers.Count()});
+        }
     }
 }

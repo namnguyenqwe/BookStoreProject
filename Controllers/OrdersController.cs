@@ -42,7 +42,7 @@ namespace BookStoreProject.Controllers
             {
                 var orderreturn = _mapper.Map<OrderForDetailDto>(order);
                 orderreturn.Pay = orderreturn.Total1 - orderreturn.Discount;
-                orderreturn.Total2 = orderreturn.Pay + orderreturn.Shippingfee;
+                orderreturn.Total2 = (decimal)(orderreturn.Pay + orderreturn.ShippingFee);
                 return Ok(orderreturn);
             
             }
@@ -141,6 +141,12 @@ namespace BookStoreProject.Controllers
             }
 
         }
+        [HttpGet("statistic/all")]
+        public IActionResult GetOrderCount()
+        {
+            var orders = _ordersService.GetOders(null);
+            return Ok(new { orderCount = orders.Count() });
+        }    
 
         [NonAction]
         public string GetUserId()
