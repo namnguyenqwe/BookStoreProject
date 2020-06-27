@@ -14,6 +14,9 @@ using BookStoreProject.Models;
 using BookStoreProject.Services;
 using BookStoreProject.Commons;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
+using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 
 namespace BookStoreProject.Controllers
 {
@@ -142,10 +145,21 @@ namespace BookStoreProject.Controllers
 
         }
         [HttpGet("statistic/all")]
-        public IActionResult GetUserCount()
+        public IActionResult GetUserCount(string from, string to)
         {
-            var count = _userManager.GetUsersInRoleAsync("User").Result.Count;
-            return Ok(new { userCount = count });
+            if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
+            {
+                var dateStarted = DateTime.ParseExact(from, "d/M/yyyy",
+                 CultureInfo.CreateSpecificCulture("fr-FR"));
+                var dateEnded = DateTime.ParseExact(to, "d/M/yyyy",
+                      CultureInfo.CreateSpecificCulture("fr-FR"));
+                var countFromTo = _userManager.GetUsersInRoleAsync("User").GetAwaiter().GetResult()
+                                .Where(x => x.AccountCreateDate >= dateStarted 
+                                && x.AccountCreateDate <= dateEnded) .Count();
+                return Ok(new { userCount = countFromTo });
+            }    
+             var countAll = _userManager.GetUsersInRoleAsync("User").Result.Count;
+            return Ok(new { userCount = countAll });
         }
     }
 }
