@@ -105,7 +105,7 @@ namespace BookStoreProject.Controllers
                 var contact = _mapper.Map<Contact>(input);
                 var result = await _contactService.CreateContact(contact);
                 if (result)
-                    return Ok();
+                    return Ok(new { message = "Gửi phản hồi thành công " });
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
