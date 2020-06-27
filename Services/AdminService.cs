@@ -61,10 +61,19 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
             }
+            if (criteria.Equals("accountcreatedate"))
+            {
+                if (sort == 0)
+                {
+                    return list.OrderByDescending(x => x.AccountCreateDate).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                else
+                    return list.OrderBy(x => x.AccountCreateDate).Skip((page - 1) * pageSize).Take(pageSize);
+            }
             return null;
         }
 
-        public IEnumerable<ApplicationUser> GetUsers(string keyword)
+        /*public IEnumerable<ApplicationUser> GetUsers(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -84,9 +93,9 @@ namespace BookStoreProject.Services
 
             }
             return _dbContext.ApplicationUsers.AsEnumerable();
-        }
+        }*/
 
-        /*public IEnumerable<ApplicationUser> GetUsers(string keyword)
+        public IEnumerable<ApplicationUser> GetUsers(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -97,6 +106,6 @@ namespace BookStoreProject.Services
                   
             }
             return _dbContext.ApplicationUsers.AsEnumerable();
-        }*/
+        }
     }
 }
