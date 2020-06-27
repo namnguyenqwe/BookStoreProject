@@ -53,7 +53,7 @@ namespace BookStoreProject.Controllers
             role3.Name = "Manager";
             await _roleManager.CreateAsync(role3);
 
-
+            
 
             var applicationUser = new ApplicationUser()
             {              
