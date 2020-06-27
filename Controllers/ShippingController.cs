@@ -8,6 +8,7 @@ using BookStoreProject.Dtos.District;
 using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "SHIPPING")]
     public class ShippingController : ControllerBase
     {
         private readonly IShippingService _shippingService;

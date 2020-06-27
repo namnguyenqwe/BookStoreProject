@@ -102,9 +102,9 @@ namespace BookStoreProject.Services
                     Price = x.Quantity * x.Book.Price
                 });
                 _dbContext.OrderItems.AddRange(orderItems);
-                var cartItemsInDB = await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == order.ApplicationUserID).ToListAsync();
-                if (cartItemsInDB.Any())
-                    _dbContext.CartItems.RemoveRange(cartItemsInDB);
+               // var cartItemsInDB = await _dbContext.CartItems.Include(x => x.Book).Where(x => x.ApplicationUserId == order.ApplicationUserID).ToListAsync();
+                if (cartItems.Any())
+                    _dbContext.CartItems.RemoveRange(cartItems);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }

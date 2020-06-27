@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BookStoreProject.Dtos.Payment;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class PaymentsController : ControllerBase
     {
         private readonly IPaymentService _paymentService;

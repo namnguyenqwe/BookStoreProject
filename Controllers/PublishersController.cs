@@ -7,6 +7,7 @@ using BookStoreProject.Dtos.Publisher;
 using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -16,6 +17,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "PUBLISHER")]
     public class PublishersController : ControllerBase
     {
         private IPublisherService _publisherService;

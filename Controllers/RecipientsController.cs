@@ -6,6 +6,7 @@ using AutoMapper;
 using BookStoreProject.Dtos.Recipient;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class RecipientsController : ControllerBase
     {
         private readonly IRecipientService _recipientService;

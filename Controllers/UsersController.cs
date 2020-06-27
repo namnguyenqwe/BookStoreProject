@@ -17,7 +17,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "User")]
     public class UsersController:ControllerBase
     {
         private IUserService _userService;

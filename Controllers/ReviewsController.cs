@@ -25,6 +25,7 @@ namespace BookStoreProject.Controllers
             _reviewService = reviewService;
             _mapper = mapper;
         }
+        [Authorize(Policy = "REVIEW")]
         [HttpGet]
         public IActionResult GetReviews(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "reviewid")
         {
@@ -85,6 +86,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [Authorize(Policy = "REVIEW")]
         [HttpGet("{reviewId}")]
         public async Task<IActionResult> GetReviewById(int reviewId)
         {
@@ -93,6 +95,7 @@ namespace BookStoreProject.Controllers
                 return NotFound(reviewId);
             return Ok(_mapper.Map<ReviewForListDto>(review));
         }
+        [Authorize(Policy = "REVIEW")]
         [HttpDelete("{reviewId}")]
         public async Task<IActionResult> DeleteReview(int reviewId)
         {
@@ -104,6 +107,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             return Ok();
         }
+        [AllowAnonymous]
         [HttpGet("user/{bookId}")]
         public async Task<IActionResult> GetReviews(int bookId, bool? isPurchased, bool isLatest = true)
         {

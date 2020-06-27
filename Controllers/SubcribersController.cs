@@ -17,7 +17,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin")]
+    
     public class SubcribersController : ControllerBase
     {
         private readonly ISubcriberService _subcriberService;
@@ -27,6 +27,7 @@ namespace BookStoreProject.Controllers
             _subcriberService = subcriberService;
             _mapper = mapper;
         }
+        [Authorize(Policy = "SUBSCRIBER")]
         [HttpGet]
         public IActionResult GetAllSubcribers(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "subcriberid")
         {
@@ -74,6 +75,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [Authorize(Policy = "SUBSCRIBER")]
         [HttpGet("{subcriberId}")]
         public async Task<IActionResult> GetSubcriberById(int subcriberId)
         {
@@ -82,6 +84,7 @@ namespace BookStoreProject.Controllers
                 return NotFound(subcriberId);
             return Ok(subcriber);
         }
+        [Authorize(Policy = "SUBSCRIBER")]
         [HttpPost]
         public async Task<IActionResult> CreateSubcriber([FromBody] SubcriberForModalDto input)
         {
@@ -91,11 +94,12 @@ namespace BookStoreProject.Controllers
                 subcriber.CreatedDate = DateTime.Now;
                 var result = await _subcriberService.CreateSubcriber(subcriber);
                 if (result)
-                    return Ok();
+                    return Ok(new { message = "Subcriber created successfully !" });
                 else return BadRequest(new { message = "Email already exists !" });
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
+        [Authorize(Policy = "SUBSCRIBER")]
         [HttpPut("{subcriberId}")]
         public async Task<IActionResult> UpdateSubcriber(int subcriberId, [FromBody] SubcriberForModalDto input)
         {
@@ -109,6 +113,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(ModelState);
         }
+        [Authorize(Policy = "SUBSCRIBER")]
         [HttpDelete("{subcriberId}")]
         public async Task<IActionResult> DeleteSubcriber(int subcriberId)
         {
@@ -120,6 +125,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest(new { message = "Có lỗi trong quá trình xóa dữ liệu"});
             return Ok();
         }
+        [Authorize(Roles = "Admin,Customer manager,Book manager")]
         [HttpGet("statistic/all")]
         public IActionResult GetSubcriberCount()
         {
