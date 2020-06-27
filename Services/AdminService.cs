@@ -8,6 +8,9 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BookStoreProject.Helpers;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
+
 
 namespace BookStoreProject.Services
 {
@@ -68,15 +71,15 @@ namespace BookStoreProject.Services
 
                 return _dbContext.ApplicationUsers
                     .Where(delegate (ApplicationUser b)
-                {
-                    if (MyConvert.ConvertToUnSign(b.FullName.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                    {
+                        if (MyConvert.ConvertToUnSign(b.FullName.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
                     
-                    b.FullName.ToUpper().Contains(keyword.ToUpper()) )
+                        b.FullName.ToUpper().Contains(keyword.ToUpper()) )
 
-                        return true;
-                    else
-                        return false;
-                })
+                            return true;
+                         else
+                            return false;
+                    })
                     .AsEnumerable();
 
             }
@@ -89,8 +92,9 @@ namespace BookStoreProject.Services
             {
                 return _dbContext.ApplicationUsers
                     .Where(x =>
-                    x.FullName.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
-
+                    x.FullName.ToUpper().Contains(keyword.ToUpper()) ||
+                    x.Email.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
+                  
             }
             return _dbContext.ApplicationUsers.AsEnumerable();
         }*/
