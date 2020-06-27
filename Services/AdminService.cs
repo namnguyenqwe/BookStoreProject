@@ -7,6 +7,7 @@ using BookStoreProject.Models;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using BookStoreProject.Helpers;
 
 namespace BookStoreProject.Services
 {
@@ -30,7 +31,7 @@ namespace BookStoreProject.Services
         {
             criteria = criteria.ToLower();
 
-            if(criteria.Equals("Id"))
+            if(criteria.Equals("id"))
             {
                 if (sort == 0)
                 {
@@ -48,20 +49,50 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.FullName).Skip((page - 1) * pageSize).Take(pageSize);
             }
+            if (criteria.Equals("email"))
+            {
+                if (sort == 0)
+                {
+                    return list.OrderByDescending(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+                }
+                else
+                    return list.OrderBy(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
+            }
             return null;
         }
 
         public IEnumerable<ApplicationUser> GetUsers(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
-            {          
+            {
+
                 return _dbContext.ApplicationUsers
-                    .Where(x =>
-                    x.FullName.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
-                     
+                    .Where(delegate (ApplicationUser b)
+                {
+                    if (MyConvert.ConvertToUnSign(b.FullName.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                    
+                    b.FullName.ToUpper().Contains(keyword.ToUpper()) )
+
+                        return true;
+                    else
+                        return false;
+                })
+                    .AsEnumerable();
+
             }
             return _dbContext.ApplicationUsers.AsEnumerable();
         }
 
+        /*public IEnumerable<ApplicationUser> GetUsers(string keyword)
+        {
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                return _dbContext.ApplicationUsers
+                    .Where(x =>
+                    x.FullName.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
+
+            }
+            return _dbContext.ApplicationUsers.AsEnumerable();
+        }*/
     }
 }

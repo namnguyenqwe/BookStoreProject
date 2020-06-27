@@ -28,7 +28,7 @@ namespace BookStoreProject.AutoMapper
 
 
             #region Applicationuser
-            CreateMap<ApplicationUser, UserForListDto>().ForMember(x => x.Id, y => { y.MapFrom(z => z.Id); }); ;
+            CreateMap<ApplicationUser, UserForListDto>();//.ForMember(x => x.Id, y => { y.MapFrom(z => z.Id); });
             #endregion
 
             #region Order
