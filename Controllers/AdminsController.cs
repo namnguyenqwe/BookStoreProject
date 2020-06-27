@@ -231,13 +231,16 @@ namespace BookStoreProject.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var user = _userService.GetSingleByCondition(s => s.Id == id,null);
+            var user = await _adminService.GetUserByIdAsync(id);
             if (user == null)
             {
-                return NotFound();
+                return NotFound(id);
             }
-            _userService.Delete(user);
-            _userService.SaveChanges();
+            var result = await _adminService.DeleteUserAsync(user.Id);
+            if(!result)
+            {
+                return BadRequest(new { message = "Có lỗi trong quá trình xóa dữ liệu" });
+            }
             return Ok();
 
         }
