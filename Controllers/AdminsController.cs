@@ -18,13 +18,14 @@ using AutoMapper;
 using BookStoreProject.Dtos.Admin;
 using BookStoreProject.Helpers;
 using BookStoreProject.Dtos.ApplicationUser;
+using System.Globalization;
 
 namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin,Customer manager")]
-    [Authorize(Policy = "USER")]
+    [Authorize(Roles = "Admin,Customer manager,Book manager")]
+    
     public class AdminsController : ControllerBase
     {
         private UserManager<ApplicationUser> _userManager;
@@ -81,7 +82,7 @@ namespace BookStoreProject.Controllers
                 return Ok(userForReturn);
             }
         }
-
+        [Authorize(Policy = "USER")]
         [HttpPost]
         [Route("AddUser")]
         public async Task<IActionResult> AddUser(UserModel model)
@@ -117,8 +118,8 @@ namespace BookStoreProject.Controllers
 
 
 
-    
 
+        [Authorize(Policy = "USER")]
         [HttpPut]
         [Route("EditUser/{id}")]
         public async Task<IActionResult> EditUser(string id, ProfileViewModel profile)
@@ -140,7 +141,7 @@ namespace BookStoreProject.Controllers
 
           
         }
-
+        [Authorize(Policy = "USER")]
         [HttpGet]
         [Route("ListUser")]
         public IActionResult GetListUser(string keyword,int page = 1, int pageSize = 10, int sort = 0, string criteria = "Id")
@@ -169,7 +170,7 @@ namespace BookStoreProject.Controllers
             }
                 
         }
-
+        [Authorize(Policy = "USER")]
         [HttpGet]
         [Route("SearchUsersByName")]
         public IActionResult GetUserByName(string name, int index, int size = 15)
@@ -177,7 +178,7 @@ namespace BookStoreProject.Controllers
             var users = _userService.GetMultiPaging(s => s.Name.Contains(name), index, size, null);
             return Ok(users);
         }
-
+        [Authorize(Policy = "USER")]
         [HttpGet]
         [Route("SearchUsersByEmail")]
         public IActionResult GetUserByEmail(string email, int index, int size = 15)
@@ -185,7 +186,7 @@ namespace BookStoreProject.Controllers
             var users = _userService.GetMultiPaging(s => s.Email.Contains(email), index, size, null);
             return Ok(users);
         }
-        
+
         /*[HttpGet]        
         [Route("SearchUsersByStatus")]
         public IActionResult GetUserByStatus(string status, int index, int size = 15)
@@ -193,7 +194,7 @@ namespace BookStoreProject.Controllers
             var users = _userService.GetMultiPaging(s => s.Status.Equals(status), index, size, null);
             return Ok(users);
         }*/
-
+        [Authorize(Policy = "USER")]
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetUserProfile(string id)
@@ -225,6 +226,7 @@ namespace BookStoreProject.Controllers
             return Ok(user);
 
         }
+        [Authorize(Policy = "USER")]
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
@@ -262,7 +264,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest(new { message = "Invalid image type !" });
             }
         }*/
-
+        [Authorize(Policy = "USER")]
         [HttpGet]
         [Route("GetRole")]
         public IActionResult GetListRole()
@@ -283,7 +285,30 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
-
+       /* [HttpGet("statistic/all")]
+        public IActionResult GetUserCount(string from, string to)
+        {
+            if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
+            {
+                var dateStarted = DateTime.ParseExact(from, "d",
+                 CultureInfo.CreateSpecificCulture("fr-FR"));
+                var dateEnded = DateTime.ParseExact(from, "d",
+                      CultureInfo.CreateSpecificCulture("fr-FR"));
+                /* var countFromTo = _userManager.GetUsersInRoleAsync("User").GetAwaiter().GetResult()
+                                 .Where(x => System.Data.Entity.DbFunctions.TruncateTime(x.AccountCreateDate) >= dateStarted
+                                 && System.Data.Entity.DbFunctions.TruncateTime(x.AccountCreateDate) <= dateEnded).Count();
+                var users = from user in _context.ApplicationUsers
+                            join userrole in _context.UserRoles on user.Id equals userrole.UserId
+                            join role in _context.Roles on userrole.RoleId equals role.Id
+                            where (role.Name == "User"
+                                 &&  System.Data.Entity.DbFunctions.TruncateTime( user.AccountCreateDate) >= dateStarted
+                                 &&  System.Data.Entity.DbFunctions.TruncateTime(user.AccountCreateDate) <= dateEnded)
+                            select user;
+                return Ok(new { userCount = users.ToList().Count() });
+            }
+            var countAll = _userManager.GetUsersInRoleAsync("User").Result.Count;
+            return Ok(new { userCount = countAll });
+        }*/
         [NonAction]
         public string GetUserId()
         {

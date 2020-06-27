@@ -184,6 +184,9 @@ namespace BookStoreProject
 
                 options.AddPolicy("USER", policy =>
                    policy.Requirements.Add(new PermissionRequirement("USER")));
+
+                options.AddPolicy("CONTACT", policy =>
+                   policy.Requirements.Add(new PermissionRequirement("CONTACT")));
             });
 
             services.AddScoped<IAuthorizationHandler, PermissionHandler>();

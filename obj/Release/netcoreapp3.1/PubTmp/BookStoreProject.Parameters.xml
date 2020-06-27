@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="IIS Web Application Name" description="" value="BookStoreProjectDUT" tags="IisApp">
-    <parameterEntry kind="ProviderPath" scope="IisApp" match="^F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\obj\\Release\\netcoreapp3\.1\\PubTmp\\Out\\$" />
-  </parameter>
-  <parameter name="BookStoreProject.Models.BookStoreDbContext" description="" value="Data Source=tcp:dut-sql-101.database.windows.net,1433;Initial Catalog=BookStoreProject_db;User Id=appuser@dut-sql-101;Password=qwerty123!@#" tags="dbfullsql">
-    <parameterEntry kind="ProviderPath" scope="dbfullsql" match="^F:\\assignments\\CNPM\\Back-end\\BookStoreProject\\obj\\Release\\netcoreapp3\.1\\PubTmp\\EFSQLScripts\\BookStoreProject\.Models\.BookStoreDbContext\.sql$" />
-  </parameter>
-</parameters>
