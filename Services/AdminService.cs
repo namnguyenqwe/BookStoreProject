@@ -89,9 +89,9 @@ namespace BookStoreProject.Services
 
                 return _dbContext.ApplicationUsers
                     .Where(x =>
-                    x.Name.ToUpper().Contains(keyword.ToUpper()) ||
-                    x.Email.ToUpper().Contains(keyword.ToUpper()) ||
-                    x.Status.ToString().Contains(keyword.ToString())).AsEnumerable();
+                    x.Name.ToUpper().Contains(keyword.ToUpper())).AsEnumerable();
+                    //x.Email.ToUpper().Contains(keyword.ToUpper()) ||
+                    //x.Status.ToString().Contains(keyword.ToString())).AsEnumerable();
                      
             }
             return _dbContext.ApplicationUsers.AsEnumerable();
