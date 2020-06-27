@@ -187,10 +187,10 @@ namespace BookStoreProject.Controllers
                                     .Where(x => x.Date >= dateStarted 
                                     && x.Date <= dateEnded
                                     && x.Status.ToLower() == "Đã hoàn thành".ToLower()).Count();
-                    return Ok(new { orderCount = countFromTo });
+                    return Ok(new { completedCount = countFromTo });
                 }
-                var orders = _ordersService.GetOders(null);
-                return Ok(new { orderCount = orders.Count() });
+                var orders = _ordersService.GetOders(null).Where(x => x.Status.ToLower() == "Đã hoàn thành".ToLower());
+                return Ok(new { completedCount = orders.Count() });
             }
             catch (System.Exception)
             {
@@ -204,7 +204,7 @@ namespace BookStoreProject.Controllers
             try
             {
                 var count = _ordersService.GetPriceTotal(from, to).GetAwaiter().GetResult();
-                return Ok(new { orderCount = count });
+                return Ok(new { totalCount = count });
             }
             catch (System.Exception)
             {

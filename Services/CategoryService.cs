@@ -124,7 +124,7 @@ namespace BookStoreProject.Services
 
         public async Task<IEnumerable<Categories>> GetCategoriesAsync()
         {
-            return await _dbContext.Categories.ToListAsync();
+            return await _dbContext.Categories.Include(x => x.Books).ToListAsync();
         }
 
         public int CountBookTitleInCategory(int CategoryId)

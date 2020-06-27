@@ -134,6 +134,7 @@ namespace BookStoreProject.AutoMapper
                                                         .ForMember(x => x.ImageLink, y => { y.MapFrom(z => z.Book.ImageLink); })
                                                         .ForMember(x => x.OriginalPrice, y => { y.MapFrom(z => z.Book.OriginalPrice); })
                                                         .ForMember(x => x.Price, y => { y.MapFrom(z => z.Book.Price); })
+                                                        .ForMember(x => x.Author, y => { y.MapFrom(z => z.Book.Author); })
                                                         .ForMember(x => x.ReviewCount, y => { y.MapFrom(z => z.Book.Reviews.Count); })
                                                         .ForMember(x => x.Rating, y =>
                                                         {
