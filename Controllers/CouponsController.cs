@@ -8,6 +8,7 @@ using BookStoreProject.Dtos.Coupon;
 using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -16,6 +17,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class CouponsController : ControllerBase
     {
         private readonly ICouponService _couponService;
@@ -25,6 +27,7 @@ namespace BookStoreProject.Controllers
             _couponService = couponService;
             _mapper = mapper;
         }
+        [Authorize(Policy = "COUPON")]
         [HttpGet]
         public IActionResult GetAllCoupons(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "couponid")
         {
@@ -85,6 +88,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
+        [Authorize(Policy = "COUPON")]
         [HttpGet("{couponId}")]
         public async Task<IActionResult> GetCouponById(string couponId)
         {
@@ -93,6 +97,7 @@ namespace BookStoreProject.Controllers
                 return NotFound(couponId);
             return Ok(_mapper.Map<CouponForListDto>(coupon));
         }
+        [Authorize(Policy = "COUPON")]
         [HttpPost]
         public async Task<IActionResult> CreateCoupon([FromBody] CouponForModalDto input)
         {
@@ -108,6 +113,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
+        [Authorize(Policy = "COUPON")]
         [HttpPut("{couponId}")]
         public async Task<IActionResult> UpdateCoupon(string couponId, [FromBody] CouponForModalDto input)
         {
@@ -125,6 +131,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(ModelState);
         }
+        [Authorize(Roles = "User")]
         [HttpGet("check/{couponId}")]
         public async Task<IActionResult> CheckCoupon(string couponId)
         {

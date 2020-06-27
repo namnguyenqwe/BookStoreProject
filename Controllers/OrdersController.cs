@@ -31,7 +31,8 @@ namespace BookStoreProject.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "Admin,Customer manager")]
+        //[Authorize(Roles = "Admin,Customer manager")]
+        [Authorize(Policy = "ORDER")]
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetOrderByIdForAdmin(int orderId)
         {
@@ -49,8 +50,8 @@ namespace BookStoreProject.Controllers
             
             }
         }
-
-        [Authorize(Roles = "Admin,Customer manager")]
+        [Authorize(Policy = "ORDER")]
+        // [Authorize(Roles = "Admin,Customer manager")]
         public IActionResult GetAllOrder(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
         {
             try
@@ -75,8 +76,8 @@ namespace BookStoreProject.Controllers
                 return BadRequest();
             }
         }
-
-        [Authorize(Roles = "Admin,Customer manager")]
+        [Authorize(Policy = "ORDER")]
+        //[Authorize(Roles = "Admin,Customer manager")]
         [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] OrderForUpdateDto input)
         {
@@ -95,8 +96,8 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(ModelState);
         }
-
-        [Authorize(Roles = "Admin,Customer manager")]
+        [Authorize(Policy = "ORDER")]
+        //[Authorize(Roles = "Admin,Customer manager")]
         [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
@@ -111,7 +112,7 @@ namespace BookStoreProject.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpGet("user")]
         public async Task<IActionResult> GetOrder()
         {
@@ -127,7 +128,7 @@ namespace BookStoreProject.Controllers
             return Ok(new { data = orderForReturn });
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpGet("user/{orderId}")]
         public async Task<IActionResult> GetOrderByIdForUser(int orderId)
         {
@@ -143,6 +144,7 @@ namespace BookStoreProject.Controllers
             }
 
         }
+        [Authorize(Roles = "Admin,Book manager,Customer manager")]
         [HttpGet("statistic/all")]
         public IActionResult GetOrderCount()
         {

@@ -23,7 +23,8 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,Customer manager")]
+    //[Authorize(Roles = "Admin,Customer manager")]
+    [Authorize(Policy = "USER")]
     public class AdminsController : ControllerBase
     {
         private UserManager<ApplicationUser> _userManager;

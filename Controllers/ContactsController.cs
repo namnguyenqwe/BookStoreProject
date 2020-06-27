@@ -7,6 +7,7 @@ using BookStoreProject.Dtos.Contact;
 using BookStoreProject.Helpers;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "CONTACT")]
     public class ContactsController : ControllerBase
     {
         private readonly IContactService _contactService;
@@ -97,6 +99,7 @@ namespace BookStoreProject.Controllers
                 return NotFound(contactId);
             return Ok(contactInDB);
         }
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateContact([FromBody] ContactForCreateDto input)
         {
@@ -109,7 +112,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
-        [HttpDelete("{contactId}")]
+        /*[HttpDelete("{contactId}")]
         public async Task<IActionResult> DeleteContact(int contactId)
         {
             var contactInDB = await _contactService.GetContactById(contactId);
@@ -121,7 +124,7 @@ namespace BookStoreProject.Controllers
                 return BadRequest("Có lỗi trong quá trình xóa dữ liệu: ");
             }
             return Ok();
-        }
+        }*/
         [HttpPut("{contactId}")]
         public async Task<IActionResult> UpdateContact(int contactId,[FromBody] ContactForUpdateDto input)
         {

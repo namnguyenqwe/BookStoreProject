@@ -7,6 +7,7 @@ using AutoMapper;
 using BookStoreProject.Dtos.CartItem;
 using BookStoreProject.Models;
 using BookStoreProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -15,6 +16,7 @@ namespace BookStoreProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class CartItemsController : ControllerBase
     {
         private readonly ICartItemService _cartItemService;
