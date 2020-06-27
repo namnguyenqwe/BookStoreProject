@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -127,10 +128,28 @@ namespace BookStoreProject.Controllers
         }
         [Authorize(Roles = "Admin,Customer manager,Book manager")]
         [HttpGet("statistic/all")]
-        public IActionResult GetSubcriberCount()
+        public IActionResult GetSubcriberCount(string from, string to)
         {
-            var subcribers = _subcriberService.GetSubcribers(null);
-            return Ok(new { subcirberCount = subcribers.Count()});
+            try
+            {
+                if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
+                {
+                    var dateStarted = DateTime.ParseExact(from, "d/M/yyyy",
+                     CultureInfo.CreateSpecificCulture("fr-FR"));
+                    var dateEnded = DateTime.ParseExact(to, "d/M/yyyy",
+                          CultureInfo.CreateSpecificCulture("fr-FR"));
+                    var countFromTo = _subcriberService.GetSubcribers(null)
+                                    .Where(x => x.CreatedDate >= dateStarted
+                                    && x.CreatedDate <= dateEnded).Count();
+                    return Ok(new { subscriberCount = countFromTo });
+                }
+                var subcribers = _subcriberService.GetSubcribers(null);
+                return Ok(new { subscriberCount = subcribers.Count() });
+            }
+            catch(System.Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }

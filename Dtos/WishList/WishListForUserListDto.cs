@@ -10,6 +10,7 @@ namespace BookStoreProject.Dtos.WishList
         public int BookID { get; set; }
         public string NameBook { get; set; }
         public string ImageLink { get; set; }
+        public string Author { get; set; }
         public int Rating { get; set; }
         public int ReviewCount { get; set; }
         public decimal? OriginalPrice { get; set; }

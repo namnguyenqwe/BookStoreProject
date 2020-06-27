@@ -59,7 +59,7 @@ namespace BookStoreProject.Controllers
                 Note = input.Note,
                 ShippingFee = input.ShippingFee,
                 ApplicationUserID = userId,
-                Status = "Đang vận chuyển",
+                Status = "Chờ tiếp nhận",
                 Date = DateTime.Now
             };
             var result = await _paymentService.SavePaymentBill(order);
@@ -69,6 +69,9 @@ namespace BookStoreProject.Controllers
 
             result = await _paymentService.SaveBillItems(order, BookIds);
 
+            if (!result)
+                return BadRequest(new { message = "Có lỗi xảy ra, vui lòng thử lại !" });
+            result = await _paymentService.ChangeQuantity(order);
             if (!result)
                 return BadRequest(new { message = "Có lỗi xảy ra, vui lòng thử lại !" });
 

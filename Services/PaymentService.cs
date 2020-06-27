@@ -16,6 +16,7 @@ namespace BookStoreProject.Services
         Task<PaymentForListDto> GetPaymentList(string applicationUserId, string[] BookIds);
         Task<bool> SavePaymentBill(Orders orderCreate);
         Task<bool> SaveBillItems(Orders order, string[] bookIds);
+        Task<bool> ChangeQuantity(Orders order);
     }
     public class PaymentService : IPaymentService
     {
@@ -26,6 +27,45 @@ namespace BookStoreProject.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
+        public async Task<bool> ChangeQuantity(Orders order)
+        {
+            try
+            {
+                var orderID = await _dbContext.Orders.Where(x => x.ApplicationUserID == order.ApplicationUserID &&
+                            x.CouponID == order.CouponID &&
+                            x.Date == order.Date &&
+                            x.Note == order.Note &&
+                            x.RecipientID == order.RecipientID &&
+                            x.ShippingFee == order.ShippingFee)
+                            .Select(x => x.OrderID).FirstOrDefaultAsync();
+                var OrderItems = await _dbContext.OrderItems.Where(x => x.OrderID == orderID).ToListAsync();
+                if (OrderItems != null)
+                {
+                    foreach (var item in OrderItems)
+                    {
+                        var book = await _dbContext.Books.FirstOrDefaultAsync(x => x.BookID == item.BookID);
+                        book.QuantityOut += item.Quantity;
+                        _dbContext.Books.Update(book);
+                    }    
+                }
+                if (order.CouponID != null)
+                {
+                    var coupon = await _dbContext.Coupons.FirstOrDefaultAsync(x => x.CouponID == order.CouponID);
+                    if (coupon == null)
+                        return false;
+                    coupon.QuantityUsed++;
+                    _dbContext.Coupons.Update(coupon);
+                }
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<PaymentForListDto> GetPaymentList(string applicationUserId, string[] bookIds)
         {
             try 
@@ -118,6 +158,7 @@ namespace BookStoreProject.Services
         {
             try
             {
+                
                 _dbContext.Orders.Add(orderCreate);
                 await _dbContext.SaveChangesAsync();
                 return true;

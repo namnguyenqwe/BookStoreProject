@@ -9,6 +9,7 @@ using BookStoreProject.Dtos.Order;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
+using System.Globalization;
 
 namespace BookStoreProject.Services
 {
@@ -22,6 +23,7 @@ namespace BookStoreProject.Services
         IEnumerable<Orders> GetOders(string keyword);
         IEnumerable<OrderForListDto> GetOrdersPerPage(IEnumerable<OrderForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId");
         Task<IEnumerable<Orders>> GetOrder(string applicationUserId);
+        Task<decimal?> GetPriceTotal(string from, string to);
     }
     public class OrdersService:IOrdersService
     {
@@ -221,6 +223,27 @@ namespace BookStoreProject.Services
                 .Include(x => x.ApplicationUser).Include(x => x.OrderItems).ThenInclude(x => x.Book)
                 .Include(x => x.Recipient).ThenInclude(x => x.District).ThenInclude(x => x.City)
                 .Where(x => x.ApplicationUserID == applicationUserId).ToListAsync();
+        }
+
+        public async Task<decimal?> GetPriceTotal(string from, string to)
+        {
+            if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
+            {
+                var dateStarted = DateTime.ParseExact(from, "d/M/yyyy",
+                     CultureInfo.CreateSpecificCulture("fr-FR"));
+                var dateEnded = DateTime.ParseExact(to, "d/M/yyyy",
+                      CultureInfo.CreateSpecificCulture("fr-FR"));
+                var orders = await _dbContext.Orders.Include(x => x.OrderItems).Include(x => x.Coupon)
+                        .Where(x => x.Date >= dateStarted
+                                    && x.Date <= dateEnded
+                                    && x.Status.ToLower() == "Đã hoàn thành".ToLower())
+                        .Select(x => x.OrderItems.Sum(x => x.Price) * (100 - (x.Coupon != null ? x.Coupon.Discount : 0) / 100)).ToListAsync();
+                return orders.Any() ? orders.Sum(x => x) : 0;
+            }    
+            var ordersAll = await _dbContext.Orders.Include(x => x.OrderItems).Include(x => x.Coupon)
+                        .Where(x => x.Status.ToLower() == "Đã hoàn thành".ToLower())
+                        .Select(x => x.OrderItems.Sum(x => x.Price) * (100 - (x.Coupon != null ? x.Coupon.Discount : 0) / 100)).ToListAsync();
+            return ordersAll.Any() ? ordersAll.Sum(x => x) : 0;
         }
     }
 }

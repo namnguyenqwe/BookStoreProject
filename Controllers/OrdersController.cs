@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using BookStoreProject.Dtos.Order;
 using System.Collections.Generic;
+using System;
+using System.Globalization;
 
 namespace BookStoreProject.Controllers
 {
@@ -146,12 +148,69 @@ namespace BookStoreProject.Controllers
         }
         [Authorize(Roles = "Admin,Book manager,Customer manager")]
         [HttpGet("statistic/all")]
-        public IActionResult GetOrderCount()
+        public IActionResult GetOrderCount(string from, string to)
         {
-            var orders = _ordersService.GetOders(null);
-            return Ok(new { orderCount = orders.Count() });
-        }    
-
+            try
+            {
+                if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
+                {
+                    var dateStarted = DateTime.ParseExact(from, "d/M/yyyy",
+                     CultureInfo.CreateSpecificCulture("fr-FR"));
+                    var dateEnded = DateTime.ParseExact(to, "d/M/yyyy",
+                          CultureInfo.CreateSpecificCulture("fr-FR"));
+                    var countFromTo = _ordersService.GetOders(null)
+                                    .Where(x => x.Date >= dateStarted
+                                    && x.Date <= dateEnded).Count();
+                    return Ok(new { orderCount = countFromTo });
+                }
+                var orders = _ordersService.GetOders(null);
+                return Ok(new { orderCount = orders.Count() });
+            }
+            catch(System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [Authorize(Roles = "Admin,Book manager,Customer manager")]
+        [HttpGet("statistic/completed")]
+        public IActionResult GetCompletedOrderCount(string from, string to)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
+                {
+                    var dateStarted = DateTime.ParseExact(from, "d/M/yyyy",
+                     CultureInfo.CreateSpecificCulture("fr-FR"));
+                    var dateEnded = DateTime.ParseExact(to, "d/M/yyyy",
+                          CultureInfo.CreateSpecificCulture("fr-FR"));
+                    var countFromTo = _ordersService.GetOders(null)
+                                    .Where(x => x.Date >= dateStarted 
+                                    && x.Date <= dateEnded
+                                    && x.Status.ToLower() == "Đã hoàn thành".ToLower()).Count();
+                    return Ok(new { orderCount = countFromTo });
+                }
+                var orders = _ordersService.GetOders(null);
+                return Ok(new { orderCount = orders.Count() });
+            }
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+        [Authorize(Roles = "Admin,Book manager,Customer manager")]
+        [HttpGet("statistic/total")]
+        public IActionResult GetOrderPriceTotal(string from, string to)
+        {
+            try
+            {
+                var count = _ordersService.GetPriceTotal(from, to).GetAwaiter().GetResult();
+                return Ok(new { orderCount = count });
+            }
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
+        }
         [NonAction]
         public string GetUserId()
         {

@@ -75,7 +75,9 @@ namespace BookStoreProject.Services
         {
             try
             {
-                return await _dbContext.Coupons.FirstOrDefaultAsync(x => x.CouponID == couponId && x.Status.Equals("Available"));
+                return await _dbContext.Coupons.FirstOrDefaultAsync(x => x.CouponID == couponId 
+                                                                        && x.Status.Equals("Available")
+                                                                        && x.Quantity > x.QuantityUsed);
             }
             catch (Exception ex)
             {
