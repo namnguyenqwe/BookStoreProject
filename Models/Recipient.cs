@@ -23,6 +23,6 @@ namespace BookStoreProject.Models
         public City City { get; set; }
         public District District { get; set; }
 
-        public ApplicationUser ApplicationUser { get; set; }
+        //ublic ApplicationUser ApplicationUser { get; set; }
     }
 }

@@ -288,11 +288,11 @@ namespace BookStoreProject.Controllers
             
             return Ok(user);
         }
-        
-       
 
 
-        [HttpDelete]
+
+
+        /*[HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -305,9 +305,23 @@ namespace BookStoreProject.Controllers
             _userService.SaveChanges();
             return Ok();
 
+        }*/
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteBook(string userId)
+        {
+            var user =  _userService.GetSingleByCondition(s => s.Id == userId,null);
+            if (user == null)
+                return NotFound(userId);
+            var result = await _adminService.DeleteUserAsync(user.Id);
+            if (!result)
+            {
+                return BadRequest(new { message = "Có lỗi trong quá trình xóa dữ liệu" });
+            }
+            return Ok();
         }
 
-      
+
         [HttpPost]
         [Route("Avatar")]
         public async Task<IActionResult> PostUserAvatar([FromForm]IFormFile file)
