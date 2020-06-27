@@ -31,7 +31,7 @@ namespace BookStoreProject.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Customer manager")]
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetOrderByIdForAdmin(int orderId)
         {
@@ -50,7 +50,7 @@ namespace BookStoreProject.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Customer manager")]
         public IActionResult GetAllOrder(string keyword, int page = 1, int pageSize = 10, int sort = 0, string criteria = "OrderId")
         {
             try
@@ -76,7 +76,7 @@ namespace BookStoreProject.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Customer manager")]
         [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] OrderForUpdateDto input)
         {
@@ -96,7 +96,7 @@ namespace BookStoreProject.Controllers
             return BadRequest(ModelState);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Customer manager")]
         [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
