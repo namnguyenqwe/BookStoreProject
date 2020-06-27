@@ -70,7 +70,7 @@ namespace BookStoreProject.Services
             {
 
                 return _dbContext.ApplicationUsers
-                    .Where(delegate (ApplicationUser b)
+                    .Where( delegate (ApplicationUser b)
                     {
                         if (MyConvert.ConvertToUnSign(b.FullName.ToUpper()).IndexOf(keyword.ToUpper(), StringComparison.CurrentCultureIgnoreCase) >= 0 ||
                     
