@@ -15,6 +15,7 @@ namespace BookStoreProject.Services
     {
         IEnumerable<ApplicationUser> GetUsers(string keyword);
         IEnumerable<UserForListDto> GetUsersPerPage(IEnumerable<UserForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "Id");
+        Task<bool> DeleteUserAsync(string userId);
         Task<IEnumerable<RoleForAuthorizeDetailDto>> GetAuthorization();
         Task<bool> UpdateAuthorization();
         Task<IEnumerable<string>> GetPermissions(string roleName);
@@ -111,6 +112,47 @@ namespace BookStoreProject.Services
                 }) ;
             }
             return listForReturn;
+        }
+        public async Task<bool> DeleteUserAsync(string userId)
+        {
+            try
+            {
+                var user = await _dbContext.ApplicationUsers.Include(x => x.WishLists)
+                            .Include(x => x.CartItems)
+                            .Include(x => x.Reviews)
+                            .Include(x => x.CartItems)
+                            .Include(x => x.Orders)
+                            .FirstOrDefaultAsync(x => x.Id == userId);
+                if (user == null)
+                    return false;
+
+                if (user.CartItems.Any())
+                {
+                    _dbContext.CartItems.RemoveRange(user.CartItems);
+                }
+
+                if (user.Reviews.Any())
+                {
+                    _dbContext.Reviews.RemoveRange(user.Reviews);
+                }
+
+                if (user.WishLists.Any())
+                {
+                    _dbContext.WishLists.RemoveRange(user.WishLists);
+                }
+
+                if (user.Reviews.Any())
+                {
+                    _dbContext.Reviews.RemoveRange(user.Reviews);
+                }
+                _dbContext.ApplicationUsers.Remove(user);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public Task<bool> UpdateAuthorization()
