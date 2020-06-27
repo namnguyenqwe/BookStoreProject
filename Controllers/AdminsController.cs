@@ -308,9 +308,9 @@ namespace BookStoreProject.Controllers
         }*/
 
         [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteBook(string userId)
+        public async Task<IActionResult> DeleteUser(string userId)
         {
-            var user =  _userService.GetSingleByCondition(s => s.Id == userId,null);
+            var user = await _adminService.GetUserByIdAsync(userId);
             if (user == null)
                 return NotFound(userId);
             var result = await _adminService.DeleteUserAsync(user.Id);

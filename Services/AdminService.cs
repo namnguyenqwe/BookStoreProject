@@ -18,7 +18,7 @@ namespace BookStoreProject.Services
     {
         IEnumerable<ApplicationUser> GetUsers(string keyword);
         IEnumerable<UserForListDto> GetUsersPerPage(IEnumerable<UserForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "Id");
-
+        Task<ApplicationUser> GetUserByIdAsync(string userId);
         Task<bool> DeleteUserAsync(string userId);
     }
     public class AdminService : IAdminService
@@ -31,6 +31,12 @@ namespace BookStoreProject.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+        public async Task<ApplicationUser> GetUserByIdAsync(string userId)
+        {
+            return await _dbContext.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == userId);
+        }
+
+
         public IEnumerable<UserForListDto> GetUsersPerPage(IEnumerable<UserForListDto> list, int page = 1, int pageSize = 10, int sort = 0, string criteria = "Id")
         {
             criteria = criteria.ToLower();
