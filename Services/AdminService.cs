@@ -61,7 +61,7 @@ namespace BookStoreProject.Services
                 else
                     return list.OrderBy(x => x.Email).Skip((page - 1) * pageSize).Take(pageSize);
             }
-            if (criteria.Equals("accoutcreatedate"))
+            if (criteria.Equals("accountcreatedate"))
             {
                 if (sort == 0)
                 {
