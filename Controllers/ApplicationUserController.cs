@@ -139,7 +139,7 @@ namespace BookStoreProject.Controllers
                 {
                     return Unauthorized();
                 }
-                return Ok();
+                return Ok(new {message = "ChangePassword thanh cong" });
             }
 
 

@@ -65,7 +65,6 @@ namespace BookStoreProject.Controllers
             var user = _userService.GetSingleByCondition(s => s.Id == userId, null);
 
             user.Name = profile.Name;
-            user.AvatarLink = profile.AvatarLink;
             _userService.Update(user);
             _userService.SaveChanges();
             return Ok(user);
