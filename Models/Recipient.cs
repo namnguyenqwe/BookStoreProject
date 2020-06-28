@@ -18,7 +18,8 @@ namespace BookStoreProject.Models
         public string Address { get; set; }
         public string CityID { get; set; }
         public string DistrictID { get; set; }
-        public bool Default { get; set; } = false;
+        public bool Default { get; set; } 
+        public bool Status { get; set; } = true;
         public ICollection<Orders> Orders { get; set; }
         public City City { get; set; }
         public District District { get; set; }

@@ -90,7 +90,7 @@ namespace BookStoreProject.Controllers
             return BadRequest(new { message = "Invalid recipient" });
         }
         [HttpPut("{recipientId}")]
-        public async Task<IActionResult> UpdateRecipient(int recipientId, [FromBody] RecipientForCreateDto input)
+        public async Task<IActionResult> UpdateRecipient(int recipientId)
         {
             if (ModelState.IsValid)
             {
@@ -104,12 +104,12 @@ namespace BookStoreProject.Controllers
                 {
                     return NotFound(recipientId);
                 }
-                var recipientUpdate = _mapper.Map(input, recipientInDB);
-                recipientUpdate.Email = userEmail;
-                var result = await _recipientService.UpdateRecipient(recipientUpdate);
+                recipientInDB.Status = false;
+                //recipientUpdate.Email = userEmail;
+                var result = await _recipientService.UpdateRecipient(recipientInDB);
                 if (result)
                 {
-                    return Ok(new { message = "Thay đổi thông tin thành công !"});
+                    return Ok(new { message = "Thông tin người dùng này ko còn khả dụng !"});
                 }
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });

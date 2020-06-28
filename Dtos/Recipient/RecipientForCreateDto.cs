@@ -25,5 +25,6 @@ namespace BookStoreProject.Dtos.Recipient
         public string CityID { get; set; }
         public string DistrictID { get; set; }
         public bool Default { get; set; } = false;
+        public bool Status { get; } = true;
     }
 }
