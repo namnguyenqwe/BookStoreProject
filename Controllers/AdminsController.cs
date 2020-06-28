@@ -227,8 +227,7 @@ namespace BookStoreProject.Controllers
 
         }
         [Authorize(Policy = "USER")]
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _adminService.GetUserByIdAsync(id);
