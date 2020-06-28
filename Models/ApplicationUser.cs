@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookStoreProject.Models
 {
-    public class ApplicationUser:IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         public string FullName { get; set; }
 
@@ -19,7 +19,7 @@ namespace BookStoreProject.Models
         public bool? IsDeleted { get; set; }
         [StringLength(50)]
         public string? Salt { get; set; }
-         
+
         public DateTime? AccountCreateDate { get; set; }
         public ICollection<WishList> WishLists { get; set; }
         public ICollection<CartItems> CartItems { get; set; }
@@ -27,22 +27,5 @@ namespace BookStoreProject.Models
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Orders> Orders { get; set; }
 
-        //public ICollection<Recipient> Recipients { get; set; }
-
-        /*public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
-        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
-        public virtual ICollection<IdentityUserToken<string>> Tokens { get; set; }
-        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; }*/
     }
-
-    /*public class ApplicationRole : IdentityRole
-    {
-        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
-    }
-
-    public class ApplicationUserRole : IdentityUserRole<string>
-    {
-        public virtual ApplicationUser User { get; set; }
-        public virtual ApplicationRole Role { get; set; }
-    }*/
 }
