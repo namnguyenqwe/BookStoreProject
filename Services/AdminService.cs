@@ -127,7 +127,6 @@ namespace BookStoreProject.Services
                 var user = await _dbContext.ApplicationUsers.Include(x => x.WishLists)
                             .Include(x => x.CartItems)
                             .Include(x => x.Reviews)
-                            .Include(x => x.CartItems)
                             .Include(x => x.Orders)
                             .FirstOrDefaultAsync(x => x.Id == userId);
                 if (user == null)
