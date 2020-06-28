@@ -51,21 +51,21 @@ namespace BookStoreProject.Services
         public async Task<Recipient> GetDefaultRecipient(string email)
         {
             var defaultRecipient = await _dbContext.Recipients.Include(x => x.District).Include(x => x.City)
-                    .FirstOrDefaultAsync(x => x.Email == email && x.Default == true);
+                    .FirstOrDefaultAsync(x => x.Email == email && x.Default == true && x.Status == true);
             if (defaultRecipient != null)
                 return defaultRecipient;
             Random rnd = new Random();
             var recipients = await GetRecipientsByEmail(email);
             var randomDefault = recipients.Skip(rnd.Next(0, recipients.Count() - 1)).FirstOrDefault();
-            randomDefault.Status = true;
+            randomDefault.Default = true;
             await UpdateRecipient(randomDefault);
-            return randomDefault;
+            return await GetRecipientById(randomDefault.RecipientID, email);
         }
 
         public async Task<Recipient> GetRecipientById(int recipientId, string email)
         {
-            return await _dbContext.Recipients
-                    .FirstOrDefaultAsync(x => x.RecipientID == recipientId && x.Email == email);
+            return await _dbContext.Recipients.Include(x => x.City).Include(x => x.District)
+                    .FirstOrDefaultAsync(x => x.RecipientID == recipientId && x.Email == email && x.Status == true);
         }
 
         public async Task<IEnumerable<Recipient>> GetRecipientsByEmail(string email)

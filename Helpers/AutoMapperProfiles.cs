@@ -203,7 +203,17 @@ namespace BookStoreProject.AutoMapper
             CreateMap<Recipient,RecipientForDefaultDto>().ForMember(x => x.Fee, y => { y.MapFrom(z => z.District.Fee); })
                                                          .ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); })
                                                          .ForMember(x => x.district, y => { y.MapFrom(z => z.District.district); });
-            CreateMap<Recipient, RecipientForUserDetailDto>();
+            CreateMap<Recipient, RecipientForUserDetailDto>().ForMember(x => x.Fee, y => { y.MapFrom(z => z.District.Fee); })
+                                                         .ForMember(x => x.city, y => { y.MapFrom(z => z.City.city); })
+                                                         .ForMember(x => x.district, y => { y.MapFrom(z => z.District.district); });
+            CreateMap<RecipientForUpdateDto, Recipient>().ForMember(x => x.RecipientID, opt => opt.Ignore())
+                                                        .ForMember(x => x.Email, opt => opt.Ignore())
+                                                        .ForMember(x => x.CityID, opt => opt.Ignore())
+                                                        .ForMember(x => x.DistrictID, opt => opt.Ignore())
+                                                        .ForMember(x => x.Name, opt => opt.Ignore())
+                                                        .ForMember(x => x.Address, opt => opt.Ignore())
+                                                        .ForMember(x => x.Phone, opt => opt.Ignore())
+                                                        .ForMember(x => x.Status, opt => opt.Ignore());
             #endregion
 
             #region Contact

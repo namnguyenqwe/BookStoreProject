@@ -89,7 +89,7 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(new { message = "Invalid recipient" });
         }
-        [HttpPut("{recipientId}")]
+        [HttpPut("status/{recipientId}")]
         public async Task<IActionResult> UpdateRecipient(int recipientId)
         {
             if (ModelState.IsValid)
@@ -114,7 +114,33 @@ namespace BookStoreProject.Controllers
             }
             return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
         }
-       
+
+        [HttpPut("default/{recipientId}")]
+        public async Task<IActionResult> UpdateRecipient(int recipientId,[FromBody] RecipientForUpdateDto input)
+        {
+            if (ModelState.IsValid)
+            {
+                var userEmail = GetUserEmail();
+                if (userEmail == "error")
+                {
+                    return Unauthorized(new { message = "Unauthorized" });
+                }
+                var recipientInDB = await _recipientService.GetRecipientById(recipientId, userEmail);
+                if (recipientInDB == null)
+                {
+                    return NotFound(recipientId);
+                }
+                //recipientInDB.Status = false;
+                //recipientUpdate.Email = userEmail;
+                recipientInDB = _mapper.Map(input, recipientInDB);
+                var result = await _recipientService.UpdateRecipient(recipientInDB);
+                if (result)
+                {
+                    return Ok(new { message = "Thay đổi thành công !" });
+                }
+            }
+            return BadRequest(new { message = ModelState.Values.First().Errors[0].ErrorMessage });
+        }
         [NonAction]
         public string GetUserEmail()
         {

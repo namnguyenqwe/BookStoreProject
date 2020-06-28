@@ -14,7 +14,11 @@ namespace BookStoreProject.Dtos.Recipient
         public string Phone { get; set; }
         public string Address { get; set; }
         public string CityID { get; set; }
+        public string city { get; set; }
         public string DistrictID { get; set; }
-        public bool Default { get; set; } = false;
+        public string district { get; set; }
+        public bool Default { get; set; }
+        //public bool Status { get; set; }
+        public int? Fee { get; set; }
     }
 }

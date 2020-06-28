@@ -14,6 +14,7 @@ namespace BookStoreProject.Dtos.Recipient
         public string city { get; set; }
         public string district { get; set; }
         public bool Default { get; set; }
+       // public bool Status { get; set; }
         public int? Fee { get; set; }
     }
 }
