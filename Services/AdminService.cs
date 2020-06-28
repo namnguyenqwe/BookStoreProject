@@ -148,7 +148,7 @@ namespace BookStoreProject.Services
                     _dbContext.WishLists.RemoveRange(user.WishLists);
                 }
 
-                if (user.Reviews.Any())
+                if (user.Orders.Any())
                 {
                     _dbContext.Orders.RemoveRange(user.Orders);
                 }
